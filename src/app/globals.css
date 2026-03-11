@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --muted: rgba(0, 0, 0, 0.65);
+  --card: rgba(0, 0, 0, 0.06);
+  --border: rgba(0, 0, 0, 0.12);
 }
 
 @theme inline {
@@ -16,6 +19,9 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --muted: rgba(255, 255, 255, 0.72);
+    --card: rgba(255, 255, 255, 0.08);
+    --border: rgba(255, 255, 255, 0.14);
   }
 }
 
@@ -23,4 +29,65 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.prose {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.prose > * + * {
+  margin-top: 1rem;
+}
+
+.prose h1,
+.prose h2,
+.prose h3 {
+  color: var(--foreground);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.prose h2 {
+  margin-top: 2rem;
+}
+
+.prose a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.prose code {
+  color: var(--foreground);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.9em;
+}
+
+.prose pre {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  overflow: auto;
+}
+
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted);
+}
+
+.prose ul {
+  padding-left: 1.25rem;
+  list-style: disc;
 }
