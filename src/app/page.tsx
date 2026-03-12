@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   SiPython, SiR, SiLangchain, SiPytorch,
   SiSvelte, SiNextdotjs, SiJavascript, SiDocker,
@@ -46,9 +47,9 @@ const OTHER_STACKS: Stack[] = [
 
 function StackBadge({ icon: Icon, label, color }: Stack) {
   return (
-    <div className="flex items-center gap-1.5 rounded-lg border border-black/10 bg-white px-3 py-2 text-xs dark:border-white/10 dark:bg-white/5">
-      <Icon style={{ color }} className="size-4 shrink-0" />
-      <span className="font-medium">{label}</span>
+    <div className="flex items-center gap-1.5 rounded-lg border border-black/8 bg-white px-3 py-2 text-xs shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8">
+      <Icon style={{ color }} className="size-3.5 shrink-0" />
+      <span className="font-medium text-zinc-700 dark:text-zinc-300">{label}</span>
     </div>
   );
 }
@@ -57,7 +58,7 @@ export default function Home() {
   return (
     <main className="flex flex-col min-h-dvh">
       {/* 히어로 이미지 */}
-      <div className="relative w-full">
+      <div className="relative w-full overflow-hidden">
         <Image
           src="/coala_odsey2.png"
           alt="코알라의 오딧세이"
@@ -66,47 +67,60 @@ export default function Home() {
           priority
           className="w-full h-auto"
         />
-        {/* 하단 그라디언트 오버레이 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-50 via-zinc-50/20 to-transparent dark:from-black dark:via-black/20" />
+        {/* 그라디언트 오버레이 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/30" />
         {/* 이미지 위 텍스트 */}
         <div className="absolute bottom-0 left-0 right-0 px-8 pb-8">
-          <h1 className="text-2xl font-semibold tracking-tight drop-shadow">
+          <h1 className="text-2xl font-bold tracking-tight drop-shadow-sm">
             코알라의 오딧세이
           </h1>
-          <p className="mt-1 text-sm text-black/70 dark:text-white/70">
+          <p className="mt-1 text-sm text-black/60 dark:text-white/60">
             이다운의 여정을 기록하는 블로그
           </p>
         </div>
       </div>
 
-      {/* 소개 */}
-      <div className="px-8 py-8 max-w-3xl space-y-8">
-        <div className="space-y-4">
-          <p className="text-sm leading-7 text-black/70 dark:text-white/70">
+      {/* 본문 */}
+      <div className="px-8 py-10 max-w-3xl space-y-10">
+
+        {/* 소개 */}
+        <section className="space-y-4">
+          <p className="text-sm leading-7 text-zinc-600 dark:text-zinc-400">
             대학교에서 생명과학과 빅데이터 분석을, 대학원에서 LLM을 공부했고
             현재는 전문연구요원으로 AI 개발을 하며 살아가는 코알라입니다.
           </p>
-          <p className="text-sm leading-7 text-black/70 dark:text-white/70">
+          <p className="text-sm leading-7 text-zinc-600 dark:text-zinc-400">
             LLM/IT 기술, 전문연구요원 일상, AI 개발의 도전과 성취까지 —
             그때그때의 경험과 생각을 솔직하게 나눕니다.
           </p>
 
-          <div className="flex flex-wrap gap-3">
-            <div className="rounded-lg border border-black/10 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-white/5">
-              <div className="text-xs text-black/50 dark:text-white/50 mb-1">관심사</div>
-              <div className="font-medium">LLM · AI · 생명과학</div>
+          {/* 인포 카드 */}
+          <div className="flex flex-wrap gap-3 pt-1">
+            <div className="rounded-xl border border-black/8 bg-white px-4 py-3 text-sm shadow-sm dark:border-white/10 dark:bg-white/5">
+              <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1 font-medium tracking-wide uppercase">관심사</div>
+              <div className="font-semibold text-zinc-800 dark:text-zinc-200">LLM · AI · 생명과학</div>
             </div>
-            <div className="rounded-lg border border-black/10 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-white/5">
-              <div className="text-xs text-black/50 dark:text-white/50 mb-1">현재</div>
-              <div className="font-medium">전문연구요원 AI 개발</div>
+            <div className="rounded-xl border border-black/8 bg-white px-4 py-3 text-sm shadow-sm dark:border-white/10 dark:bg-white/5">
+              <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1 font-medium tracking-wide uppercase">현재</div>
+              <div className="font-semibold text-zinc-800 dark:text-zinc-200">전문연구요원 AI 개발</div>
             </div>
+            <Link
+              href="/posts"
+              className="rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm shadow-sm hover:bg-violet-100 transition-colors dark:border-violet-500/20 dark:bg-violet-500/10 dark:hover:bg-violet-500/15"
+            >
+              <div className="text-xs text-violet-500 dark:text-violet-400 mb-1 font-medium tracking-wide uppercase">바로가기</div>
+              <div className="font-semibold text-violet-700 dark:text-violet-300">글 보러가기 →</div>
+            </Link>
           </div>
-        </div>
+        </section>
+
+        {/* 구분선 */}
+        <div className="h-px bg-black/8 dark:bg-white/8" />
 
         {/* 기술 스택 */}
-        <div className="space-y-4">
+        <section className="space-y-6">
           <div>
-            <h2 className="text-sm font-semibold mb-3">주력 스택</h2>
+            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-3">주력 스택</h2>
             <div className="flex flex-wrap gap-2">
               {PRIMARY_STACKS.map((s) => (
                 <StackBadge key={s.label} {...s} />
@@ -115,14 +129,14 @@ export default function Home() {
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold mb-3">그 외</h2>
+            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-3">그 외</h2>
             <div className="flex flex-wrap gap-2">
               {OTHER_STACKS.map((s) => (
                 <StackBadge key={s.label} {...s} />
               ))}
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </main>
   );
