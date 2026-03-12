@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
+import { LikeButton } from "@/components/LikeButton";
+import { CommentSection } from "@/components/CommentSection";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 
 type PageProps = {
@@ -90,6 +92,17 @@ export default async function PostDetailPage({ params }: PageProps) {
           className="prose max-w-none"
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
+
+        {/* 좋아요 버튼 */}
+        <div className="mt-12 flex justify-center">
+          <LikeButton slug={slug} />
+        </div>
+
+        {/* 댓글 구분선 */}
+        <div className="mt-12 h-px bg-black/8 dark:bg-white/8" />
+
+        {/* 댓글 섹션 */}
+        <CommentSection slug={slug} />
       </Container>
     </main>
   );
