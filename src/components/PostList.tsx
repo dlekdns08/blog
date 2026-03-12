@@ -6,7 +6,7 @@ import type { PostMeta } from "@/lib/posts";
 
 function TagBadge({ tag }: { tag: string }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:bg-white/10 dark:text-zinc-300">
+    <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-500 dark:bg-white/10 dark:text-zinc-400">
       {tag}
     </span>
   );
@@ -33,9 +33,10 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
 
   return (
     <div>
-      <div className="relative mb-6">
+      {/* 검색창 */}
+      <div className="relative mb-5">
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-black/40 dark:text-white/40 pointer-events-none"
+          className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400 pointer-events-none"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -49,18 +50,19 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="제목, 설명, 태그 검색..."
-          className="w-full rounded-lg border border-black/10 bg-white py-2 pl-9 pr-4 text-sm outline-none placeholder:text-black/40 focus:border-black/30 focus:ring-2 focus:ring-black/10 dark:border-white/10 dark:bg-white/5 dark:placeholder:text-white/40 dark:focus:border-white/30 dark:focus:ring-white/10"
+          className="w-full rounded-xl border border-black/10 bg-white py-2.5 pl-9 pr-4 text-sm shadow-sm outline-none placeholder:text-zinc-400 focus:border-violet-300 focus:ring-2 focus:ring-violet-100 dark:border-white/10 dark:bg-white/5 dark:placeholder:text-zinc-500 dark:focus:border-violet-500/40 dark:focus:ring-violet-500/10 transition-shadow"
         />
       </div>
 
+      {/* 태그 필터 */}
       {allTags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-1.5 mb-7">
           <button
             onClick={() => setActiveTag(null)}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
               activeTag === null
                 ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900"
-                : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-white/10 dark:text-zinc-300 dark:hover:bg-white/20"
+                : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-white/10 dark:text-zinc-400 dark:hover:bg-white/20"
             }`}
           >
             전체
@@ -71,8 +73,8 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
               onClick={() => setActiveTag(activeTag === tag ? null : tag)}
               className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                 activeTag === tag
-                  ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900"
-                  : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-white/10 dark:text-zinc-300 dark:hover:bg-white/20"
+                  ? "bg-violet-600 text-white dark:bg-violet-500 dark:text-white"
+                  : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-white/10 dark:text-zinc-400 dark:hover:bg-white/20"
               }`}
             >
               {tag}
@@ -81,40 +83,40 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
         </div>
       )}
 
+      {/* 포스트 목록 */}
       {filtered.length === 0 ? (
-        <p className="text-sm text-black/50 dark:text-white/50">
+        <p className="text-sm text-zinc-400 dark:text-zinc-500 py-8 text-center">
           검색 결과가 없습니다.
         </p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="space-y-3">
           {filtered.map((p) => (
-            <li
-              key={p.slug}
-              className="rounded-xl border border-black/10 bg-white p-4 dark:border-white/10 dark:bg-white/5"
-            >
-              <div className="flex items-baseline justify-between gap-4">
-                <Link
-                  href={`/posts/${p.slug}`}
-                  className="font-medium hover:underline"
-                >
-                  {p.title}
-                </Link>
-                <time className="shrink-0 text-xs text-black/60 dark:text-white/60">
-                  {p.date}
-                </time>
-              </div>
-              {p.description && (
-                <p className="mt-2 text-sm text-black/70 dark:text-white/70">
-                  {p.description}
-                </p>
-              )}
-              {p.tags && p.tags.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {p.tags.map((tag) => (
-                    <TagBadge key={tag} tag={tag} />
-                  ))}
+            <li key={p.slug}>
+              <Link
+                href={`/posts/${p.slug}`}
+                className="group block rounded-xl border border-black/8 bg-white p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8"
+              >
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="font-semibold text-zinc-900 group-hover:text-violet-700 dark:text-zinc-100 dark:group-hover:text-violet-300 transition-colors">
+                    {p.title}
+                  </span>
+                  <time className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
+                    {p.date}
+                  </time>
                 </div>
-              )}
+                {p.description && (
+                  <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                    {p.description}
+                  </p>
+                )}
+                {p.tags && p.tags.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {p.tags.map((tag) => (
+                      <TagBadge key={tag} tag={tag} />
+                    ))}
+                  </div>
+                )}
+              </Link>
             </li>
           ))}
         </ul>
