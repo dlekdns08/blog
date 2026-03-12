@@ -56,7 +56,7 @@ export function Sidebar() {
         <div className="mt-auto space-y-3">
           <div className="flex items-center gap-2">
             <a
-              href="https://github.com/idaun"
+              href="https://github.com/dlekdns08"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
