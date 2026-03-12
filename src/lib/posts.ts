@@ -5,39 +5,59 @@ import { remark } from "remark";
 import remarkHtml from "remark-html";
 
 export type PostMeta = {
-  slug: string;
+  slug: string;       // e.g. "ai/bert"
+  category: string;   // e.g. "ai"
   title: string;
-  date: string; // ISO string (YYYY-MM-DD)
+  date: string;
   description?: string;
   tags?: string[];
 };
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 
-function isMarkdownFile(fileName: string) {
-  return fileName.endsWith(".md") || fileName.endsWith(".mdx");
+function isMarkdownFile(name: string) {
+  return name.endsWith(".md") || name.endsWith(".mdx");
 }
 
-async function resolvePostPath(slug: string) {
-  const md = path.join(POSTS_DIR, `${slug}.md`);
-  const mdx = path.join(POSTS_DIR, `${slug}.mdx`);
-  try {
-    await fs.access(md);
-    return md;
-  } catch {
-    await fs.access(mdx);
-    return mdx;
+/** content/posts 아래 1단계 하위 폴더만 카테고리로 인식 */
+async function collectSlugs(): Promise<{ slug: string; category: string }[]> {
+  const entries = await fs.readdir(POSTS_DIR, { withFileTypes: true });
+  const results: { slug: string; category: string }[] = [];
+
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      const category = entry.name;
+      const files = await fs.readdir(path.join(POSTS_DIR, category), {
+        withFileTypes: true,
+      });
+      for (const file of files) {
+        if (file.isFile() && isMarkdownFile(file.name)) {
+          const name = file.name.replace(/\.(md|mdx)$/, "");
+          results.push({ slug: `${category}/${name}`, category });
+        }
+      }
+    } else if (entry.isFile() && isMarkdownFile(entry.name)) {
+      // 루트에 있는 파일은 category = ""
+      const name = entry.name.replace(/\.(md|mdx)$/, "");
+      results.push({ slug: name, category: "" });
+    }
   }
+
+  return results;
+}
+
+function resolveFilePath(slug: string): string {
+  // slug = "ai/bert" → content/posts/ai/bert.md
+  const base = path.join(POSTS_DIR, slug);
+  return base.endsWith(".md") || base.endsWith(".mdx") ? base : `${base}.md`;
 }
 
 export async function getAllPosts(): Promise<PostMeta[]> {
-  const entries = await fs.readdir(POSTS_DIR, { withFileTypes: true });
+  const slugInfos = await collectSlugs();
 
-  const slugs = entries
-    .filter((e) => e.isFile() && isMarkdownFile(e.name))
-    .map((e) => e.name.replace(/\.(md|mdx)$/, ""));
-
-  const metas = await Promise.all(slugs.map(getPostMetaBySlug));
+  const metas = await Promise.all(
+    slugInfos.map(({ slug, category }) => getPostMeta(slug, category))
+  );
 
   return metas.sort((a, b) => {
     const ad = Date.parse(a.date);
@@ -47,10 +67,9 @@ export async function getAllPosts(): Promise<PostMeta[]> {
   });
 }
 
-export async function getPostMetaBySlug(slug: string): Promise<PostMeta> {
-  const raw = await fs.readFile(await resolvePostPath(slug), "utf8");
-  const parsed = matter(raw);
-  const data = parsed.data as Partial<PostMeta>;
+async function getPostMeta(slug: string, category: string): Promise<PostMeta> {
+  const raw = await fs.readFile(resolveFilePath(slug), "utf8");
+  const { data } = matter(raw);
 
   if (!data.title || !data.date) {
     throw new Error(`Post frontmatter must include title and date: ${slug}`);
@@ -58,6 +77,7 @@ export async function getPostMetaBySlug(slug: string): Promise<PostMeta> {
 
   return {
     slug,
+    category,
     title: String(data.title),
     date: String(data.date),
     description: data.description ? String(data.description) : undefined,
@@ -69,26 +89,28 @@ export async function getPostBySlug(slug: string): Promise<{
   meta: PostMeta;
   html: string;
 }> {
-  const raw = await fs.readFile(await resolvePostPath(slug), "utf8");
-  const parsed = matter(raw);
-  const data = parsed.data as Partial<PostMeta>;
+  const filePath = resolveFilePath(slug);
+  const raw = await fs.readFile(filePath, "utf8");
+  const { data, content } = matter(raw);
 
   if (!data.title || !data.date) {
     throw new Error(`Post frontmatter must include title and date: ${slug}`);
   }
 
-  const processed = await remark().use(remarkHtml).process(parsed.content);
-  const html = String(processed);
+  const processed = await remark().use(remarkHtml).process(content);
+
+  // category = slug의 첫 번째 세그먼트 (없으면 "")
+  const category = slug.includes("/") ? slug.split("/")[0] : "";
 
   return {
     meta: {
       slug,
+      category,
       title: String(data.title),
       date: String(data.date),
       description: data.description ? String(data.description) : undefined,
       tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
     },
-    html,
+    html: String(processed),
   };
 }
-

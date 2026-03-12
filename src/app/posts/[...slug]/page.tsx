@@ -7,18 +7,25 @@ import { CommentSection } from "@/components/CommentSection";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 
 type PageProps = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
+};
+
+const CATEGORY_LABEL: Record<string, string> = {
+  ai: "AI",
+  dev: "개발",
+  life: "일상",
 };
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
-  return posts.map((p) => ({ slug: p.slug }));
+  return posts.map((p) => ({ slug: p.slug.split("/") }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const slugStr = slug.join("/");
   try {
-    const post = await getPostBySlug(slug);
+    const post = await getPostBySlug(slugStr);
     return {
       title: post.meta.title,
       description: post.meta.description,
@@ -30,13 +37,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PostDetailPage({ params }: PageProps) {
   const { slug } = await params;
+  const slugStr = slug.join("/");
 
   let post: Awaited<ReturnType<typeof getPostBySlug>>;
   try {
-    post = await getPostBySlug(slug);
+    post = await getPostBySlug(slugStr);
   } catch {
     notFound();
   }
+
+  const categoryLabel = CATEGORY_LABEL[post.meta.category] ?? post.meta.category;
 
   return (
     <main className="py-10">
@@ -54,6 +64,11 @@ export default async function PostDetailPage({ params }: PageProps) {
 
         {/* 포스트 헤더 */}
         <header className="mb-10 space-y-3">
+          {categoryLabel && (
+            <div className="text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-widest">
+              {categoryLabel}
+            </div>
+          )}
           <h1 className="text-2xl font-bold tracking-tight leading-tight">
             {post.meta.title}
           </h1>
@@ -62,26 +77,9 @@ export default async function PostDetailPage({ params }: PageProps) {
               {post.meta.description}
             </p>
           )}
-          <div className="flex items-center gap-3 pt-1">
-            <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
-              {post.meta.date}
-            </time>
-            {post.meta.tags && post.meta.tags.length > 0 && (
-              <>
-                <span className="text-zinc-200 dark:text-zinc-700">·</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {post.meta.tags.map((tag: string) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-500 dark:bg-white/10 dark:text-zinc-400"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+          <time className="block text-xs text-zinc-400 dark:text-zinc-500 tabular-nums pt-1">
+            {post.meta.date}
+          </time>
         </header>
 
         {/* 구분선 */}
@@ -95,14 +93,14 @@ export default async function PostDetailPage({ params }: PageProps) {
 
         {/* 좋아요 버튼 */}
         <div className="mt-12 flex justify-center">
-          <LikeButton slug={slug} />
+          <LikeButton slug={slugStr} />
         </div>
 
         {/* 댓글 구분선 */}
         <div className="mt-12 h-px bg-black/8 dark:bg-white/8" />
 
         {/* 댓글 섹션 */}
-        <CommentSection slug={slug} />
+        <CommentSection slug={slugStr} />
       </Container>
     </main>
   );
