@@ -38,7 +38,7 @@ export default function RootLayout({
 
         <div className="flex min-h-dvh">
           {/* 데스크탑 사이드바 */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex self-stretch">
             <Sidebar />
           </div>
 

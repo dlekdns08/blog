@@ -13,7 +13,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 border-r border-black/10 dark:border-white/10">
+    <aside className="w-56 shrink-0 border-r border-black/10 dark:border-white/10 self-stretch">
       <div className="sticky top-0 flex h-dvh flex-col px-6 py-8">
         {/* 블로그 타이틀 */}
         <Link href="/" className="group block">
