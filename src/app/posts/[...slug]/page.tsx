@@ -14,6 +14,8 @@ const CATEGORY_LABEL: Record<string, string> = {
   ai: "AI",
   dev: "개발",
   life: "일상",
+  class: "수업",
+  project: "프로젝트",
 };
 
 export async function generateStaticParams() {

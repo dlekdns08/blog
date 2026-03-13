@@ -2,7 +2,10 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 import { remark } from "remark";
-import remarkHtml from "remark-html";
+import remarkMath from "remark-math";
+import remarkRehype from "remark-rehype";
+import rehypeKatex from "rehype-katex";
+import rehypeStringify from "rehype-stringify";
 
 export type PostMeta = {
   slug: string;       // e.g. "ai/bert"
@@ -97,7 +100,12 @@ export async function getPostBySlug(slug: string): Promise<{
     throw new Error(`Post frontmatter must include title and date: ${slug}`);
   }
 
-  const processed = await remark().use(remarkHtml).process(content);
+  const processed = await remark()
+    .use(remarkMath)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeKatex)
+    .use(rehypeStringify, { allowDangerousHtml: true })
+    .process(content);
 
   // category = slug의 첫 번째 세그먼트 (없으면 "")
   const category = slug.includes("/") ? slug.split("/")[0] : "";
