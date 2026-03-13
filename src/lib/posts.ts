@@ -7,6 +7,11 @@ import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 import rehypeStringify from "rehype-stringify";
 
+export type Attachment = {
+  name: string;   // 표시 이름  e.g. "원본 논문 PDF"
+  file: string;   // public/ 기준 경로  e.g. "attachments/ai/transformerXL/paper.pdf"
+};
+
 export type PostMeta = {
   slug: string;       // e.g. "ai/bert"
   category: string;   // e.g. "ai"
@@ -14,6 +19,7 @@ export type PostMeta = {
   date: string;
   description?: string;
   tags?: string[];
+  attachments?: Attachment[];
 };
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
@@ -85,7 +91,16 @@ async function getPostMeta(slug: string, category: string): Promise<PostMeta> {
     date: String(data.date),
     description: data.description ? String(data.description) : undefined,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
+    attachments: parseAttachments(data.attachments),
   };
+}
+
+function parseAttachments(raw: unknown): Attachment[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const result = raw
+    .filter((item) => item && typeof item.name === "string" && typeof item.file === "string")
+    .map((item) => ({ name: String(item.name), file: String(item.file) }));
+  return result.length > 0 ? result : undefined;
 }
 
 export async function getPostBySlug(slug: string): Promise<{
@@ -118,6 +133,7 @@ export async function getPostBySlug(slug: string): Promise<{
       date: String(data.date),
       description: data.description ? String(data.description) : undefined,
       tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
+      attachments: parseAttachments(data.attachments),
     },
     html: String(processed),
   };

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
 import { LikeButton } from "@/components/LikeButton";
 import { CommentSection } from "@/components/CommentSection";
+import { PostAttachments } from "@/components/PostAttachments";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 
 type PageProps = {
@@ -92,6 +93,11 @@ export default async function PostDetailPage({ params }: PageProps) {
           className="prose max-w-none"
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
+
+        {/* 첨부 파일 */}
+        {post.meta.attachments && post.meta.attachments.length > 0 && (
+          <PostAttachments attachments={post.meta.attachments} />
+        )}
 
         {/* 좋아요 버튼 */}
         <div className="mt-12 flex justify-center">
