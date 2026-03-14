@@ -1,29 +1,26 @@
-name: Deploy Next.js
+name: Deploy Blog
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: self-hosted
-
     steps:
-      - name: 코드 체크아웃
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Node.js 설정
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
-      - name: 패키지 설치
-        run: npm ci
+      - name: Install and build
+        run: |
+          npm ci
+          npm run build
 
-      - name: 빌드
-        run: npm run build
-
-      - name: PM2 재시작
-        run: pm2 restart nextjs-app || pm2 start npm --name "nextjs-app" -- start
+      - name: Run
+        run: |
+          docker compose down || true
+          docker compose up -d --build
