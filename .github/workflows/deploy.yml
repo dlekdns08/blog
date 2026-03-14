@@ -37,20 +37,21 @@ jobs:
 
       - name: Health check
         run: |
-          for i in {1..10}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:${{ steps.color.outputs.next_port }})
+          sleep 5
+          for i in {1..15}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:${{ steps.color.outputs.next_port }} 2>/dev/null || echo "000")
+            echo "Status: $STATUS ($i/15)"
             if [ "$STATUS" = "200" ]; then
               echo "Health check passed!"
               exit 0
             fi
-            echo "Waiting... ($i/10)"
-            sleep 3
+            sleep 5
           done
           echo "Health check failed!"
           docker stop blog-${{ steps.color.outputs.next }} || true
           docker rm blog-${{ steps.color.outputs.next }} || true
           exit 1
-
+          
       - name: Switch Nginx traffic
         run: |
           sudo sed -i "s/localhost:[0-9]*/localhost:${{ steps.color.outputs.next_port }}/" /etc/nginx/sites-available/koala
