@@ -62,3 +62,11 @@ jobs:
           docker stop blog-${{ steps.color.outputs.current }} || true
           docker rm blog-${{ steps.color.outputs.current }} || true
           docker rmi blog:${{ steps.color.outputs.current }} || true
+
+      - name: Notify self-healing
+        if: failure()
+        run: |
+          curl -X POST http://5.104.87.242:8080/webhook/ci \
+            -H 'Content-Type: application/json' \
+            -H "x-ci-token: ${{ secrets.CI_WEBHOOK_TOKEN }}" \
+            -d "{\"repo\":\"dlekdns08/blog\",\"error_message\":\"Deploy failed\"}"
