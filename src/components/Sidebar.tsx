@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SubscribeForm } from "@/components/SubscribeForm";
 
 const NAV = [
   { href: "/", label: "홈" },
@@ -51,6 +52,9 @@ export function Sidebar() {
             );
           })}
         </nav>
+
+        {/* 구독 폼 */}
+        <SubscribeForm />
 
         {/* 하단 소셜 & 저작권 */}
         <div className="mt-auto space-y-3">
