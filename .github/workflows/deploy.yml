@@ -30,15 +30,7 @@ jobs:
         run: |
           if [ -f "package.json" ]; then
             AUDIT_OUT=$(npm audit --omit=dev --json 2>&1) || true
-            HIGH=$(echo "$AUDIT_OUT" | python3 -c "
-import json, sys
-try:
-    data = json.load(sys.stdin)
-    vulns = [v for v in data.get('vulnerabilities', {}).values() if v.get('severity') in ('high', 'critical')]
-    print(len(vulns))
-except:
-    print(0)
-" 2>/dev/null || echo "0")
+            HIGH=$(echo "$AUDIT_OUT" | python3 -c "import json,sys; d=json.load(sys.stdin); print(len([v for v in d.get('vulnerabilities',{}).values() if v.get('severity') in ('high','critical')]))" 2>/dev/null || echo "0")
             if [ "$HIGH" -gt "0" ]; then
               echo "::error::보안 스캔 실패 — HIGH/CRITICAL 취약점 ${HIGH}개 발견"
               echo "$AUDIT_OUT" > /tmp/blog_logs.txt
