@@ -229,7 +229,7 @@ export function CommentSection({ slug }: { slug: string }) {
   useEffect(() => {
     fetch(`${API_URL}/posts/${slug}/comments`)
       .then((r) => r.json())
-      .then((data) => setComments(data))
+      .then((data) => setComments(Array.isArray(data) ? data : []))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [slug]);
