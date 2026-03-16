@@ -1,4 +1,4 @@
-럍---
+---
 title: "MCP(Model Context Protocol) 완전 정복 — AI와 도구를 연결하는 USB-C"
 date: "2026-03-16"
 description: "Anthropic이 제안한 MCP의 구조와 작동 원리를 깊이 파헤칩니다. Host, Client, Server의 역할 분리부터 직접 MCP 서버를 만드는 실습 코드까지 한 번에 정리합니다."
