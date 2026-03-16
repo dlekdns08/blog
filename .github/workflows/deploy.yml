@@ -26,6 +26,17 @@ jobs:
             echo "next_port=3000" >> $GITHUB_OUTPUT
           fi
 
+      - name: Security scan
+        run: |
+          if [ -f "package.json" ]; then
+            npm audit --audit-level=high 2>/dev/null || {
+              echo "::error::보안 스캔 실패 — HIGH/CRITICAL npm 취약점이 발견되었습니다."
+              npm audit --audit-level=high 2>/dev/null > /tmp/blog_logs.txt || true
+              exit 1
+            }
+          fi
+          echo "Security scan passed."
+
       - name: Build and start next container
         run: |
           docker build -t blog:${{ steps.color.outputs.next }} .
@@ -66,7 +77,9 @@ jobs:
       - name: Notify self-healing
         if: failure()
         run: |
+          LOGS=$(cat /tmp/blog_logs.txt 2>/dev/null | tail -c 4000 || echo "Deploy failed")
+          PAYLOAD=$(jq -n --arg repo "dlekdns08/blog" --arg logs "$LOGS" '{"repo":$repo,"logs":$logs}')
           curl -X POST http://5.104.87.242:8080/webhook/ci \
             -H 'Content-Type: application/json' \
             -H "x-ci-token: ${{ secrets.CI_WEBHOOK_TOKEN }}" \
-            -d "{\"repo\":\"dlekdns08/blog\",\"error_message\":\"Deploy failed\"}"
+            -d "$PAYLOAD"
