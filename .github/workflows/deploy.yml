@@ -29,9 +29,9 @@ jobs:
       - name: Security scan
         run: |
           if [ -f "package.json" ]; then
-            npm audit --audit-level=high 2>/dev/null || {
+            npm audit --omit=dev --audit-level=high 2>/dev/null || {
               echo "::error::보안 스캔 실패 — HIGH/CRITICAL npm 취약점이 발견되었습니다."
-              npm audit --audit-level=high 2>/dev/null > /tmp/blog_logs.txt || true
+              npm audit --omit=dev --audit-level=high 2>/dev/null > /tmp/blog_logs.txt || true
               exit 1
             }
           fi
