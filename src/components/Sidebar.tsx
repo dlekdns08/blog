@@ -183,7 +183,18 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
 
         {/* ── 카테고리 드릴다운 ─────────────────────────── */}
         {categories.length > 0 && (
-          <div className="flex-1 min-h-0 overflow-y-auto mb-1 pr-0.5">
+          <div className="relative flex-1 min-h-0 mb-1">
+            {/* 상단 페이드 */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-zinc-50 dark:from-black to-transparent z-10" />
+            {/* 하단 페이드 */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-zinc-50 dark:from-black to-transparent z-10" />
+
+          <div className="h-full overflow-y-auto pr-0.5
+            [&::-webkit-scrollbar]:w-1
+            [&::-webkit-scrollbar-thumb]:rounded-full
+            [&::-webkit-scrollbar-thumb]:bg-zinc-200
+            dark:[&::-webkit-scrollbar-thumb]:bg-white/15
+            [&::-webkit-scrollbar-track]:bg-transparent">
 
             {/* 패널 헤더 */}
             <div className="flex items-center gap-2 mb-3 min-h-[1.5rem]">
@@ -332,6 +343,7 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
               </div>
             )}
 
+          </div>
           </div>
         )}
 

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import type { PostMeta } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 
@@ -37,19 +37,21 @@ function FilterPill({
 
 type Props = {
   posts: PostMeta[];
-  initialCategory?: string | null;
-  initialSub?: string | null;
-  initialSubSub?: string | null;
 };
 
-export function PostList({ posts, initialCategory, initialSub, initialSubSub }: Props) {
+export function PostList({ posts }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [activeCategory, setActiveCategory] = useState<string | null>(initialCategory ?? null);
-  const [activeSub,      setActiveSub]      = useState<string | null>(initialSub      ?? null);
-  const [activeSubSub,   setActiveSubSub]   = useState<string | null>(initialSubSub   ?? null);
-  const [query,          setQuery]          = useState("");
-  const [page,           setPage]           = useState(1);
+  const activeCategory = searchParams.get("category");
+  const activeSub      = searchParams.get("sub");
+  const activeSubSub   = searchParams.get("subsub");
+
+  const [query, setQuery] = useState("");
+  const [page,  setPage]  = useState(1);
+
+  // URL 파라미터 변경 시 페이지 초기화
+  useEffect(() => { setPage(1); }, [activeCategory, activeSub, activeSubSub]);
 
   // 카테고리 탭에 표시할 목록
   const categories = Array.from(new Set(posts.map((p) => p.category))).filter(Boolean);
@@ -64,23 +66,14 @@ export function PostList({ posts, initialCategory, initialSub, initialSubSub }: 
   }
 
   function handleCategoryChange(cat: string | null) {
-    setActiveCategory(cat);
-    setActiveSub(null);
-    setActiveSubSub(null);
-    setPage(1);
     router.push(buildUrl(cat, null, null), { scroll: false });
   }
 
   function clearSub() {
-    setActiveSub(null);
-    setActiveSubSub(null);
-    setPage(1);
     router.push(buildUrl(activeCategory, null, null), { scroll: false });
   }
 
   function clearSubSub() {
-    setActiveSubSub(null);
-    setPage(1);
     router.push(buildUrl(activeCategory, activeSub, null), { scroll: false });
   }
 

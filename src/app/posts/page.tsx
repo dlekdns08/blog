@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Container } from "@/components/Container";
 import { PostList } from "@/components/PostList";
 import { getAllPosts } from "@/lib/posts";
@@ -6,16 +7,8 @@ export const metadata = {
   title: "글",
 };
 
-type Props = {
-  searchParams: Promise<{
-    category?: string;
-    sub?: string;
-    subsub?: string;
-  }>;
-};
-
-export default async function PostsPage({ searchParams }: Props) {
-  const [posts, params] = await Promise.all([getAllPosts(), searchParams]);
+export default async function PostsPage() {
+  const posts = await getAllPosts();
 
   return (
     <main className="py-10">
@@ -27,12 +20,9 @@ export default async function PostsPage({ searchParams }: Props) {
           </p>
         </div>
 
-        <PostList
-          posts={posts}
-          initialCategory={params.category ?? null}
-          initialSub={params.sub ?? null}
-          initialSubSub={params.subsub ?? null}
-        />
+        <Suspense>
+          <PostList posts={posts} />
+        </Suspense>
       </Container>
     </main>
   );
