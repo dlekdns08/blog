@@ -186,8 +186,7 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
           <div className="relative flex-1 min-h-0 mb-1">
 
           <div className="h-full overflow-y-auto pr-0.5
-            [mask-image:linear-gradient(to_bottom,transparent,black_20px)]
-            [&::-webkit-scrollbar]:w-1
+[&::-webkit-scrollbar]:w-1
             [&::-webkit-scrollbar-thumb]:rounded-full
             [&::-webkit-scrollbar-thumb]:bg-zinc-300
             [&::-webkit-scrollbar-thumb:hover]:bg-zinc-400
