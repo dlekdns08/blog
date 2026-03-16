@@ -6,12 +6,11 @@ import { LikeButton } from "@/components/LikeButton";
 import { CommentSection } from "@/components/CommentSection";
 import { PostAttachments } from "@/components/PostAttachments";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { CATEGORY_CONFIG } from "@/lib/categories";
 
 type PageProps = {
   params: Promise<{ slug: string[] }>;
 };
-
-import { CATEGORY_CONFIG } from "@/lib/categories";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
