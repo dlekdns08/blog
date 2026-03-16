@@ -83,7 +83,7 @@ jobs:
           if [ -n "$NEW_POST" ]; then
             TITLE=$(grep -m1 '^title:' "$NEW_POST" 2>/dev/null | sed 's/^title:[[:space:]]*//' | tr -d '"' || basename "$NEW_POST" .md)
             SLUG=$(basename "$NEW_POST" .md)
-            curl -s -X POST http://5.104.87.242:8000/subscribe/notify \
+            curl -s -X POST https://api.koala.ai.kr/subscribe/notify \
               -H 'Content-Type: application/json' \
               -d "{\"title\":\"$TITLE\",\"slug\":\"$SLUG\",\"url\":\"https://koala.ai.kr/posts/$SLUG\",\"api_key\":\"${{ secrets.NOTIFY_API_KEY }}\"}" || true
           fi
