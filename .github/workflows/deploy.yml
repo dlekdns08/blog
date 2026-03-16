@@ -9,6 +9,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
 
       - name: Determine current color
         id: color
