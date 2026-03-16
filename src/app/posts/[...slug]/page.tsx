@@ -11,13 +11,7 @@ type PageProps = {
   params: Promise<{ slug: string[] }>;
 };
 
-const CATEGORY_LABEL: Record<string, string> = {
-  ai: "AI",
-  dev: "개발",
-  life: "일상",
-  class: "수업",
-  project: "프로젝트",
-};
+import { CATEGORY_CONFIG } from "@/lib/categories";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -49,14 +43,15 @@ export default async function PostDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const categoryLabel = CATEGORY_LABEL[post.meta.category] ?? post.meta.category;
+  const catConfig = CATEGORY_CONFIG[post.meta.category];
+  const categoryLabel = catConfig?.label ?? post.meta.category;
 
   return (
     <main className="py-10">
       <Container>
         {/* 뒤로가기 */}
         <Link
-          href="/posts"
+          href={`/posts${post.meta.category ? `?category=${post.meta.category}` : ""}`}
           className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-violet-600 dark:text-zinc-500 dark:hover:text-violet-400 transition-colors mb-8"
         >
           <svg className="size-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -67,9 +62,22 @@ export default async function PostDetailPage({ params }: PageProps) {
 
         {/* 포스트 헤더 */}
         <header className="mb-10 space-y-3">
+          {/* 카테고리 경로 */}
           {categoryLabel && (
-            <div className="text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-widest">
-              {categoryLabel}
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-widest">
+              <span>{categoryLabel}</span>
+              {post.meta.subcategory && (
+                <>
+                  <span className="text-violet-300 dark:text-violet-600">/</span>
+                  <span>{post.meta.subcategory}</span>
+                </>
+              )}
+              {post.meta.subSubcategory && (
+                <>
+                  <span className="text-violet-300 dark:text-violet-600">/</span>
+                  <span>{post.meta.subSubcategory}</span>
+                </>
+              )}
             </div>
           )}
           <h1 className="text-2xl font-bold tracking-tight leading-tight">

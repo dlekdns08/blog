@@ -1,16 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { PostMeta } from "@/lib/posts";
+import { CATEGORY_CONFIG } from "@/lib/categories";
 
 const PAGE_SIZE = 10;
-
-const CATEGORY_LABEL: Record<string, string> = {
-  ai: "AI",
-  dev: "개발",
-  life: "일상",
-};
 
 function TagBadge({ tag }: { tag: string }) {
   return (
@@ -20,30 +16,72 @@ function TagBadge({ tag }: { tag: string }) {
   );
 }
 
-export function PostList({ posts }: { posts: PostMeta[] }) {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
+function FilterPill({
+  label,
+  onRemove,
+}: {
+  label: string;
+  onRemove: () => void;
+}) {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-500/20 dark:text-violet-300">
+      {label}
+      <button onClick={onRemove} className="hover:text-violet-900 dark:hover:text-white transition-colors">
+        <svg className="size-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </span>
+  );
+}
 
-  // 실제 존재하는 카테고리만 추출 (중복 제거)
+type Props = {
+  posts: PostMeta[];
+  initialCategory?: string | null;
+  initialSub?: string | null;
+  initialSubSub?: string | null;
+};
+
+export function PostList({ posts, initialCategory, initialSub, initialSubSub }: Props) {
+  const router = useRouter();
+
+  const [activeCategory, setActiveCategory] = useState<string | null>(initialCategory ?? null);
+  const [activeSub,      setActiveSub]      = useState<string | null>(initialSub      ?? null);
+  const [activeSubSub,   setActiveSubSub]   = useState<string | null>(initialSubSub   ?? null);
+  const [query,          setQuery]          = useState("");
+  const [page,           setPage]           = useState(1);
+
+  // 카테고리 탭에 표시할 목록
   const categories = Array.from(new Set(posts.map((p) => p.category))).filter(Boolean);
 
-  const filtered = posts.filter((p) => {
-    const matchesCategory = activeCategory ? p.category === activeCategory : true;
-    const q = query.trim().toLowerCase();
-    const matchesQuery = q
-      ? p.title.toLowerCase().includes(q) ||
-        p.description?.toLowerCase().includes(q)
-      : true;
-    return matchesCategory && matchesQuery;
-  });
-
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  function buildUrl(cat: string | null, sub: string | null, subsub: string | null) {
+    const p = new URLSearchParams();
+    if (cat)    p.set("category", cat);
+    if (sub)    p.set("sub",      sub);
+    if (subsub) p.set("subsub",   subsub);
+    const qs = p.toString();
+    return `/posts${qs ? `?${qs}` : ""}`;
+  }
 
   function handleCategoryChange(cat: string | null) {
     setActiveCategory(cat);
+    setActiveSub(null);
+    setActiveSubSub(null);
     setPage(1);
+    router.push(buildUrl(cat, null, null), { scroll: false });
+  }
+
+  function clearSub() {
+    setActiveSub(null);
+    setActiveSubSub(null);
+    setPage(1);
+    router.push(buildUrl(activeCategory, null, null), { scroll: false });
+  }
+
+  function clearSubSub() {
+    setActiveSubSub(null);
+    setPage(1);
+    router.push(buildUrl(activeCategory, activeSub, null), { scroll: false });
   }
 
   function handleQueryChange(q: string) {
@@ -55,6 +93,18 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
     setPage(next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  const filtered = posts.filter((p) => {
+    const matchCat    = activeCategory ? p.category        === activeCategory : true;
+    const matchSub    = activeSub      ? p.subcategory     === activeSub      : true;
+    const matchSubSub = activeSubSub   ? p.subSubcategory  === activeSubSub   : true;
+    const q = query.trim().toLowerCase();
+    const matchQuery  = q ? p.title.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q) : true;
+    return matchCat && matchSub && matchSubSub && matchQuery;
+  });
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div>
@@ -81,10 +131,10 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
 
       {/* 카테고리 탭 */}
       {categories.length > 0 && (
-        <div className="flex items-center gap-1 mb-7 border-b border-black/8 dark:border-white/8">
+        <div className="flex items-center gap-1 mb-4 border-b border-black/8 dark:border-white/8 overflow-x-auto">
           <button
             onClick={() => handleCategoryChange(null)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
+            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px whitespace-nowrap transition-colors ${
               activeCategory === null
                 ? "border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400"
                 : "border-transparent text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
@@ -96,13 +146,13 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
             </span>
           </button>
           {categories.map((cat) => {
-            const label = CATEGORY_LABEL[cat] ?? cat;
+            const label = CATEGORY_CONFIG[cat]?.label ?? cat;
             const count = posts.filter((p) => p.category === cat).length;
             return (
               <button
                 key={cat}
                 onClick={() => handleCategoryChange(cat)}
-                className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
+                className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px whitespace-nowrap transition-colors ${
                   activeCategory === cat
                     ? "border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400"
                     : "border-transparent text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
@@ -115,6 +165,22 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
               </button>
             );
           })}
+        </div>
+      )}
+
+      {/* 활성 서브필터 표시 */}
+      {(activeSub || activeSubSub) && (
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
+          <span className="text-xs text-zinc-400 dark:text-zinc-500">필터:</span>
+          {activeSub && !activeSubSub && (
+            <FilterPill label={activeSub} onRemove={clearSub} />
+          )}
+          {activeSub && activeSubSub && (
+            <>
+              <FilterPill label={activeSub} onRemove={clearSub} />
+              <FilterPill label={activeSubSub} onRemove={clearSubSub} />
+            </>
+          )}
         </div>
       )}
 
@@ -132,6 +198,27 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
                   href={`/posts/${p.slug}`}
                   className="group block rounded-xl border border-black/8 bg-white p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8"
                 >
+                  {/* 카테고리 경로 */}
+                  {(p.category || p.subcategory) && (
+                    <div className="mb-1.5 flex items-center gap-1 text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
+                      {p.category && (
+                        <span>{CATEGORY_CONFIG[p.category]?.label ?? p.category}</span>
+                      )}
+                      {p.subcategory && (
+                        <>
+                          <span>/</span>
+                          <span>{p.subcategory}</span>
+                        </>
+                      )}
+                      {p.subSubcategory && (
+                        <>
+                          <span>/</span>
+                          <span>{p.subSubcategory}</span>
+                        </>
+                      )}
+                    </div>
+                  )}
+
                   <div className="flex items-baseline justify-between gap-4">
                     <span className="font-semibold text-zinc-900 group-hover:text-violet-700 dark:text-zinc-100 dark:group-hover:text-violet-300 transition-colors">
                       {p.title}
@@ -167,17 +254,17 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
               >
                 ←
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
                 <button
-                  key={p}
-                  onClick={() => changePage(p)}
+                  key={n}
+                  onClick={() => changePage(n)}
                   className={`min-w-[2rem] rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                    p === page
+                    n === page
                       ? "bg-violet-600 text-white dark:bg-violet-500"
                       : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"
                   }`}
                 >
-                  {p}
+                  {n}
                 </button>
               ))}
               <button

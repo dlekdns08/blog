@@ -6,8 +6,16 @@ export const metadata = {
   title: "글",
 };
 
-export default async function PostsPage() {
-  const posts = await getAllPosts();
+type Props = {
+  searchParams: Promise<{
+    category?: string;
+    sub?: string;
+    subsub?: string;
+  }>;
+};
+
+export default async function PostsPage({ searchParams }: Props) {
+  const [posts, params] = await Promise.all([getAllPosts(), searchParams]);
 
   return (
     <main className="py-10">
@@ -19,9 +27,13 @@ export default async function PostsPage() {
           </p>
         </div>
 
-        <PostList posts={posts} />
+        <PostList
+          posts={posts}
+          initialCategory={params.category ?? null}
+          initialSub={params.sub ?? null}
+          initialSubSub={params.subsub ?? null}
+        />
       </Container>
     </main>
   );
 }
-

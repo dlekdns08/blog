@@ -4,6 +4,8 @@ import "./globals.css";
 import "katex/dist/katex.min.css";
 import { Sidebar } from "@/components/Sidebar";
 import { MobileHeader } from "@/components/MobileHeader";
+import { getAllPosts } from "@/lib/posts";
+import { buildCategoryTree } from "@/lib/categories";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +26,14 @@ export const metadata: Metadata = {
     "코알라의 여정을 기록하는 블로그. LLM/IT 기술, 전문연구요원 일상, AI 개발의 도전과 성취를 나눕니다.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const posts = await getAllPosts();
+  const categories = buildCategoryTree(posts);
+
   return (
     <html lang="ko">
       <body
@@ -40,7 +45,7 @@ export default function RootLayout({
         <div className="flex min-h-dvh">
           {/* 데스크탑 사이드바 */}
           <div className="hidden md:flex self-stretch">
-            <Sidebar />
+            <Sidebar categories={categories} />
           </div>
 
           {/* 본문 */}

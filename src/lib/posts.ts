@@ -14,8 +14,10 @@ export type Attachment = {
 };
 
 export type PostMeta = {
-  slug: string;       // e.g. "ai/bert"
-  category: string;   // e.g. "ai"
+  slug: string;            // e.g. "ai/bert" or "ai/llm/bert"
+  category: string;        // e.g. "ai" (1st dir segment, "" if root)
+  subcategory?: string;    // e.g. "llm" (2nd dir segment, if any)
+  subSubcategory?: string; // e.g. "papers" (3rd dir segment, if any)
   title: string;
   date: string;
   description?: string;
@@ -29,30 +31,43 @@ function isMarkdownFile(name: string) {
   return name.endsWith(".md") || name.endsWith(".mdx");
 }
 
-/** content/posts 아래 1단계 하위 폴더만 카테고리로 인식 */
-async function collectSlugs(): Promise<{ slug: string; category: string }[]> {
-  const entries = await fs.readdir(POSTS_DIR, { withFileTypes: true });
-  const results: { slug: string; category: string }[] = [];
+/** content/posts 아래 최대 3단계 하위 폴더까지 재귀 스캔 */
+async function collectSlugs(): Promise<{
+  slug: string;
+  category: string;
+  subcategory?: string;
+  subSubcategory?: string;
+}[]> {
+  const results: {
+    slug: string;
+    category: string;
+    subcategory?: string;
+    subSubcategory?: string;
+  }[] = [];
 
-  for (const entry of entries) {
-    if (entry.isDirectory()) {
-      const category = entry.name;
-      const files = await fs.readdir(path.join(POSTS_DIR, category), {
-        withFileTypes: true,
-      });
-      for (const file of files) {
-        if (file.isFile() && isMarkdownFile(file.name)) {
-          const name = file.name.replace(/\.(md|mdx)$/, "");
-          results.push({ slug: `${category}/${name}`, category });
-        }
+  async function scan(dir: string, segments: string[], depth: number) {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isFile() && isMarkdownFile(entry.name)) {
+        const name = entry.name.replace(/\.(md|mdx)$/, "");
+        const slug = [...segments, name].join("/");
+        results.push({
+          slug,
+          category:       segments[0] ?? "",
+          subcategory:    segments[1],
+          subSubcategory: segments[2],
+        });
+      } else if (entry.isDirectory() && depth < 3) {
+        await scan(
+          path.join(dir, entry.name),
+          [...segments, entry.name],
+          depth + 1
+        );
       }
-    } else if (entry.isFile() && isMarkdownFile(entry.name)) {
-      // 루트에 있는 파일은 category = ""
-      const name = entry.name.replace(/\.(md|mdx)$/, "");
-      results.push({ slug: name, category: "" });
     }
   }
 
+  await scan(POSTS_DIR, [], 0);
   return results;
 }
 
@@ -66,7 +81,9 @@ export async function getAllPosts(): Promise<PostMeta[]> {
   const slugInfos = await collectSlugs();
 
   const metas = await Promise.all(
-    slugInfos.map(({ slug, category }) => getPostMeta(slug, category))
+    slugInfos.map(({ slug, category, subcategory, subSubcategory }) =>
+      getPostMeta(slug, category, subcategory, subSubcategory)
+    )
   );
 
   return metas.sort((a, b) => {
@@ -77,7 +94,12 @@ export async function getAllPosts(): Promise<PostMeta[]> {
   });
 }
 
-async function getPostMeta(slug: string, category: string): Promise<PostMeta> {
+async function getPostMeta(
+  slug: string,
+  category: string,
+  subcategory?: string,
+  subSubcategory?: string
+): Promise<PostMeta> {
   const raw = await fs.readFile(resolveFilePath(slug), "utf8");
   const { data } = matter(raw);
 
@@ -88,6 +110,8 @@ async function getPostMeta(slug: string, category: string): Promise<PostMeta> {
   return {
     slug,
     category,
+    subcategory,
+    subSubcategory,
     title: String(data.title),
     date: String(data.date),
     description: data.description ? String(data.description) : undefined,
@@ -124,13 +148,19 @@ export async function getPostBySlug(slug: string): Promise<{
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content);
 
-  // category = slug의 첫 번째 세그먼트 (없으면 "")
-  const category = slug.includes("/") ? slug.split("/")[0] : "";
+  // 디렉토리 세그먼트 추출 (마지막 세그먼트는 파일명)
+  const parts = slug.split("/");
+  const dirParts = parts.slice(0, -1);
+  const category       = dirParts[0] ?? "";
+  const subcategory    = dirParts[1];
+  const subSubcategory = dirParts[2];
 
   return {
     meta: {
       slug,
       category,
+      subcategory,
+      subSubcategory,
       title: String(data.title),
       date: String(data.date),
       description: data.description ? String(data.description) : undefined,
