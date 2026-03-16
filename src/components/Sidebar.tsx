@@ -184,16 +184,15 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
         {/* ── 카테고리 드릴다운 ─────────────────────────── */}
         {categories.length > 0 && (
           <div className="relative flex-1 min-h-0 mb-1">
-            {/* 상단 페이드 */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-zinc-50 dark:from-black to-transparent z-10" />
-            {/* 하단 페이드 */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-zinc-50 dark:from-black to-transparent z-10" />
 
           <div className="h-full overflow-y-auto pr-0.5
+            [mask-image:linear-gradient(to_bottom,transparent,black_20px)]
             [&::-webkit-scrollbar]:w-1
             [&::-webkit-scrollbar-thumb]:rounded-full
-            [&::-webkit-scrollbar-thumb]:bg-zinc-200
+            [&::-webkit-scrollbar-thumb]:bg-zinc-300
+            [&::-webkit-scrollbar-thumb:hover]:bg-zinc-400
             dark:[&::-webkit-scrollbar-thumb]:bg-white/15
+            dark:[&::-webkit-scrollbar-thumb:hover]:bg-white/30
             [&::-webkit-scrollbar-track]:bg-transparent">
 
             {/* 패널 헤더 */}
