@@ -136,10 +136,10 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
 
   return (
     <aside className="w-64 shrink-0 border-r border-black/8 dark:border-white/8 self-stretch">
-      <div className="sticky top-0 h-dvh flex flex-col overflow-y-auto px-4 py-7">
+      <div className="sticky top-0 h-dvh flex flex-col overflow-hidden px-4 py-7">
 
         {/* ── 헤더 ─────────────────────────────────────── */}
-        <Link href="/" className="group flex items-center gap-3 mb-7 px-1">
+        <Link href="/" className="group flex items-center gap-3 mb-7 px-1 shrink-0">
           <div className="size-10 rounded-2xl bg-gradient-to-br from-violet-100 to-violet-200 dark:from-violet-500/25 dark:to-violet-600/15 flex items-center justify-center text-xl shadow-sm shrink-0">
             🐨
           </div>
@@ -154,7 +154,7 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
         </Link>
 
         {/* ── 메인 네비게이션 ──────────────────────────── */}
-        <nav className="space-y-0.5 mb-5">
+        <nav className="space-y-0.5 mb-5 shrink-0">
           {NAV.map(({ href, label, icon }) => {
             const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
             return (
@@ -183,7 +183,7 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
 
         {/* ── 카테고리 드릴다운 ─────────────────────────── */}
         {categories.length > 0 && (
-          <div className="flex-1 min-h-0 mb-5">
+          <div className="flex-1 min-h-0 overflow-y-auto mb-1 pr-0.5">
 
             {/* 패널 헤더 */}
             <div className="flex items-center gap-2 mb-3 min-h-[1.5rem]">
@@ -335,25 +335,28 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
           </div>
         )}
 
-        {/* ── 구독 폼 ──────────────────────────────────── */}
-        <div className="mb-5 rounded-2xl bg-gradient-to-br from-violet-50 to-violet-100/50 dark:from-violet-500/10 dark:to-violet-600/5 p-4 border border-violet-100 dark:border-violet-500/15">
-          <SubscribeForm />
-        </div>
+        {/* ── 하단 고정 영역 (구독 + 푸터) ─────────────── */}
+        <div className="shrink-0 pt-3 space-y-4">
+          {/* 구독 폼 */}
+          <div className="rounded-2xl bg-gradient-to-br from-violet-50 to-violet-100/50 dark:from-violet-500/10 dark:to-violet-600/5 p-4 border border-violet-100 dark:border-violet-500/15">
+            <SubscribeForm />
+          </div>
 
-        {/* ── 하단 푸터 ─────────────────────────────────── */}
-        <div className="space-y-2.5 px-1">
-          <a
-            href="https://github.com/dlekdns08"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-800 dark:text-zinc-500 dark:hover:text-zinc-200 transition-colors"
-          >
-            <GitHubIcon />
-            <span>GitHub</span>
-          </a>
-          <p className="text-[11px] text-zinc-300 dark:text-white/20">
-            © {new Date().getFullYear()} 이다운
-          </p>
+          {/* 푸터 */}
+          <div className="space-y-2.5 px-1">
+            <a
+              href="https://github.com/dlekdns08"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-800 dark:text-zinc-500 dark:hover:text-zinc-200 transition-colors"
+            >
+              <GitHubIcon />
+              <span>GitHub</span>
+            </a>
+            <p className="text-[11px] text-zinc-300 dark:text-white/20">
+              © {new Date().getFullYear()} 이다운
+            </p>
+          </div>
         </div>
 
       </div>
