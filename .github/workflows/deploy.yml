@@ -67,7 +67,7 @@ jobs:
           
       - name: Switch Nginx traffic
         run: |
-          sudo sed -i "s/localhost:[0-9]*/localhost:${{ steps.color.outputs.next_port }}/" /etc/nginx/sites-available/koala
+          sudo sed -i "/server_name koala.ai.kr/,/}/s/localhost:[0-9]*/localhost:${{ steps.color.outputs.next_port }}/" /etc/nginx/sites-available/koala
           sudo nginx -t && sudo nginx -s reload
 
       - name: Remove old container
