@@ -10,12 +10,15 @@ export function DeleteButton({ slug }: { slug: string }) {
 
   async function handleDelete() {
     setDeleting(true)
-    const res = await fetch(`/api/admin/posts/${slug}`, { method: 'DELETE' })
-    if (res.ok) {
-      router.refresh()
-    } else {
-      const data = await res.json()
-      alert(data.error ?? '삭제 실패')
+    try {
+      const res = await fetch(`/api/admin/posts/${slug}`, { method: 'DELETE' })
+      if (res.ok) {
+        router.refresh()
+      } else {
+        const data = await res.json()
+        alert(data.error ?? '삭제 실패')
+      }
+    } finally {
       setDeleting(false)
       setConfirming(false)
     }

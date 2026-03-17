@@ -35,6 +35,10 @@ self-healing-cicd  (Python)          :8080
        Prometheus :9090  ←  Node Exporter :9100 (호스트 메트릭)
           ↓
        Grafana :3001
+          ↓
+       Nginx (443 SSL)
+          ↓
+  grafana.koala.ai.kr
 ```
 
 - **cAdvisor**: Docker 데몬에 접근해 각 컨테이너의 CPU, 메모리, 네트워크 지표를 수집
@@ -130,6 +134,8 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin123
       - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=https://grafana.koala.ai.kr
+      - GF_SERVER_DOMAIN=grafana.koala.ai.kr
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
@@ -260,8 +266,46 @@ cd /home/monitoring
 docker compose up -d
 ```
 
+---
+
+## Nginx + HTTPS 설정
+
+Grafana에 도메인을 붙이려면 Nginx 리버스 프록시를 추가해야 합니다.
+
+### /etc/nginx/sites-available/grafana
+
+```nginx
+server {
+    listen 80;
+    server_name grafana.koala.ai.kr;
+
+    location / {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+```bash
+# 심볼릭 링크 생성 및 활성화
+ln -s /etc/nginx/sites-available/grafana /etc/nginx/sites-enabled/grafana
+nginx -t && systemctl reload nginx
+
+# SSL 인증서 발급 (DNS A 레코드 등록 후)
+certbot --nginx -d grafana.koala.ai.kr
+```
+
+Certbot이 완료되면 Nginx 설정에 443 SSL 블록이 자동으로 추가되고, HTTP → HTTPS 리다이렉트도 설정됩니다.
+
 접속:
-- **Grafana**: `http://서버IP:3001` (admin / admin123)
+- **Grafana**: `https://grafana.koala.ai.kr` (admin / admin123)
 - **Prometheus**: `http://서버IP:9090`
 
 ---
@@ -324,6 +368,28 @@ self-healing   down  (← /metrics 엔드포인트 없음, 정상)
 ```
 
 blog/api/self-healing-cicd 서비스는 `/metrics` 엔드포인트를 별도로 구현하지 않아서 Prometheus scrape는 실패하지만, **cAdvisor가 수집하는 컨테이너 리소스 지표는 정상 동작**합니다. Grafana 대시보드에서 CPU, 메모리, 네트워크 I/O 모두 정상 시각화됩니다.
+
+---
+
+## 삽질 기록: 리버스 프록시 뒤에서 로그인 실패
+
+Nginx로 도메인을 붙인 뒤 `https://grafana.koala.ai.kr`에 접속하면 로그인 화면은 뜨는데, 로그인 버튼을 누르면 **"Login failed - Unknown error occurred"** 가 뜨는 현상이 생겼어요.
+
+원인은 Grafana의 **CSRF 보호 / 쿠키 도메인** 설정 때문입니다. Grafana는 자신이 어떤 URL로 서빙되는지 알아야 세션 쿠키를 올바르게 발급할 수 있는데, 설정이 없으면 내부 포트(`localhost:3001`) 기준으로 동작해서 외부 도메인에서 로그인이 깨집니다.
+
+**해결 방법**: `docker-compose.yml`의 Grafana 환경변수에 실제 접속 URL 명시
+
+```yaml
+environment:
+  - GF_SERVER_ROOT_URL=https://grafana.koala.ai.kr
+  - GF_SERVER_DOMAIN=grafana.koala.ai.kr
+```
+
+설정 후 컨테이너를 재시작하면 해결됩니다.
+
+```bash
+docker compose up -d grafana
+```
 
 ---
 
