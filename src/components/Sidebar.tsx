@@ -364,7 +364,8 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
               <span>GitHub</span>
             </a>
             <p className="text-[11px] text-zinc-300 dark:text-white/20">
-              © {new Date().getFullYear()} 이다운
+              <Link href="/admin/login" tabIndex={-1} className="hover:text-zinc-300 dark:hover:text-white/20">©</Link>{" "}
+              {new Date().getFullYear()} 이다운
             </p>
           </div>
         </div>
