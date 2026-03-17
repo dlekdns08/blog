@@ -3,6 +3,8 @@ name: Deploy Blog
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'content/posts/**'
 
 jobs:
   deploy:
