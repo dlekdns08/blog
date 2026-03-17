@@ -42,12 +42,23 @@ jobs:
           echo "Security scan passed."
 
       - name: Build and start next container
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
-          docker build -t blog:${{ steps.color.outputs.next }} .
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL}" \
+            -t blog:${{ steps.color.outputs.next }} .
           docker run -d \
             --name blog-${{ steps.color.outputs.next }} \
             -p ${{ steps.color.outputs.next_port }}:3000 \
             --restart always \
+            -e NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL}" \
+            -e ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }} \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e GITHUB_TOKEN=${{ secrets.BLOG_GITHUB_TOKEN }} \
+            -e GITHUB_OWNER=dlekdns08 \
+            -e GITHUB_REPO=blog \
+            -e GITHUB_BRANCH=main \
             blog:${{ steps.color.outputs.next }}
 
       - name: Health check
