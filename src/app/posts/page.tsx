@@ -3,6 +3,8 @@ import { Container } from "@/components/Container";
 import { PostList } from "@/components/PostList";
 import { getAllPosts } from "@/lib/posts";
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: "글",
 };
