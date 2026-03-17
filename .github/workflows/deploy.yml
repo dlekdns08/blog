@@ -50,6 +50,8 @@ jobs:
           docker build \
             --build-arg NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL}" \
             -t blog:${{ steps.color.outputs.next }} .
+          docker stop blog-${{ steps.color.outputs.next }} || true
+          docker rm blog-${{ steps.color.outputs.next }} || true
           docker run -d \
             --name blog-${{ steps.color.outputs.next }} \
             -p ${{ steps.color.outputs.next_port }}:3000 \
