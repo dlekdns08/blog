@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://api.koala.ai.kr";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.koala.ai.kr";
 
 export function SubscribeForm() {
   const [email, setEmail] = useState("");
