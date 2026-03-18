@@ -6,56 +6,116 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="py-10">
+    <main className="py-12">
       <Container>
-        <article className="space-y-6">
-          <header className="space-y-2">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              이다운의 코알라 오딧세이
-            </h1>
-            <p className="text-sm leading-7 text-black/70 dark:text-white/70">
-              안녕하세요. 저는 대학교에서 생명과학과 빅데이터 분석을, 대학원에서
-              LLM(이라고 하기엔 데이터 분석에 조금 더 가까웠습니다.. ) 를 공부했고
-              현재는 전문연구요원으로 모 IT 업체에서 AI 개발을 하면서 먹고 살고
-              있는 코알라라고 합니다.
-            </p>
+        <article className="space-y-10">
+
+          {/* Hero */}
+          <header className="flex flex-col items-center text-center gap-5 pb-8 border-b border-[var(--border)]">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full bg-[var(--accent-muted)] flex items-center justify-center text-5xl shadow-md ring-4 ring-[var(--border)]">
+                🐨
+              </div>
+            </div>
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold tracking-tight">
+                이다운의 코알라 오딧세이
+              </h1>
+              <p className="text-sm text-[var(--muted)]">
+                AI 개발자 · 전문연구요원 · 생명과학 + 빅데이터 출신
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2">
+              {["LLM", "AI 개발", "빅데이터", "생명과학", "Next.js"].map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 rounded-full text-xs font-medium bg-[var(--accent-muted)] text-[var(--accent)] border border-[var(--accent-muted)]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </header>
 
-          <section className="space-y-3 text-sm leading-7 text-black/70 dark:text-white/70">
-            <p>
-              제가 &quot;코알라 오딧세이&quot;라는 블로그를 개설하게 된 이유는 제
-              별명인 &apos;코알라&apos;와 고대 그리스의 서사시이자 긴 여행을 의미하는
-              &apos;오딧세이&apos;를 결합하여, 인생이라는 저만의 여정을 기록하고
-              소중한 추억으로 간직하고자 함입니다.
-            </p>
-            <p>
+          {/* About */}
+          <section className="grid sm:grid-cols-2 gap-4">
+            <Card emoji="👋" title="안녕하세요!">
+              대학교에서 <strong>생명과학</strong>과 <strong>빅데이터 분석</strong>을,
+              대학원에서 LLM(이라고 하기엔 데이터 분석에 조금 더 가까웠습니다..)을
+              공부했습니다. 현재는 전문연구요원으로 모 IT 업체에서{" "}
+              <strong>AI 개발</strong>을 하며 살고 있는 코알라입니다.
+            </Card>
+            <Card emoji="🧭" title="왜 코알라 오딧세이?">
+              제 별명인 <strong>&apos;코알라&apos;</strong>와 고대 그리스의 서사시이자
+              긴 여행을 의미하는 <strong>&apos;오딧세이&apos;</strong>를 결합하여,
+              인생이라는 저만의 여정을 기록하고 소중한 추억으로 간직하고자 이 블로그를
+              시작했습니다.
+            </Card>
+          </section>
+
+          {/* Philosophy */}
+          <section className="rounded-2xl bg-[var(--card)] border border-[var(--border)] p-6 space-y-3">
+            <h2 className="font-semibold text-base flex items-center gap-2">
+              <span>🌿</span> 블로그 운영 방식
+            </h2>
+            <p className="text-sm leading-7 text-[var(--muted)]">
               인생은 때로는 빠르게 달려가기도 하고, 때로는 그늘에서 휴식을 취하며
-              여유를 즐기기도 하듯이, 이 블로그의 포스팅 역시 규칙적이지 않을 수
-              있습니다. 하지만 그때그때의 경험과 생각을 솔직하게 나누고자 합니다.
+              여유를 즐기기도 합니다. 이 블로그의 포스팅 역시 규칙적이지 않을 수
+              있지만, 그때그때의 경험과 생각을 <strong>솔직하게</strong> 나누고자
+              합니다.
             </p>
           </section>
 
-          <section className="space-y-3 text-sm leading-7 text-black/70 dark:text-white/70">
-            <p>
-              이 블로그에서는 제가 현재 연구하고 있는 LLM 및 IT 기술에 대한 심도
-              있는 이야기부터, 전문연구요원으로서의 일상적인 경험, 그리고 개인적인
-              삶 속에서 겪는 다양한 에피소드까지 폭넓게 다룰 예정입니다. 또한, AI
-              개발 과정에서의 도전과 성취 등도 공유하고자 합니다.
-            </p>
-            <p>
-              저의 &quot;코알라 오딧세이&quot; 여정에 함께해 주신다면 큰 힘이 될 것입니다.
-              앞으로 이 공간을 통해 많은 분들과 소통하며 서로의 경험과 지식을 나눌
-              수 있기를 기대합니다. 지속적인 관심과 응원 부탁드리며, 잘 부탁드립니다!
-            </p>
+          {/* Topics */}
+          <section className="space-y-4">
+            <h2 className="font-semibold text-base">📝 이런 이야기를 씁니다</h2>
+            <div className="grid sm:grid-cols-3 gap-3">
+              {[
+                { emoji: "🤖", title: "AI & LLM", desc: "연구 중인 기술과 개발 과정의 도전과 성취" },
+                { emoji: "💼", title: "전문연구요원 일상", desc: "연구소 생활과 개발자로서의 일상적인 경험" },
+                { emoji: "🐨", title: "코알라의 에피소드", desc: "개인적인 삶 속에서 겪는 다양한 이야기" },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-xl border border-[var(--border)] p-4 space-y-2 hover:bg-[var(--card)] transition-colors"
+                >
+                  <div className="text-2xl">{item.emoji}</div>
+                  <p className="font-medium text-sm">{item.title}</p>
+                  <p className="text-xs leading-5 text-[var(--muted)]">{item.desc}</p>
+                </div>
+              ))}
+            </div>
           </section>
 
-          <footer className="text-sm leading-7 text-black/70 dark:text-white/70">
-            <p>감사합니다.</p>
-            <p className="mt-2">코알라 드림</p>
+          {/* Footer */}
+          <footer className="pt-6 border-t border-[var(--border)] flex flex-col items-center gap-1 text-sm text-[var(--muted)]">
+            <p>
+              저의 <strong>코알라 오딧세이</strong> 여정에 함께해 주셔서 감사합니다. 🙏
+            </p>
+            <p className="text-xs">— 코알라 드림</p>
           </footer>
+
         </article>
       </Container>
     </main>
   );
 }
 
+function Card({
+  emoji,
+  title,
+  children,
+}: {
+  emoji: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 space-y-3">
+      <h2 className="font-semibold text-sm flex items-center gap-2">
+        <span>{emoji}</span> {title}
+      </h2>
+      <p className="text-sm leading-7 text-[var(--muted)]">{children}</p>
+    </div>
+  );
+}
