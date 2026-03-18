@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.koala.ai.kr";
-
 function getClientId(): string {
   const key = "blog_client_id";
   let id = localStorage.getItem(key);
@@ -23,7 +21,7 @@ export function LikeButton({ slug }: { slug: string }) {
   // 초기 좋아요 상태 조회
   useEffect(() => {
     const clientId = getClientId();
-    fetch(`${API_URL}/posts/${slug}/likes?client_id=${clientId}`)
+    fetch(`/api/likes/${slug}?client_id=${clientId}`)
       .then((r) => r.json())
       .then((data) => {
         setLiked(data.liked);
@@ -44,7 +42,7 @@ export function LikeButton({ slug }: { slug: string }) {
 
     try {
       const clientId = getClientId();
-      const res = await fetch(`${API_URL}/posts/${slug}/likes`, {
+      const res = await fetch(`/api/likes/${slug}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ client_id: clientId }),
@@ -96,7 +94,10 @@ export function LikeButton({ slug }: { slug: string }) {
           d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
         />
       </svg>
-      <span>{count > 0 ? count : "좋아요"}</span>
+      <span>좋아요</span>
+      {count > 0 && (
+        <span className="tabular-nums">{count}</span>
+      )}
     </button>
   );
 }
