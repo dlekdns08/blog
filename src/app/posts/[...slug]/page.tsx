@@ -19,7 +19,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const slugStr = slug.join("/");
+  const slugStr = slug.map(decodeURIComponent).join("/");
   try {
     const post = await getPostBySlug(slugStr);
     return {
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PostDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const slugStr = slug.join("/");
+  const slugStr = slug.map(decodeURIComponent).join("/");
 
   let post: Awaited<ReturnType<typeof getPostBySlug>>;
   try {
