@@ -7,6 +7,7 @@ const NAV = [
   { href: "/", label: "홈" },
   { href: "/posts", label: "글" },
   { href: "/about", label: "소개" },
+  { href: "/game", label: "게임" },
 ];
 
 export function MobileHeader() {
