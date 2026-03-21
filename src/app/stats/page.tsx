@@ -2,6 +2,9 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 
+// Do not statically generate — requires live API at runtime
+export const dynamic = "force-dynamic";
+
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 async function getViewStats(): Promise<Record<string, number>> {
