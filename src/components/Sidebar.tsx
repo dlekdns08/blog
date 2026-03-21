@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { SubscribeForm } from "@/components/SubscribeForm";
+import { useCommandPalette } from "@/components/CommandPaletteProvider";
 import type { CategoryData, SubCategoryData } from "@/lib/categories";
 
 // ── 아이콘 ──────────────────────────────────────────────────
@@ -125,6 +126,7 @@ const NAV = [
 
 export function Sidebar({ categories }: { categories: CategoryData[] }) {
   const pathname = usePathname();
+  const cmdPalette = useCommandPalette();
 
   // 드릴다운 선택 상태
   const [selCat, setSelCat] = useState<string | null>(null);
@@ -161,6 +163,30 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
             </div>
           </div>
         </Link>
+
+        {/* ── 검색 버튼 (⌘K) ──────────────────────────── */}
+        <button
+          onClick={() => cmdPalette?.open()}
+          className="flex items-center gap-2.5 w-full rounded-xl px-3 py-2 mb-4 text-sm text-zinc-400 border border-dashed border-black/10 dark:border-white/10 hover:border-violet-300 dark:hover:border-violet-500/40 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 transition-all duration-150 shrink-0"
+        >
+          <svg
+            className="size-3.5 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.75}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 15.803a7.5 7.5 0 0 0 10.607 0Z"
+            />
+          </svg>
+          <span className="flex-1 text-left text-xs">검색</span>
+          <kbd className="text-[10px] font-medium bg-zinc-100 dark:bg-white/8 rounded px-1.5 py-0.5 leading-5">
+            ⌘K
+          </kbd>
+        </button>
 
         {/* ── 메인 네비게이션 ──────────────────────────── */}
         <nav className="space-y-0.5 mb-5 shrink-0">

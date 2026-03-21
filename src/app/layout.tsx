@@ -4,6 +4,7 @@ import "./globals.css";
 import "katex/dist/katex.min.css";
 import { Sidebar } from "@/components/Sidebar";
 import { MobileHeader } from "@/components/MobileHeader";
+import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
 import { getAllPosts } from "@/lib/posts";
 import { buildCategoryTree } from "@/lib/categories";
 
@@ -50,20 +51,22 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50 text-zinc-950 antialiased dark:bg-black dark:text-zinc-50`}
       >
-        {/* 모바일 헤더 */}
-        <MobileHeader />
+        <CommandPaletteProvider posts={posts}>
+          {/* 모바일 헤더 */}
+          <MobileHeader />
 
-        <div className="flex min-h-dvh">
-          {/* 데스크탑 사이드바 */}
-          <div className="hidden md:flex self-stretch">
-            <Sidebar categories={categories} />
-          </div>
+          <div className="flex min-h-dvh">
+            {/* 데스크탑 사이드바 */}
+            <div className="hidden md:flex self-stretch">
+              <Sidebar categories={categories} />
+            </div>
 
-          {/* 본문 */}
-          <div className="flex-1 min-w-0">
-            {children}
+            {/* 본문 */}
+            <div className="flex-1 min-w-0">
+              {children}
+            </div>
           </div>
-        </div>
+        </CommandPaletteProvider>
       </body>
     </html>
   );

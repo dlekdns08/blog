@@ -5,6 +5,42 @@ import { useEffect, useRef } from "react";
 const COPY_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
 const CHECK_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
 
+const LANG_LABELS: Record<string, string> = {
+  javascript: "JavaScript",
+  typescript: "TypeScript",
+  js: "JavaScript",
+  ts: "TypeScript",
+  jsx: "JSX",
+  tsx: "TSX",
+  python: "Python",
+  py: "Python",
+  bash: "Bash",
+  sh: "Shell",
+  shell: "Shell",
+  zsh: "Zsh",
+  css: "CSS",
+  html: "HTML",
+  json: "JSON",
+  yaml: "YAML",
+  yml: "YAML",
+  markdown: "Markdown",
+  md: "Markdown",
+  sql: "SQL",
+  rust: "Rust",
+  go: "Go",
+  java: "Java",
+  kotlin: "Kotlin",
+  swift: "Swift",
+  c: "C",
+  cpp: "C++",
+  csharp: "C#",
+  ruby: "Ruby",
+  php: "PHP",
+  dockerfile: "Dockerfile",
+  toml: "TOML",
+  xml: "XML",
+};
+
 export function PostContent({ html }: { html: string }) {
   const ref = useRef<HTMLElement>(null);
 
@@ -15,15 +51,31 @@ export function PostContent({ html }: { html: string }) {
     blocks.forEach((pre) => {
       if (pre.querySelector(".copy-btn")) return;
 
+      // ── 언어 배지 ──
+      const code = pre.querySelector("code");
+      const langClass = Array.from(code?.classList ?? []).find((c) =>
+        c.startsWith("language-")
+      );
+      if (langClass) {
+        const lang = langClass.replace("language-", "");
+        const label = LANG_LABELS[lang] ?? lang;
+        const badge = document.createElement("span");
+        badge.className = "lang-badge";
+        badge.textContent = label;
+        pre.appendChild(badge);
+      }
+
+      // ── 복사 버튼 ──
       const btn = document.createElement("button");
       btn.className = "copy-btn";
       btn.setAttribute("aria-label", "코드 복사");
       btn.innerHTML = COPY_ICON;
 
       btn.addEventListener("click", async () => {
-        const code = pre.querySelector("code")?.textContent ?? pre.textContent ?? "";
+        const text =
+          pre.querySelector("code")?.textContent ?? pre.textContent ?? "";
         try {
-          await navigator.clipboard.writeText(code);
+          await navigator.clipboard.writeText(text);
           btn.innerHTML = CHECK_ICON;
           btn.classList.add("copied");
           setTimeout(() => {
@@ -31,7 +83,7 @@ export function PostContent({ html }: { html: string }) {
             btn.classList.remove("copied");
           }, 2000);
         } catch {
-          // clipboard API 실패 시 무시
+          // clipboard API 미지원 시 무시
         }
       });
 

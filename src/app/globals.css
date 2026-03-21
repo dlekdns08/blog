@@ -221,3 +221,24 @@ body {
   color: #22c55e;
   opacity: 1;
 }
+
+/* ── Code Language Badge ── */
+
+.lang-badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.85rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.prose pre:has(.lang-badge) {
+  padding-top: 2.25rem;
+}
