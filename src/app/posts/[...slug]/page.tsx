@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { EmojiReactions } from "@/components/EmojiReactions";
 import { CommentSection } from "@/components/CommentSection";
@@ -145,7 +146,11 @@ export default async function PostDetailPage({ params }: PageProps) {
             <div className="mb-10 h-px bg-black/8 dark:bg-white/8" />
 
             {/* 본문 */}
-            <PostContent html={html} />
+            <Suspense fallback={
+              <article className="prose max-w-none" dangerouslySetInnerHTML={{ __html: html }} />
+            }>
+              <PostContent html={html} />
+            </Suspense>
 
             {/* 첨부 파일 */}
             {post.meta.attachments && post.meta.attachments.length > 0 && (
