@@ -7,10 +7,13 @@ import { PostAttachments } from "@/components/PostAttachments";
 import { PostContent } from "@/components/PostContent";
 import { PostNav } from "@/components/PostNav";
 import { ReadingProgress } from "@/components/ReadingProgress";
+import { ScrollToTop } from "@/components/ScrollToTop";
+import { ShareButton } from "@/components/ShareButton";
 import { TableOfContents } from "@/components/TableOfContents";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { injectHeadingIds } from "@/lib/headings";
+import { formatDate } from "@/lib/date";
 
 type PageProps = {
   params: Promise<{ slug: string[] }>;
@@ -77,14 +80,14 @@ export default async function PostDetailPage({ params }: PageProps) {
 
   return (
     <main className="py-10">
-      {/* 읽기 진행률 바 */}
       <ReadingProgress />
+      <ScrollToTop />
 
       <div className="mx-auto w-full max-w-5xl px-6 sm:px-8">
         <div className="xl:flex xl:gap-12">
 
-          {/* ── 메인 컨텐츠 ── */}
-          <div className="flex-1 min-w-0">
+          {/* ── 메인 컨텐츠 — 항상 max-w-3xl 유지 ── */}
+          <div className="w-full max-w-3xl mx-auto xl:mx-0 min-w-0">
 
             {/* 뒤로가기 */}
             <Link
@@ -124,9 +127,12 @@ export default async function PostDetailPage({ params }: PageProps) {
                   {post.meta.description}
                 </p>
               )}
-              <time className="block text-xs text-zinc-400 dark:text-zinc-500 tabular-nums pt-1">
-                {post.meta.date}
-              </time>
+              <div className="flex items-center gap-3 pt-1">
+                <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
+                  {formatDate(post.meta.date)}
+                </time>
+                <ShareButton />
+              </div>
             </header>
 
             {/* 구분선 */}

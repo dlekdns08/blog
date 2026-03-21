@@ -10,6 +10,9 @@ import {
 import { FaJava } from "react-icons/fa";
 import { TbBrain } from "react-icons/tb";
 import type { IconType } from "react-icons";
+import { getAllPosts } from "@/lib/posts";
+import { CATEGORY_CONFIG } from "@/lib/categories";
+import { formatRelativeDate } from "@/lib/date";
 
 type Stack = { icon: IconType; label: string; color: string };
 
@@ -54,7 +57,9 @@ function StackBadge({ icon: Icon, label, color }: Stack) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const recentPosts = (await getAllPosts()).slice(0, 5);
+
   return (
     <main className="flex flex-col min-h-dvh">
       {/* 히어로 이미지 */}
@@ -113,6 +118,53 @@ export default function Home() {
             </Link>
           </div>
         </section>
+
+        {/* 구분선 */}
+        <div className="h-px bg-black/8 dark:bg-white/8" />
+
+        {/* 최근 글 */}
+        {recentPosts.length > 0 && (
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+                최근 글
+              </h2>
+              <Link
+                href="/posts"
+                className="text-xs text-violet-600 dark:text-violet-400 hover:underline"
+              >
+                전체 보기 →
+              </Link>
+            </div>
+            <ul className="space-y-2">
+              {recentPosts.map((post) => {
+                const catConfig = CATEGORY_CONFIG[post.category];
+                return (
+                  <li key={post.slug}>
+                    <Link
+                      href={`/posts/${post.slug}`}
+                      className="group flex items-center justify-between gap-3 rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 hover:shadow-sm transition-all duration-150"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {catConfig && (
+                          <span className="text-base leading-none shrink-0">
+                            {catConfig.icon}
+                          </span>
+                        )}
+                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
+                          {post.title}
+                        </span>
+                      </div>
+                      <time className="text-xs text-zinc-400 dark:text-zinc-500 shrink-0 tabular-nums">
+                        {formatRelativeDate(post.date)}
+                      </time>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
         {/* 구분선 */}
         <div className="h-px bg-black/8 dark:bg-white/8" />
