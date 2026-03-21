@@ -41,7 +41,13 @@ export async function GET(req: NextRequest) {
     loadGoogleFont("Noto+Sans+KR", 700),
   ]);
 
-  const fonts: ConstructorParameters<typeof ImageResponse>[1]["fonts"] = [];
+  type FontOption = {
+    name: string;
+    data: ArrayBuffer;
+    weight?: 400 | 700;
+    style?: "normal" | "italic";
+  };
+  const fonts: FontOption[] = [];
   if (fontRegular) fonts.push({ name: "Noto", data: fontRegular, weight: 400, style: "normal" });
   if (fontBold) fonts.push({ name: "Noto", data: fontBold, weight: 700, style: "normal" });
 
