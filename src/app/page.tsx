@@ -78,13 +78,13 @@ export default async function Home() {
         {/* 이미지 위 텍스트 */}
         <div className="absolute bottom-0 left-0 right-0 px-8 pb-8">
           <h1 className="text-2xl font-bold tracking-tight drop-shadow-sm">
-            코알라의 오딧세이
+            코알라 오딧세이
           </h1>
           <p className="mt-1 text-sm text-black/60 dark:text-white/60">
             <TypingText
               texts={[
                 "이다운의 여정을 기록하는 블로그",
-                "LLM · AI · 생명과학 탐구",
+                "LLM · AI 탐구",
                 "코알라의 끝없는 오딧세이",
               ]}
             />
