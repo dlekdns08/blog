@@ -34,19 +34,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const post = await getPostBySlug(slugStr);
     const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://koala.ai.kr";
 
-    // 프론트매터에 image가 있으면 그걸 사용, 없으면 메인 히어로 이미지 fallback
-    let ogImageUrl: string;
-    if (post.meta.image) {
-      ogImageUrl = post.meta.image.startsWith("http")
-        ? post.meta.image
-        : `${BASE}${post.meta.image}`;
-    } else {
-      const ogUrl = new URL("/api/og", BASE);
-      ogUrl.searchParams.set("title", post.meta.title);
-      if (post.meta.category) ogUrl.searchParams.set("category", post.meta.category);
-      if (post.meta.date) ogUrl.searchParams.set("date", post.meta.date);
-      ogImageUrl = ogUrl.toString();
-    }
+    // 프론트매터에 image가 있으면 그걸 사용, 없으면 정적 기본 이미지
+    const ogImageUrl = post.meta.image
+      ? (post.meta.image.startsWith("http") ? post.meta.image : `${BASE}${post.meta.image}`)
+      : `${BASE}/coala_odsey2.png`;
 
     return {
       title: post.meta.title,
@@ -54,16 +45,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       openGraph: {
         title: post.meta.title,
         description: post.meta.description,
-        images: [
-          { url: ogImageUrl, width: 1200, height: 630 },
-          { url: `${BASE}/coala_odsey2.png`, width: 1536, height: 429 },  // fallback
-        ],
+        images: [{ url: ogImageUrl, width: 1536, height: 429 }],
       },
       twitter: {
         card: "summary_large_image",
         title: post.meta.title,
         description: post.meta.description,
-        images: [ogImageUrl],
+        images: [{ url: ogImageUrl }],
       },
     };
   } catch {
