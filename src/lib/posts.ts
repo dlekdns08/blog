@@ -23,6 +23,7 @@ export type PostMeta = {
   description?: string;
   tags?: string[];
   attachments?: Attachment[];
+  image?: string;          // OG 이미지 경로 (e.g. "/images/posts/my-post.png")
 };
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
@@ -117,6 +118,7 @@ async function getPostMeta(
     description: data.description ? String(data.description) : undefined,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
     attachments: parseAttachments(data.attachments),
+    image: data.image ? String(data.image) : undefined,
   };
 }
 
@@ -166,6 +168,7 @@ export async function getPostBySlug(slug: string): Promise<{
       description: data.description ? String(data.description) : undefined,
       tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
       attachments: parseAttachments(data.attachments),
+      image: data.image ? String(data.image) : undefined,
     },
     html: String(processed),
   };

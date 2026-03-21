@@ -21,7 +21,8 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://koala.ai.kr";
-const DEFAULT_OG = `${SITE_URL}/api/og?title=${encodeURIComponent("이다운의 코알라 오딧세이")}`;
+// 정적 이미지를 기본 OG로 사용 (동적 생성 실패 시 fallback)
+const DEFAULT_OG = `${SITE_URL}/coala_odsey2.png`;
 
 export const metadata: Metadata = {
   title: {

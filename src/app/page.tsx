@@ -67,7 +67,7 @@ export default async function Home() {
       <div className="relative w-full overflow-hidden">
         <Image
           src="/coala_odsey2.png"
-          alt="코알라의 오딧세이"
+          alt="코알라 오딧세이"
           width={1536}
           height={429}
           priority

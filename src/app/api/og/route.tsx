@@ -1,29 +1,29 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 
 export const runtime = "nodejs";
 
-async function loadGoogleFont(family: string, weight: number): Promise<ArrayBuffer | null> {
+let _cachedFonts: { regular: ArrayBuffer | null; bold: ArrayBuffer | null } | null = null;
+
+async function loadLocalFonts() {
+  if (_cachedFonts) return _cachedFonts;
   try {
-    const css = await fetch(
-      `https://fonts.googleapis.com/css2?family=${family}:wght@${weight}&display=swap`,
-      {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        },
-        cache: "force-cache",
-      }
-    ).then((r) => r.text());
-
-    const match = css.match(/src: url\(([^)]+)\) format\('woff2'\)/);
-    if (!match) return null;
-
-    return fetch(match[1], { cache: "force-cache" }).then((r) => r.arrayBuffer());
+    const dir = path.join(process.cwd(), "public", "fonts");
+    const [regular, bold] = await Promise.all([
+      readFile(path.join(dir, "NotoSansKR-Regular.otf")).catch(() => null),
+      readFile(path.join(dir, "NotoSansKR-Bold.otf")).catch(() => null),
+    ]);
+    _cachedFonts = {
+      regular: regular ? regular.buffer as ArrayBuffer : null,
+      bold: bold ? bold.buffer as ArrayBuffer : null,
+    };
   } catch {
-    return null;
+    _cachedFonts = { regular: null, bold: null };
   }
+  return _cachedFonts;
 }
 
 export async function GET(req: NextRequest) {
@@ -36,10 +36,7 @@ export async function GET(req: NextRequest) {
   const catLabel = catConfig?.label ?? (category || null);
   const catIcon = catConfig?.icon ?? null;
 
-  const [fontRegular, fontBold] = await Promise.all([
-    loadGoogleFont("Noto+Sans+KR", 400),
-    loadGoogleFont("Noto+Sans+KR", 700),
-  ]);
+  const { regular, bold } = await loadLocalFonts();
 
   type FontOption = {
     name: string;
@@ -48,8 +45,8 @@ export async function GET(req: NextRequest) {
     style?: "normal" | "italic";
   };
   const fonts: FontOption[] = [];
-  if (fontRegular) fonts.push({ name: "Noto", data: fontRegular, weight: 400, style: "normal" });
-  if (fontBold) fonts.push({ name: "Noto", data: fontBold, weight: 700, style: "normal" });
+  if (regular) fonts.push({ name: "Noto", data: regular, weight: 400, style: "normal" });
+  if (bold) fonts.push({ name: "Noto", data: bold, weight: 700, style: "normal" });
 
   const fontFamily = fonts.length > 0 ? "Noto" : "sans-serif";
 
