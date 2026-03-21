@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
-import { LikeButton } from "@/components/LikeButton";
+import { EmojiReactions } from "@/components/EmojiReactions";
 import { CommentSection } from "@/components/CommentSection";
 import { PostAttachments } from "@/components/PostAttachments";
+import { PostContent } from "@/components/PostContent";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 
@@ -96,19 +97,16 @@ export default async function PostDetailPage({ params }: PageProps) {
         <div className="mb-10 h-px bg-black/8 dark:bg-white/8" />
 
         {/* 본문 */}
-        <article
-          className="prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: post.html }}
-        />
+        <PostContent html={post.html} />
 
         {/* 첨부 파일 */}
         {post.meta.attachments && post.meta.attachments.length > 0 && (
           <PostAttachments attachments={post.meta.attachments} />
         )}
 
-        {/* 좋아요 버튼 */}
+        {/* 이모지 반응 */}
         <div className="mt-12 flex justify-center">
-          <LikeButton slug={slugStr} />
+          <EmojiReactions slug={slugStr} />
         </div>
 
         {/* 댓글 구분선 */}
