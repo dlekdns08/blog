@@ -23,9 +23,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const slugStr = slug.map(decodeURIComponent).join("/");
   try {
     const post = await getPostBySlug(slugStr);
+
+    const ogUrl = new URL("/api/og", process.env.NEXT_PUBLIC_SITE_URL ?? "https://koala.ai.kr");
+    ogUrl.searchParams.set("title", post.meta.title);
+    if (post.meta.category) ogUrl.searchParams.set("category", post.meta.category);
+    if (post.meta.date) ogUrl.searchParams.set("date", post.meta.date);
+
     return {
       title: post.meta.title,
       description: post.meta.description,
+      openGraph: {
+        title: post.meta.title,
+        description: post.meta.description,
+        images: [{ url: ogUrl.toString(), width: 1200, height: 630 }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.meta.title,
+        description: post.meta.description,
+        images: [ogUrl.toString()],
+      },
     };
   } catch {
     return { title: "글을 찾을 수 없음" };

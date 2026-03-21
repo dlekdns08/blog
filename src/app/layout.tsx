@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://koala.ai.kr";
+const DEFAULT_OG = `${SITE_URL}/api/og?title=${encodeURIComponent("이다운의 코알라 오딧세이")}`;
+
 export const metadata: Metadata = {
   title: {
     default: "이다운의 코알라 오딧세이",
@@ -24,6 +27,14 @@ export const metadata: Metadata = {
   },
   description:
     "코알라의 여정을 기록하는 블로그. LLM/IT 기술, 전문연구요원 일상, AI 개발의 도전과 성취를 나눕니다.",
+  openGraph: {
+    siteName: "이다운의 코알라 오딧세이",
+    images: [{ url: DEFAULT_OG, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [DEFAULT_OG],
+  },
 };
 
 export default async function RootLayout({
