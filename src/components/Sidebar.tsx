@@ -5,7 +5,11 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { SubscribeForm } from "@/components/SubscribeForm";
 import { useCommandPalette } from "@/components/CommandPaletteProvider";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { RandomPostButton } from "@/components/RandomPostButton";
+import { BookmarksWidget } from "@/components/BookmarksWidget";
 import type { CategoryData, SubCategoryData } from "@/lib/categories";
+import type { PostMeta } from "@/lib/posts";
 
 // ── 아이콘 ──────────────────────────────────────────────────
 
@@ -37,6 +41,14 @@ function GameIcon() {
   return (
     <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+    </svg>
+  );
+}
+
+function StatsIcon() {
+  return (
+    <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
     </svg>
   );
 }
@@ -122,9 +134,10 @@ const NAV = [
   { href: "/posts", label: "글",  icon: <PostsIcon /> },
   { href: "/about", label: "소개", icon: <AboutIcon /> },
   { href: "/game",  label: "게임", icon: <GameIcon /> },
+  { href: "/stats", label: "통계", icon: <StatsIcon /> },
 ];
 
-export function Sidebar({ categories }: { categories: CategoryData[] }) {
+export function Sidebar({ categories, posts }: { categories: CategoryData[]; posts: PostMeta[] }) {
   const pathname = usePathname();
   const cmdPalette = useCommandPalette();
 
@@ -211,10 +224,18 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
           })}
         </nav>
 
+        {/* ── 랜덤 글 버튼 ─────────────────────────────── */}
+        <div className="mb-1">
+          <RandomPostButton posts={posts} />
+        </div>
+
         {/* ── 구분선 ───────────────────────────────────── */}
         {categories.length > 0 && (
-          <div className="h-px bg-black/6 dark:bg-white/6 mb-5" />
+          <div className="h-px bg-black/6 dark:bg-white/6 mb-5 mt-4" />
         )}
+
+        {/* ── 북마크 위젯 ──────────────────────────────── */}
+        <BookmarksWidget posts={posts} />
 
         {/* ── 카테고리 드릴다운 ─────────────────────────── */}
         {categories.length > 0 && (
@@ -389,15 +410,18 @@ export function Sidebar({ categories }: { categories: CategoryData[] }) {
 
           {/* 푸터 */}
           <div className="space-y-2.5 px-1">
-            <a
-              href="https://github.com/dlekdns08"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-800 dark:text-zinc-500 dark:hover:text-zinc-200 transition-colors"
-            >
-              <GitHubIcon />
-              <span>GitHub</span>
-            </a>
+            <div className="flex items-center justify-between">
+              <a
+                href="https://github.com/dlekdns08"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-800 dark:text-zinc-500 dark:hover:text-zinc-200 transition-colors"
+              >
+                <GitHubIcon />
+                <span>GitHub</span>
+              </a>
+              <ThemeToggle compact />
+            </div>
             <p className="text-[11px] text-zinc-300 dark:text-white/20">
               <Link href="/admin/login" tabIndex={-1} className="hover:text-zinc-300 dark:hover:text-white/20">©</Link>{" "}
               {new Date().getFullYear()} 이다운

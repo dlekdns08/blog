@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode for Tailwind dark: variants */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #0f0f0f;
@@ -17,8 +20,20 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Class-based dark mode (set by ThemeProvider) */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #f0f0f0;
+  --muted: rgba(255, 255, 255, 0.60);
+  --card: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.12);
+  --accent: #a78bfa;
+  --accent-muted: rgba(167, 139, 250, 0.12);
+}
+
+/* Fallback for no-JS: still respect system preference */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.dark):not(.light) {
     --background: #0a0a0a;
     --foreground: #f0f0f0;
     --muted: rgba(255, 255, 255, 0.60);
@@ -241,4 +256,30 @@ body {
 
 .prose pre:has(.lang-badge) {
   padding-top: 2.25rem;
+}
+
+/* ── Search Highlight ── */
+
+.search-highlight {
+  background: rgba(109, 40, 217, 0.15);
+  color: var(--accent);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.dark .search-highlight {
+  background: rgba(167, 139, 250, 0.2);
+  color: #c4b5fd;
+}
+
+/* ── Post Card 3D Tilt ── */
+
+.post-card-tilt {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.post-card-tilt:hover {
+  box-shadow: 0 8px 30px rgba(109, 40, 217, 0.12);
 }

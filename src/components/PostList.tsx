@@ -209,7 +209,17 @@ export function PostList({ posts }: Props) {
               <li key={p.slug}>
                 <Link
                   href={`/posts/${p.slug}`}
-                  className="group block rounded-xl border border-black/8 bg-white p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8"
+                  className="post-card-tilt group block rounded-xl border border-black/8 bg-white p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8"
+                  style={{ perspective: "600px" }}
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+                    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+                    e.currentTarget.style.transform = `perspective(600px) rotateX(${y * -5}deg) rotateY(${x * 5}deg) translateY(-2px)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "";
+                  }}
                 >
                   {/* 카테고리 경로 */}
                   {(p.category || p.subcategory) && (

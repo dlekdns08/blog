@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCommandPalette } from "@/components/CommandPaletteProvider";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV = [
   { href: "/", label: "홈" },
   { href: "/posts", label: "글" },
   { href: "/about", label: "소개" },
   { href: "/game", label: "게임" },
+  { href: "/stats", label: "통계" },
 ];
 
 export function MobileHeader() {
@@ -24,6 +26,9 @@ export function MobileHeader() {
         </Link>
 
         <div className="flex items-center gap-1">
+          {/* 다크모드 토글 */}
+          <ThemeToggle compact />
+
           {/* 검색 버튼 */}
           <button
             onClick={() => cmdPalette?.open()}

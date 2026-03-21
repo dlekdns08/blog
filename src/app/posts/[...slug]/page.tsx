@@ -10,6 +10,8 @@ import { ReadingProgress } from "@/components/ReadingProgress";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ShareButton } from "@/components/ShareButton";
 import { TableOfContents } from "@/components/TableOfContents";
+import { BookmarkButton } from "@/components/BookmarkButton";
+import { ViewCounter } from "@/components/ViewCounter";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { injectHeadingIds } from "@/lib/headings";
@@ -127,11 +129,15 @@ export default async function PostDetailPage({ params }: PageProps) {
                   {post.meta.description}
                 </p>
               )}
-              <div className="flex items-center gap-3 pt-1">
+              <div className="flex items-center gap-3 pt-1 flex-wrap">
                 <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
                   {formatDate(post.meta.date)}
                 </time>
-                <ShareButton />
+                <ViewCounter slug={slugStr} />
+                <div className="flex items-center gap-1 ml-auto">
+                  <BookmarkButton slug={slugStr} title={post.meta.title} />
+                  <ShareButton />
+                </div>
               </div>
             </header>
 

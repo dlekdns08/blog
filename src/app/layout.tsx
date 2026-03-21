@@ -5,6 +5,8 @@ import "katex/dist/katex.min.css";
 import { Sidebar } from "@/components/Sidebar";
 import { MobileHeader } from "@/components/MobileHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { CursorTrail } from "@/components/CursorTrail";
 import { getAllPosts } from "@/lib/posts";
 import { buildCategoryTree } from "@/lib/categories";
 
@@ -38,6 +40,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Inline script to apply dark class before first render (prevents FOUC)
+const themeScript = `(function(){var t=localStorage.getItem("theme"),d=window.matchMedia("(prefers-color-scheme:dark)").matches;if(t==="dark"||(t!=="light"&&d))document.documentElement.classList.add("dark")})()`;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -48,25 +53,33 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
+      <head>
+        {/* Must run before body renders to avoid flash of wrong theme */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50 text-zinc-950 antialiased dark:bg-black dark:text-zinc-50`}
       >
-        <CommandPaletteProvider posts={posts}>
-          {/* 모바일 헤더 */}
-          <MobileHeader />
+        <ThemeProvider>
+          <CommandPaletteProvider posts={posts}>
+            <CursorTrail />
 
-          <div className="flex min-h-dvh">
-            {/* 데스크탑 사이드바 */}
-            <div className="hidden md:flex self-stretch">
-              <Sidebar categories={categories} />
-            </div>
+            {/* 모바일 헤더 */}
+            <MobileHeader />
 
-            {/* 본문 */}
-            <div className="flex-1 min-w-0">
-              {children}
+            <div className="flex min-h-dvh">
+              {/* 데스크탑 사이드바 */}
+              <div className="hidden md:flex self-stretch">
+                <Sidebar categories={categories} posts={posts} />
+              </div>
+
+              {/* 본문 */}
+              <div className="flex-1 min-w-0">
+                {children}
+              </div>
             </div>
-          </div>
-        </CommandPaletteProvider>
+          </CommandPaletteProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

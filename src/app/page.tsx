@@ -13,6 +13,7 @@ import type { IconType } from "react-icons";
 import { getAllPosts } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { formatRelativeDate } from "@/lib/date";
+import { TypingText } from "@/components/TypingText";
 
 type Stack = { icon: IconType; label: string; color: string };
 
@@ -80,7 +81,13 @@ export default async function Home() {
             코알라의 오딧세이
           </h1>
           <p className="mt-1 text-sm text-black/60 dark:text-white/60">
-            이다운의 여정을 기록하는 블로그
+            <TypingText
+              texts={[
+                "이다운의 여정을 기록하는 블로그",
+                "LLM · AI · 생명과학 탐구",
+                "코알라의 끝없는 오딧세이",
+              ]}
+            />
           </p>
         </div>
       </div>

@@ -48,10 +48,14 @@ export function CommandPalette({ posts, open, onClose }: Props) {
 
   const navigate = useCallback(
     (post: PostMeta) => {
-      router.push(`/posts/${post.slug}`);
+      const q = query.trim();
+      const url = q
+        ? `/posts/${post.slug}?q=${encodeURIComponent(q)}`
+        : `/posts/${post.slug}`;
+      router.push(url);
       onClose();
     },
-    [router, onClose]
+    [router, onClose, query]
   );
 
   // 열릴 때 초기화 + 포커스
