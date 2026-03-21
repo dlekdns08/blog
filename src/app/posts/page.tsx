@@ -18,22 +18,25 @@ export default async function PostsPage() {
   return (
     <main className="py-10">
       <Container>
-        <div className="lg:flex lg:gap-8 lg:items-start">
 
-          {/* 카테고리 네비게이션 (lg+ 왼쪽 고정 패널) */}
-          <div className="hidden lg:block w-56 shrink-0 sticky top-10">
+        {/* 페이지 헤더 — 전체 폭 */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold tracking-tight">글</h1>
+          <p className="mt-1 text-sm text-black/50 dark:text-white/50">
+            작성한 글 목록입니다.
+          </p>
+        </div>
+
+        {/* 본문 2단 레이아웃 */}
+        <div className="lg:flex lg:gap-10 lg:items-start">
+
+          {/* 카테고리 네비게이션 */}
+          <div className="hidden lg:block w-44 shrink-0 sticky top-10">
             <CategoryNav categories={categories} />
           </div>
 
           {/* 포스트 목록 */}
           <div className="flex-1 min-w-0">
-            <div className="space-y-2 mb-8">
-              <h1 className="text-2xl font-semibold tracking-tight">글</h1>
-              <p className="text-sm leading-6 text-black/70 dark:text-white/70">
-                작성한 글 목록입니다.
-              </p>
-            </div>
-
             <Suspense>
               <PostList posts={posts} />
             </Suspense>
