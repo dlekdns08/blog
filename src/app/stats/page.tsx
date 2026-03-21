@@ -21,64 +21,44 @@ function Skeleton({ className }: { className?: string }) {
 export default function StatsPage() {
   const [stats, setStats] = useState<PostStat[]>([]);
   const [loading, setLoading] = useState(true);
-  const [totalPosts, setTotalPosts] = useState(0);
 
   useEffect(() => {
     async function load() {
       try {
-        // Fetch posts list from the existing posts API proxy
-        const postsRes = await fetch("/api/admin/posts");
-        // posts API might not be public — fall back to reactions/bulk approach
-        // We use the reactions bulk endpoint to discover slugs, and views/top for views
-        const [viewsRes, reactionsTopRes] = await Promise.all([
-          fetch("/api/views/top?limit=100").then((r) => r.ok ? r.json() : []),
-          fetch("/api/views/bulk?slugs=").catch(() => ({})),
+        // 1. 전체 포스트 목록 (slug, title, category)
+        const postsRes = await fetch("/api/posts");
+        const posts: { slug: string; title: string; category: string }[] =
+          postsRes.ok ? await postsRes.json() : [];
+
+        if (posts.length === 0) { setLoading(false); return; }
+
+        const slugs = posts.map((p) => p.slug).join(",");
+        const enc = encodeURIComponent(slugs);
+
+        // 2. 조회수 + 반응수 병렬 fetch
+        const [viewsData, reactionsData] = await Promise.all([
+          fetch(`/api/views/bulk?slugs=${enc}`)
+            .then((r) => r.ok ? r.json() : {})
+            .catch(() => ({})) as Promise<Record<string, number>>,
+          fetch(`/api/reactions/bulk?slugs=${enc}`)
+            .then((r) => r.ok ? r.json() : {})
+            .catch(() => ({})) as Promise<Record<string, Record<string, number>>>,
         ]);
 
-        // viewsRes: [{slug, views}]
-        const viewMap: Record<string, number> = {};
-        let maxViews = 0;
-        for (const { slug, views } of viewsRes as { slug: string; views: number }[]) {
-          viewMap[slug] = views;
-          if (views > maxViews) maxViews = views;
-        }
-
-        // Get reaction counts for the slugs we know about
-        const knownSlugs = (viewsRes as { slug: string }[]).map((r) => r.slug);
-        let reactionMap: Record<string, number> = {};
-        if (knownSlugs.length > 0) {
-          const reacRes = await fetch(
-            `/api/reactions/bulk?slugs=${encodeURIComponent(knownSlugs.join(","))}`
-          );
-          if (reacRes.ok) {
-            const reacData: Record<string, Record<string, number>> = await reacRes.json();
-            for (const [slug, emojis] of Object.entries(reacData)) {
-              reactionMap[slug] = Object.values(emojis).reduce((a, b) => a + b, 0);
-            }
-          }
-        }
-
-        const combined: PostStat[] = (viewsRes as { slug: string; views: number }[]).map(
-          ({ slug, views }) => {
-            // Extract category from slug (first segment)
-            const parts = slug.split("/");
-            const category = parts.length > 1 ? parts[0] : "";
-            // Use slug as title if we can't get the real title
-            const title = slug.split("/").pop()?.replace(/-/g, " ") ?? slug;
-            return {
-              slug,
-              title,
-              category,
-              views,
-              reactions: reactionMap[slug] ?? 0,
-            };
-          }
-        );
+        const combined: PostStat[] = posts.map((p) => ({
+          slug: p.slug,
+          title: p.title,
+          category: p.category,
+          views: viewsData[p.slug] ?? 0,
+          reactions: Object.values(reactionsData[p.slug] ?? {}).reduce(
+            (a: number, b: number) => a + b,
+            0
+          ),
+        }));
 
         setStats(combined);
-        setTotalPosts(combined.length);
       } catch {
-        // ignore errors
+        /* ignore */
       } finally {
         setLoading(false);
       }
@@ -90,15 +70,18 @@ export default function StatsPage() {
   const totalReactions = stats.reduce((s, p) => s + p.reactions, 0);
 
   const byViews = [...stats].sort((a, b) => b.views - a.views);
-  const byReactions = [...stats].sort((a, b) => b.reactions - a.reactions).filter((p) => p.reactions > 0);
+  const byReactions = [...stats]
+    .sort((a, b) => b.reactions - a.reactions)
+    .filter((p) => p.reactions > 0);
 
-  // Category breakdown
   const catViews: Record<string, number> = {};
   for (const p of stats) {
     const key = p.category || "기타";
     catViews[key] = (catViews[key] ?? 0) + p.views;
   }
-  const sortedCats = Object.entries(catViews).sort((a, b) => b[1] - a[1]);
+  const sortedCats = Object.entries(catViews)
+    .filter(([, v]) => v > 0)
+    .sort((a, b) => b[1] - a[1]);
   const maxCatViews = sortedCats[0]?.[1] ?? 1;
 
   return (
@@ -121,7 +104,7 @@ export default function StatsPage() {
           ))
         ) : (
           [
-            { label: "조회된 글", value: totalPosts, unit: "개" },
+            { label: "전체 글", value: stats.length, unit: "개" },
             { label: "누적 조회", value: totalViews.toLocaleString(), unit: "회" },
             { label: "누적 반응", value: totalReactions.toLocaleString(), unit: "개" },
           ].map((s) => (
@@ -171,9 +154,9 @@ export default function StatsPage() {
         </section>
       )}
 
-      {(!loading && sortedCats.length > 0) && <div className="h-px bg-black/8 dark:bg-white/8" />}
+      {!loading && <div className="h-px bg-black/8 dark:bg-white/8" />}
 
-      {/* 조회수 TOP */}
+      {/* 조회수 TOP 10 */}
       <section className="space-y-3">
         <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
           조회수 TOP 10
@@ -184,13 +167,13 @@ export default function StatsPage() {
               <Skeleton key={i} className="h-12 w-full rounded-xl" />
             ))}
           </div>
-        ) : byViews.length === 0 ? (
+        ) : byViews.filter((p) => p.views > 0).length === 0 ? (
           <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-8">
             아직 조회 데이터가 없어요
           </p>
         ) : (
           <ol className="space-y-2">
-            {byViews.slice(0, 10).map((p, i) => (
+            {byViews.filter((p) => p.views > 0).slice(0, 10).map((p, i) => (
               <li key={p.slug}>
                 <Link
                   href={`/posts/${p.slug}`}
@@ -200,7 +183,7 @@ export default function StatsPage() {
                     {i + 1}
                   </span>
                   <span className="flex-1 text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
-                    {p.slug}
+                    {p.title}
                   </span>
                   <div className="flex items-center gap-3 shrink-0 text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
                     <span className="flex items-center gap-1">
@@ -219,6 +202,7 @@ export default function StatsPage() {
         )}
       </section>
 
+      {/* 반응 TOP 10 */}
       {!loading && byReactions.length > 0 && (
         <>
           <div className="h-px bg-black/8 dark:bg-white/8" />
@@ -237,7 +221,7 @@ export default function StatsPage() {
                       {i + 1}
                     </span>
                     <span className="flex-1 text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
-                      {p.slug}
+                      {p.title}
                     </span>
                     <span className="shrink-0 text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
                       {p.reactions}개 반응
