@@ -17,28 +17,7 @@ function TagBadge({ tag }: { tag: string }) {
   );
 }
 
-function FilterPill({
-  label,
-  onRemove,
-}: {
-  label: string;
-  onRemove: () => void;
-}) {
-  return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-500/20 dark:text-violet-300">
-      {label}
-      <button onClick={onRemove} className="hover:text-violet-900 dark:hover:text-white transition-colors">
-        <svg className="size-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </span>
-  );
-}
-
-type Props = {
-  posts: PostMeta[];
-};
+type Props = { posts: PostMeta[] };
 
 export function PostList({ posts }: Props) {
   const router = useRouter();
@@ -50,7 +29,6 @@ export function PostList({ posts }: Props) {
 
   const [query, setQuery] = useState("");
   const [page,  setPage]  = useState(1);
-  // { slug: { emoji: count } }
   const [reactionCounts, setReactionCounts] = useState<Record<string, Record<string, number>>>({});
 
   useEffect(() => {
@@ -62,11 +40,28 @@ export function PostList({ posts }: Props) {
       .catch(() => {});
   }, [posts]);
 
-  // URL 파라미터 변경 시 페이지 초기화
   useEffect(() => { setPage(1); }, [activeCategory, activeSub, activeSubSub]);
 
-  // 카테고리 탭에 표시할 목록
+  // 카테고리 목록 (글이 있는 것만)
   const categories = Array.from(new Set(posts.map((p) => p.category))).filter(Boolean);
+
+  // 선택된 카테고리의 소분류 목록
+  const subCategories = activeCategory
+    ? Array.from(new Set(
+        posts
+          .filter((p) => p.category === activeCategory && p.subcategory)
+          .map((p) => p.subcategory!)
+      ))
+    : [];
+
+  // 선택된 소분류의 세분류 목록
+  const subSubCategories = activeSub
+    ? Array.from(new Set(
+        posts
+          .filter((p) => p.category === activeCategory && p.subcategory === activeSub && p.subSubcategory)
+          .map((p) => p.subSubcategory!)
+      ))
+    : [];
 
   function buildUrl(cat: string | null, sub: string | null, subsub: string | null) {
     const p = new URLSearchParams();
@@ -75,18 +70,6 @@ export function PostList({ posts }: Props) {
     if (subsub) p.set("subsub",   subsub);
     const qs = p.toString();
     return `/posts${qs ? `?${qs}` : ""}`;
-  }
-
-  function handleCategoryChange(cat: string | null) {
-    router.push(buildUrl(cat, null, null), { scroll: false });
-  }
-
-  function clearSub() {
-    router.push(buildUrl(activeCategory, null, null), { scroll: false });
-  }
-
-  function clearSubSub() {
-    router.push(buildUrl(activeCategory, activeSub, null), { scroll: false });
   }
 
   function handleQueryChange(q: string) {
@@ -100,9 +83,9 @@ export function PostList({ posts }: Props) {
   }
 
   const filtered = posts.filter((p) => {
-    const matchCat    = activeCategory ? p.category        === activeCategory : true;
-    const matchSub    = activeSub      ? p.subcategory     === activeSub      : true;
-    const matchSubSub = activeSubSub   ? p.subSubcategory  === activeSubSub   : true;
+    const matchCat    = activeCategory ? p.category       === activeCategory : true;
+    const matchSub    = activeSub      ? p.subcategory    === activeSub      : true;
+    const matchSubSub = activeSubSub   ? p.subSubcategory === activeSubSub   : true;
     const q = query.trim().toLowerCase();
     const matchQuery  = q ? p.title.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q) : true;
     return matchCat && matchSub && matchSubSub && matchQuery;
@@ -115,14 +98,7 @@ export function PostList({ posts }: Props) {
     <div>
       {/* 검색창 */}
       <div className="relative mb-5">
-        <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400 pointer-events-none"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-        >
+        <svg className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400 pointer-events-none" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 15.803a7.5 7.5 0 0 0 10.607 0Z" />
         </svg>
         <input
@@ -134,57 +110,101 @@ export function PostList({ posts }: Props) {
         />
       </div>
 
-      {/* 카테고리 탭 */}
+      {/* 카테고리 필터 */}
       {categories.length > 0 && (
-        <div className="flex items-center gap-1 mb-4 border-b border-black/8 dark:border-white/8 overflow-x-auto">
-          <button
-            onClick={() => handleCategoryChange(null)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px whitespace-nowrap transition-colors ${
-              activeCategory === null
-                ? "border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400"
-                : "border-transparent text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
-            }`}
-          >
-            전체
-            <span className={`ml-1.5 text-xs ${activeCategory === null ? "text-violet-500" : "text-zinc-400 dark:text-zinc-600"}`}>
-              {posts.length}
-            </span>
-          </button>
-          {categories.map((cat) => {
-            const label = CATEGORY_CONFIG[cat]?.label ?? cat;
-            const count = posts.filter((p) => p.category === cat).length;
-            return (
-              <button
-                key={cat}
-                onClick={() => handleCategoryChange(cat)}
-                className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px whitespace-nowrap transition-colors ${
-                  activeCategory === cat
-                    ? "border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400"
-                    : "border-transparent text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
-                }`}
-              >
-                {label}
-                <span className={`ml-1.5 text-xs ${activeCategory === cat ? "text-violet-500" : "text-zinc-400 dark:text-zinc-600"}`}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      )}
+        <div className="mb-5 space-y-2">
 
-      {/* 활성 서브필터 표시 */}
-      {(activeSub || activeSubSub) && (
-        <div className="flex items-center gap-2 mb-4 flex-wrap">
-          <span className="text-xs text-zinc-400 dark:text-zinc-500">필터:</span>
-          {activeSub && !activeSubSub && (
-            <FilterPill label={activeSub} onRemove={clearSub} />
+          {/* 대분류 pills */}
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              onClick={() => router.push("/posts", { scroll: false })}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
+                !activeCategory
+                  ? "bg-violet-600 text-white shadow-sm"
+                  : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-white/8 dark:text-zinc-400 dark:hover:bg-white/12"
+              }`}
+            >
+              <span className="text-xs">📋</span>
+              <span>전체</span>
+              <span className={`text-xs tabular-nums ${!activeCategory ? "text-violet-200" : "text-zinc-400 dark:text-zinc-500"}`}>
+                {posts.length}
+              </span>
+            </button>
+
+            {categories.map((cat) => {
+              const cfg   = CATEGORY_CONFIG[cat];
+              const label = cfg?.label ?? cat;
+              const icon  = cfg?.icon  ?? "📁";
+              const count = posts.filter((p) => p.category === cat).length;
+              const active = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => router.push(buildUrl(cat, null, null), { scroll: false })}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
+                    active
+                      ? "bg-violet-600 text-white shadow-sm"
+                      : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-white/8 dark:text-zinc-400 dark:hover:bg-white/12"
+                  }`}
+                >
+                  <span className="text-xs">{icon}</span>
+                  <span>{label}</span>
+                  <span className={`text-xs tabular-nums ${active ? "text-violet-200" : "text-zinc-400 dark:text-zinc-500"}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 소분류 pills */}
+          {subCategories.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pl-1">
+              {subCategories.map((sub) => {
+                const count  = posts.filter((p) => p.category === activeCategory && p.subcategory === sub).length;
+                const active = activeSub === sub;
+                return (
+                  <button
+                    key={sub}
+                    onClick={() => router.push(buildUrl(activeCategory, active ? null : sub, null), { scroll: false })}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all ${
+                      active
+                        ? "bg-violet-100 text-violet-700 dark:bg-violet-500/25 dark:text-violet-300"
+                        : "bg-zinc-100/70 text-zinc-400 hover:bg-zinc-200 dark:bg-white/5 dark:text-zinc-500 dark:hover:bg-white/10"
+                    }`}
+                  >
+                    <span className="size-1.5 rounded-full bg-current opacity-60 shrink-0" />
+                    {sub}
+                    <span className="tabular-nums opacity-70">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
           )}
-          {activeSub && activeSubSub && (
-            <>
-              <FilterPill label={activeSub} onRemove={clearSub} />
-              <FilterPill label={activeSubSub} onRemove={clearSubSub} />
-            </>
+
+          {/* 세분류 pills */}
+          {subSubCategories.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pl-2">
+              {subSubCategories.map((ss) => {
+                const count  = posts.filter((p) => p.subcategory === activeSub && p.subSubcategory === ss).length;
+                const active = activeSubSub === ss;
+                return (
+                  <button
+                    key={ss}
+                    onClick={() => router.push(buildUrl(activeCategory, activeSub, active ? null : ss), { scroll: false })}
+                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-all ${
+                      active
+                        ? "bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-400"
+                        : "bg-zinc-100/50 text-zinc-400 hover:bg-zinc-200 dark:bg-white/4 dark:text-zinc-500 dark:hover:bg-white/8"
+                    }`}
+                  >
+                    <span className="size-1 rounded-full bg-current opacity-50 shrink-0" />
+                    {ss}
+                    <span className="tabular-nums opacity-70">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
           )}
         </div>
       )}
@@ -193,13 +213,9 @@ export function PostList({ posts }: Props) {
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-16 text-center">
           <span className="text-4xl select-none">🔍</span>
-          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-            검색 결과가 없습니다
-          </p>
+          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">검색 결과가 없습니다</p>
           {query && (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">
-              &ldquo;{query}&rdquo;에 맞는 글이 없어요
-            </p>
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">&ldquo;{query}&rdquo;에 맞는 글이 없어요</p>
           )}
         </div>
       ) : (
@@ -209,7 +225,7 @@ export function PostList({ posts }: Props) {
               <li key={p.slug}>
                 <Link
                   href={`/posts/${p.slug}`}
-                  className="post-card-tilt group block rounded-xl border border-black/8 bg-white p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8"
+                  className="group block rounded-xl border border-black/8 bg-white p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8"
                   style={{ perspective: "600px" }}
                   onMouseMove={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
@@ -217,42 +233,23 @@ export function PostList({ posts }: Props) {
                     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
                     e.currentTarget.style.transform = `perspective(600px) rotateX(${y * -5}deg) rotateY(${x * 5}deg) translateY(-2px)`;
                   }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "";
-                  }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = ""; }}
                 >
-                  {/* 카테고리 경로 */}
                   {(p.category || p.subcategory) && (
                     <div className="mb-1.5 flex items-center gap-1 text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
-                      {p.category && (
-                        <span>{CATEGORY_CONFIG[p.category]?.label ?? p.category}</span>
-                      )}
-                      {p.subcategory && (
-                        <>
-                          <span>/</span>
-                          <span>{p.subcategory}</span>
-                        </>
-                      )}
-                      {p.subSubcategory && (
-                        <>
-                          <span>/</span>
-                          <span>{p.subSubcategory}</span>
-                        </>
-                      )}
+                      {p.category && <span>{CATEGORY_CONFIG[p.category]?.label ?? p.category}</span>}
+                      {p.subcategory && <><span>/</span><span>{p.subcategory}</span></>}
+                      {p.subSubcategory && <><span>/</span><span>{p.subSubcategory}</span></>}
                     </div>
                   )}
-
                   <div className="flex items-baseline justify-between gap-4">
                     <span className="font-semibold text-zinc-900 group-hover:text-violet-700 dark:text-zinc-100 dark:group-hover:text-violet-300 transition-colors">
                       {p.title}
                     </span>
                     <div className="shrink-0 flex items-center gap-2">
-                      {/* 가장 많이 받은 반응 이모지 표시 */}
                       {(() => {
                         const reactions = reactionCounts[p.slug] ?? {};
-                        const top = Object.entries(reactions)
-                          .filter(([, cnt]) => cnt > 0)
-                          .sort(([, a], [, b]) => b - a)[0];
+                        const top = Object.entries(reactions).filter(([, cnt]) => cnt > 0).sort(([, a], [, b]) => b - a)[0];
                         if (!top) return null;
                         return (
                           <span className="inline-flex items-center gap-0.5 text-xs text-zinc-400 dark:text-zinc-500">
@@ -261,24 +258,17 @@ export function PostList({ posts }: Props) {
                           </span>
                         );
                       })()}
-                      <time
-                        className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums"
-                        title={p.date}
-                      >
+                      <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums" title={p.date}>
                         {formatRelativeDate(p.date)}
                       </time>
                     </div>
                   </div>
                   {p.description && (
-                    <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                      {p.description}
-                    </p>
+                    <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">{p.description}</p>
                   )}
                   {p.tags && p.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1.5">
-                      {p.tags.map((tag) => (
-                        <TagBadge key={tag} tag={tag} />
-                      ))}
+                      {p.tags.map((tag) => <TagBadge key={tag} tag={tag} />)}
                     </div>
                   )}
                 </Link>
@@ -293,9 +283,7 @@ export function PostList({ posts }: Props) {
                 onClick={() => changePage(page - 1)}
                 disabled={page === 1}
                 className="rounded-lg px-3 py-1.5 text-sm text-zinc-400 hover:text-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed dark:text-zinc-500 dark:hover:text-white transition-colors"
-              >
-                ←
-              </button>
+              >←</button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
                 <button
                   key={n}
@@ -305,17 +293,13 @@ export function PostList({ posts }: Props) {
                       ? "bg-violet-600 text-white dark:bg-violet-500"
                       : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"
                   }`}
-                >
-                  {n}
-                </button>
+                >{n}</button>
               ))}
               <button
                 onClick={() => changePage(page + 1)}
                 disabled={page === totalPages}
                 className="rounded-lg px-3 py-1.5 text-sm text-zinc-400 hover:text-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed dark:text-zinc-500 dark:hover:text-white transition-colors"
-              >
-                →
-              </button>
+              >→</button>
             </div>
           )}
         </>
