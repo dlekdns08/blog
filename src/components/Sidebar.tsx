@@ -2,13 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { SubscribeForm } from "@/components/SubscribeForm";
 import { useCommandPalette } from "@/components/CommandPaletteProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { RandomPostButton } from "@/components/RandomPostButton";
 import { BookmarksWidget } from "@/components/BookmarksWidget";
-import type { CategoryData, SubCategoryData } from "@/lib/categories";
 import type { PostMeta } from "@/lib/posts";
 
 // ── 아이콘 ──────────────────────────────────────────────────
@@ -61,72 +59,6 @@ function GitHubIcon() {
   );
 }
 
-function ChevronRight() {
-  return (
-    <svg className="size-3.5 shrink-0 text-zinc-400" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-    </svg>
-  );
-}
-
-function BackArrow() {
-  return (
-    <svg className="size-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-    </svg>
-  );
-}
-
-// ── 스텝 인디케이터 ──────────────────────────────────────────
-
-function StepIndicator({ depth }: { depth: number }) {
-  const STEPS = ["대분류", "소분류", "세분류"];
-  return (
-    <div className="flex items-center gap-px mb-4 px-0.5">
-      {STEPS.map((label, i) => (
-        <div key={i} className="flex items-center" style={{ flex: i < 2 ? "1 1 0%" : undefined }}>
-          <div className="flex flex-col items-center gap-0.5">
-            <span
-              className={`size-5 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-200 ${
-                depth >= i
-                  ? "bg-violet-600 text-white shadow-sm shadow-violet-300 dark:shadow-violet-900"
-                  : "bg-zinc-100 text-zinc-400 dark:bg-white/8 dark:text-zinc-500"
-              }`}
-            >
-              {i + 1}
-            </span>
-            <span
-              className={`text-[9px] font-medium whitespace-nowrap transition-colors duration-200 ${
-                depth >= i ? "text-violet-600 dark:text-violet-400" : "text-zinc-400 dark:text-zinc-600"
-              }`}
-            >
-              {label}
-            </span>
-          </div>
-          {i < 2 && (
-            <span
-              className={`flex-1 h-px mx-1 mb-3.5 transition-colors duration-200 ${
-                depth > i
-                  ? "bg-violet-400 dark:bg-violet-600"
-                  : "bg-zinc-200 dark:bg-white/10"
-              }`}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ── 공통 행 스타일 ───────────────────────────────────────────
-
-const rowBase =
-  "flex items-center justify-between w-full rounded-xl px-3 py-2.5 text-sm transition-all duration-150";
-const rowIdle =
-  "text-zinc-600 hover:bg-zinc-100/80 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/8 dark:hover:text-white";
-const rowActive =
-  "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300";
-
 // ── 메인 컴포넌트 ───────────────────────────────────────────
 
 const NAV = [
@@ -137,26 +69,9 @@ const NAV = [
   { href: "/stats", label: "통계", icon: <StatsIcon /> },
 ];
 
-export function Sidebar({ categories, posts }: { categories: CategoryData[]; posts: PostMeta[] }) {
+export function Sidebar({ categories: _categories, posts }: { categories: unknown[]; posts: PostMeta[] }) {
   const pathname = usePathname();
   const cmdPalette = useCommandPalette();
-
-  // 드릴다운 선택 상태
-  const [selCat, setSelCat] = useState<string | null>(null);
-  const [selSub, setSelSub] = useState<string | null>(null);
-
-  const depth = selCat ? (selSub ? 2 : 1) : 0;
-
-  const activeCat = categories.find((c) => c.name === selCat);
-  const activeSub: SubCategoryData | undefined = activeCat?.children.find((s) => s.name === selSub);
-
-  function goBack() {
-    if (selSub) {
-      setSelSub(null);
-    } else {
-      setSelCat(null);
-    }
-  }
 
   return (
     <aside className="w-64 shrink-0 border-r border-black/8 dark:border-white/8 self-stretch">
@@ -182,18 +97,8 @@ export function Sidebar({ categories, posts }: { categories: CategoryData[]; pos
           onClick={() => cmdPalette?.open()}
           className="flex items-center gap-2.5 w-full rounded-xl px-3 py-2 mb-4 text-sm text-zinc-400 border border-dashed border-black/10 dark:border-white/10 hover:border-violet-300 dark:hover:border-violet-500/40 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 transition-all duration-150 shrink-0"
         >
-          <svg
-            className="size-3.5 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.75}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 15.803a7.5 7.5 0 0 0 10.607 0Z"
-            />
+          <svg className="size-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 15.803a7.5 7.5 0 0 0 10.607 0Z" />
           </svg>
           <span className="flex-1 text-left text-xs">검색</span>
           <kbd className="text-[10px] font-medium bg-zinc-100 dark:bg-white/8 rounded px-1.5 py-0.5 leading-5">
@@ -225,181 +130,18 @@ export function Sidebar({ categories, posts }: { categories: CategoryData[]; pos
         </nav>
 
         {/* ── 랜덤 글 버튼 ─────────────────────────────── */}
-        <div className="mb-1">
+        <div className="mb-4">
           <RandomPostButton posts={posts} />
         </div>
 
         {/* ── 구분선 ───────────────────────────────────── */}
-        {categories.length > 0 && (
-          <div className="h-px bg-black/6 dark:bg-white/6 mb-5 mt-4" />
-        )}
+        <div className="h-px bg-black/6 dark:bg-white/6 mb-5" />
 
         {/* ── 북마크 위젯 ──────────────────────────────── */}
         <BookmarksWidget posts={posts} />
 
-        {/* ── 카테고리 드릴다운 ─────────────────────────── */}
-        {categories.length > 0 && (
-          <div className="relative flex-1 min-h-0 mb-1">
-
-          <div className="h-full overflow-y-auto pr-0.5
-[&::-webkit-scrollbar]:w-1
-            [&::-webkit-scrollbar-thumb]:rounded-full
-            [&::-webkit-scrollbar-thumb]:bg-zinc-300
-            [&::-webkit-scrollbar-thumb:hover]:bg-zinc-400
-            dark:[&::-webkit-scrollbar-thumb]:bg-white/15
-            dark:[&::-webkit-scrollbar-thumb:hover]:bg-white/30
-            [&::-webkit-scrollbar-track]:bg-transparent">
-
-            {/* 패널 헤더 */}
-            <div className="flex items-center gap-2 mb-3 min-h-[1.5rem]">
-              {depth > 0 ? (
-                <button
-                  onClick={goBack}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-violet-700 dark:text-zinc-400 dark:hover:text-violet-300 transition-colors"
-                >
-                  <BackArrow />
-                  <span className="truncate max-w-[9rem]">
-                    {depth === 2
-                      ? `${activeCat?.label} / ${selSub}`
-                      : activeCat?.label}
-                  </span>
-                </button>
-              ) : (
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 px-1">
-                  카테고리
-                </p>
-              )}
-            </div>
-
-            {/* 스텝 인디케이터 */}
-            <StepIndicator depth={depth} />
-
-            {/* ── 패널 0: 대분류 ─────────────────────── */}
-            {depth === 0 && (
-              <div className="space-y-0.5">
-                {categories.map((cat) => (
-                  cat.children.length > 0 ? (
-                    /* 서브카테고리 있음 → 드릴다운 */
-                    <button
-                      key={cat.name}
-                      onClick={() => { setSelCat(cat.name); setSelSub(null); }}
-                      className={`${rowBase} ${rowIdle}`}
-                    >
-                      <span className="flex items-center gap-2.5">
-                        <span className="text-base leading-none w-5 text-center">{cat.icon}</span>
-                        <span className="font-medium">{cat.label}</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">{cat.count}</span>
-                        <ChevronRight />
-                      </span>
-                    </button>
-                  ) : (
-                    /* 서브카테고리 없음 → 바로 링크 */
-                    <Link
-                      key={cat.name}
-                      href={`/posts?category=${cat.name}`}
-                      className={`${rowBase} ${rowIdle}`}
-                    >
-                      <span className="flex items-center gap-2.5">
-                        <span className="text-base leading-none w-5 text-center">{cat.icon}</span>
-                        <span className="font-medium">{cat.label}</span>
-                      </span>
-                      <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">{cat.count}</span>
-                    </Link>
-                  )
-                ))}
-              </div>
-            )}
-
-            {/* ── 패널 1: 소분류 ─────────────────────── */}
-            {depth === 1 && activeCat && (
-              <div className="space-y-0.5">
-                {/* 대분류 전체 */}
-                <Link
-                  href={`/posts?category=${activeCat.name}`}
-                  className={`${rowBase} ${rowIdle} border border-dashed border-black/8 dark:border-white/10`}
-                >
-                  <span className="flex items-center gap-2.5">
-                    <span className="text-base leading-none w-5 text-center">{activeCat.icon}</span>
-                    <span className="font-medium text-zinc-500 dark:text-zinc-400">전체보기</span>
-                  </span>
-                  <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">{activeCat.count}</span>
-                </Link>
-
-                <div className="h-px bg-black/5 dark:bg-white/5 my-1" />
-
-                {activeCat.children.map((sub) => (
-                  sub.children.length > 0 ? (
-                    /* 3단계 있음 → 드릴다운 */
-                    <button
-                      key={sub.name}
-                      onClick={() => setSelSub(sub.name)}
-                      className={`${rowBase} ${rowIdle}`}
-                    >
-                      <span className="flex items-center gap-2.5">
-                        <span className="size-1.5 rounded-full bg-violet-400 dark:bg-violet-500 shrink-0 ml-1.5" />
-                        <span className="font-medium">{sub.name}</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">{sub.count}</span>
-                        <ChevronRight />
-                      </span>
-                    </button>
-                  ) : (
-                    /* 3단계 없음 → 바로 링크 */
-                    <Link
-                      key={sub.name}
-                      href={`/posts?category=${activeCat.name}&sub=${sub.name}`}
-                      className={`${rowBase} ${rowIdle}`}
-                    >
-                      <span className="flex items-center gap-2.5">
-                        <span className="size-1.5 rounded-full bg-zinc-300 dark:bg-zinc-600 shrink-0 ml-1.5" />
-                        <span className="font-medium">{sub.name}</span>
-                      </span>
-                      <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">{sub.count}</span>
-                    </Link>
-                  )
-                ))}
-              </div>
-            )}
-
-            {/* ── 패널 2: 세분류 ─────────────────────── */}
-            {depth === 2 && activeCat && activeSub && (
-              <div className="space-y-0.5">
-                {/* 소분류 전체 */}
-                <Link
-                  href={`/posts?category=${activeCat.name}&sub=${activeSub.name}`}
-                  className={`${rowBase} ${rowIdle} border border-dashed border-black/8 dark:border-white/10`}
-                >
-                  <span className="flex items-center gap-2.5">
-                    <span className="size-1.5 rounded-full bg-violet-400 dark:bg-violet-500 shrink-0 ml-1.5" />
-                    <span className="font-medium text-zinc-500 dark:text-zinc-400">전체보기</span>
-                  </span>
-                  <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">{activeSub.count}</span>
-                </Link>
-
-                <div className="h-px bg-black/5 dark:bg-white/5 my-1" />
-
-                {activeSub.children.map((ss) => (
-                  <Link
-                    key={ss.name}
-                    href={`/posts?category=${activeCat.name}&sub=${activeSub.name}&subsub=${ss.name}`}
-                    className={`${rowBase} ${rowIdle}`}
-                  >
-                    <span className="flex items-center gap-2.5">
-                      <span className="size-1 rounded-full bg-zinc-300 dark:bg-zinc-600 shrink-0 ml-2" />
-                      <span className="font-medium">{ss.name}</span>
-                    </span>
-                    <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">{ss.count}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-
-          </div>
-          </div>
-        )}
+        {/* ── 여백 채우기 ──────────────────────────────── */}
+        <div className="flex-1" />
 
         {/* ── 하단 고정 영역 (구독 + 푸터) ─────────────── */}
         <div className="shrink-0 pt-3 space-y-4">
