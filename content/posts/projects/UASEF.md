@@ -1,6 +1,6 @@
 ---
 title: 'UASEF: 의료 LLM 에이전트를 위한 불확실성 기반 안전 에스컬레이션 프레임워크 설계'
-date: '2026-03-21'
+date: '2026-03-27'
 description: Uncertainty-Aware Safe Escalation Framework for Medical LLM Agent
 ---
 > **Uncertainty-Aware Safe Escalation Framework for Medical LLM Agents**
