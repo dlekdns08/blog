@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, useCallback, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { MarkdownEditor } from './MarkdownEditor'
+import { CategoryPicker, type CategoryParts } from './CategoryPicker'
 
 type Props = {
   mode: 'create' | 'edit'
@@ -24,7 +25,12 @@ export function PostForm({
   initialTags = '',
   initialContent = '',
 }: Props) {
-  const [slug, setSlug] = useState(initialSlug)
+  const [catParts, setCatParts] = useState<CategoryParts>({
+    category: '',
+    subcategory: '',
+    subSubcategory: '',
+  })
+  const [filename, setFilename] = useState('')
   const [title, setTitle] = useState(initialTitle)
   const [date, setDate] = useState(initialDate)
   const [description, setDescription] = useState(initialDescription)
@@ -33,6 +39,20 @@ export function PostForm({
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+
+  const handleCategoryChange = useCallback((parts: CategoryParts) => {
+    setCatParts(parts)
+  }, [])
+
+  // 카테고리 선택 + 파일명으로 최종 slug 조합
+  const computedSlug = [
+    catParts.category,
+    catParts.subcategory,
+    catParts.subSubcategory,
+    filename,
+  ]
+    .filter(Boolean)
+    .join('/')
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -46,10 +66,20 @@ export function PostForm({
 
     try {
       if (mode === 'create') {
+        if (!catParts.category) {
+          setError('카테고리를 선택해주세요.')
+          setSaving(false)
+          return
+        }
+        if (!filename.trim()) {
+          setError('파일명을 입력해주세요.')
+          setSaving(false)
+          return
+        }
         const res = await fetch('/api/admin/posts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug, title, date, description, tags: tagList, content }),
+          body: JSON.stringify({ slug: computedSlug, title, date, description, tags: tagList, content }),
         })
         const data = await res.json()
         if (!res.ok) throw new Error(data.error)
@@ -76,21 +106,37 @@ export function PostForm({
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {mode === 'create' && (
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1.5">
-              경로 (slug) <span className="text-red-500">*</span>
-            </label>
-            <input
-              value={slug}
-              onChange={(e) => setSlug(e.target.value)}
-              placeholder="예: ai/LLM/my-new-post"
-              required
-              className="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-none focus:ring-2 focus:ring-violet-500 font-mono"
-            />
-            <p className="mt-1 text-xs text-zinc-400">
-              영문, 숫자, /, -, _ 사용 가능 · 카테고리 구분은 /로
-            </p>
-          </div>
+          <>
+            {/* 카테고리 선택기 */}
+            <div className="md:col-span-2 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 space-y-4">
+              <CategoryPicker onChange={handleCategoryChange} />
+
+              {/* 파일명 입력 */}
+              {catParts.category && (
+                <div>
+                  <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 block mb-2">
+                    파일명 <span className="text-red-500">*</span>
+                    <span className="font-normal text-zinc-400 ml-1">(영문, 숫자, -, _ 사용)</span>
+                  </label>
+                  <input
+                    value={filename}
+                    onChange={(e) => setFilename(e.target.value.replace(/[^a-zA-Z0-9_-]/g, '-'))}
+                    placeholder="my-new-post"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-none focus:ring-2 focus:ring-violet-500 font-mono"
+                  />
+                </div>
+              )}
+
+              {/* 최종 slug 미리보기 */}
+              {computedSlug && (
+                <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                  <span className="text-zinc-300 dark:text-zinc-600">경로:</span>
+                  <span className="text-violet-600 dark:text-violet-400">content/posts/</span>
+                  <span className="text-zinc-700 dark:text-zinc-300">{computedSlug}.md</span>
+                </div>
+              )}
+            </div>
+          </>
         )}
 
         <div className="md:col-span-2">
