@@ -27,8 +27,14 @@ export function PostList({ posts }: Props) {
   const activeSub      = searchParams.get("sub");
   const activeSubSub   = searchParams.get("subsub");
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(searchParams.get("search") ?? "");
   const [page,  setPage]  = useState(1);
+
+  // URL의 search 파라미터가 바뀌면 검색어도 동기화 (워드 클라우드 등에서 링크로 진입 시)
+  useEffect(() => {
+    setQuery(searchParams.get("search") ?? "");
+    setPage(1);
+  }, [searchParams]);
   const [reactionCounts, setReactionCounts] = useState<Record<string, Record<string, number>>>({});
 
   useEffect(() => {
