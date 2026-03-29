@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 const NAV = [
   { href: "/", label: "홈" },
   { href: "/posts", label: "글" },
+  { href: "/wordcloud", label: "워드클라우드" },
   { href: "/about", label: "소개" },
   { href: "/game", label: "게임" },
   { href: "/stats", label: "통계" },

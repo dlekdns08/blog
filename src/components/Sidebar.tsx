@@ -70,11 +70,12 @@ function GitHubIcon() {
 // ── 메인 컴포넌트 ───────────────────────────────────────────
 
 const NAV = [
-  { href: "/",      label: "홈",  icon: <HomeIcon /> },
-  { href: "/posts", label: "글",  icon: <PostsIcon /> },
-  { href: "/about", label: "소개", icon: <AboutIcon /> },
-  { href: "/game",  label: "게임", icon: <GameIcon /> },
-  { href: "/stats", label: "통계", icon: <StatsIcon /> },
+  { href: "/",           label: "홈",        icon: <HomeIcon /> },
+  { href: "/posts",      label: "글",        icon: <PostsIcon /> },
+  { href: "/wordcloud",  label: "워드클라우드", icon: <WordCloudIcon /> },
+  { href: "/about",      label: "소개",       icon: <AboutIcon /> },
+  { href: "/game",       label: "게임",       icon: <GameIcon /> },
+  { href: "/stats",      label: "통계",       icon: <StatsIcon /> },
 ];
 
 export function Sidebar({ categories: _categories, posts }: { categories: unknown[]; posts: PostMeta[] }) {
