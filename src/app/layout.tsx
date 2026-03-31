@@ -7,6 +7,7 @@ import { MobileHeader } from "@/components/MobileHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CursorTrail } from "@/components/CursorTrail";
+import { ChatWidget } from "@/components/ChatWidget";
 import { getAllPosts } from "@/lib/posts";
 import { buildCategoryTree } from "@/lib/categories";
 
@@ -79,6 +80,7 @@ export default async function RootLayout({
                 {children}
               </div>
             </div>
+            <ChatWidget />
           </CommandPaletteProvider>
         </ThemeProvider>
       </body>
