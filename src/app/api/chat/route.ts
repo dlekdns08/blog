@@ -13,6 +13,10 @@ const BASE_SYSTEM = `당신은 '코알라 오딧세이' 블로그의 AI 어시�
 type Message = { role: "user" | "assistant"; content: string };
 
 export async function POST(req: NextRequest) {
+  if (!process.env.CLAUDE_TOKEN) {
+    return new Response("CLAUDE_TOKEN is not configured", { status: 503 });
+  }
+
   const { messages, context } = (await req.json()) as {
     messages: Message[];
     context?: string;
@@ -26,32 +30,37 @@ export async function POST(req: NextRequest) {
     ? `${BASE_SYSTEM}\n\n현재 독자가 읽고 있는 글의 내용:\n\`\`\`\n${context.slice(0, 8000)}\n\`\`\``
     : BASE_SYSTEM;
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        const anthropicStream = client.messages.stream({
-          model: "claude-opus-4-6",
-          max_tokens: 1024,
-          system,
-          messages,
-        });
+  try {
+    const anthropicStream = client.messages.stream({
+      model: "claude-opus-4-6",
+      max_tokens: 1024,
+      system,
+      messages,
+    });
 
-        for await (const chunk of anthropicStream) {
-          if (
-            chunk.type === "content_block_delta" &&
-            chunk.delta.type === "text_delta"
-          ) {
-            controller.enqueue(new TextEncoder().encode(chunk.delta.text));
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of anthropicStream) {
+            if (
+              chunk.type === "content_block_delta" &&
+              chunk.delta.type === "text_delta"
+            ) {
+              controller.enqueue(new TextEncoder().encode(chunk.delta.text));
+            }
           }
+          controller.close();
+        } catch (err) {
+          controller.error(err);
         }
-        controller.close();
-      } catch (err) {
-        controller.error(err);
-      }
-    },
-  });
+      },
+    });
 
-  return new Response(stream, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
-  });
+    return new Response(stream, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return new Response(message, { status: 502 });
+  }
 }
