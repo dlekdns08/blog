@@ -57,6 +57,7 @@ jobs:
             -p ${{ steps.color.outputs.next_port }}:3000 \
             --restart always \
             -e NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL}" \
+            -e CLAUDE_TOKEN=${{ secrets.CLAUDE_TOKEN }} \
             -e ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }} \
             -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
             -e GITHUB_TOKEN=${{ secrets.BLOG_GITHUB_TOKEN }} \
