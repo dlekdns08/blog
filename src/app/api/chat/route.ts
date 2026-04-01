@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
           }
           controller.close();
         } catch (err) {
+          console.error("[chat] stream error:", err);
           controller.error(err);
         }
       },
@@ -60,7 +61,10 @@ export async function POST(req: NextRequest) {
       headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("[chat] error:", err);
+    const message = err instanceof Error
+      ? `${err.name}: ${err.message}`
+      : String(err);
     return new Response(message, { status: 502 });
   }
 }
