@@ -8,6 +8,8 @@ const DB_PATH =
 
 let _db: Database.Database | null = null;
 
+console.log("Using database path:", DB_PATH);
+
 function getDb(): Database.Database {
   if (!_db) {
     _db = new Database(DB_PATH, { readonly: true });
