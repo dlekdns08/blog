@@ -43,6 +43,14 @@ function GameIcon() {
   );
 }
 
+function ArxivIcon() {
+  return (
+    <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+    </svg>
+  );
+}
+
 function StatsIcon() {
   return (
     <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
@@ -70,12 +78,13 @@ function GitHubIcon() {
 // ── 메인 컴포넌트 ───────────────────────────────────────────
 
 const NAV = [
-  { href: "/",           label: "홈",        icon: <HomeIcon /> },
-  { href: "/posts",      label: "글",        icon: <PostsIcon /> },
-  { href: "/wordcloud",  label: "워드클라우드", icon: <WordCloudIcon /> },
-  { href: "/about",      label: "소개",       icon: <AboutIcon /> },
-  { href: "/game",       label: "게임",       icon: <GameIcon /> },
-  { href: "/stats",      label: "통계",       icon: <StatsIcon /> },
+  { href: "/",              label: "홈",          icon: <HomeIcon /> },
+  { href: "/posts",         label: "글",          icon: <PostsIcon /> },
+  { href: "/wordcloud",     label: "워드클라우드",  icon: <WordCloudIcon /> },
+  { href: "/arxiv-graph",   label: "논문 그래프",   icon: <ArxivIcon /> },
+  { href: "/about",         label: "소개",         icon: <AboutIcon /> },
+  { href: "/game",          label: "게임",         icon: <GameIcon /> },
+  { href: "/stats",         label: "통계",         icon: <StatsIcon /> },
 ];
 
 export function Sidebar({ categories: _categories, posts }: { categories: unknown[]; posts: PostMeta[] }) {
