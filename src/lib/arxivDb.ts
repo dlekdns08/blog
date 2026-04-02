@@ -6,6 +6,8 @@ const DB_PATH =
   path.resolve(process.cwd(), "/app/actions-runner-arxiv/_work/arxiv-graph/arxiv-graph/data/arxiv_graph.db
 ");
 
+console.log("Using arXiv graph database at:", DB_PATH);
+
 let _db: Database.Database | null = null;
 
 function getDb(): Database.Database {
