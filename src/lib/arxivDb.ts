@@ -3,10 +3,8 @@ import path from "path";
 
 const DB_PATH =
   process.env.ARXIV_DB_PATH ??
-  path.resolve(process.cwd(), "/app/actions-runner-arxiv/_work/arxiv-graph/arxiv-graph/data/arxiv_graph.db
-");
+  path.resolve(process.cwd(), "/app/actions-runner-arxiv/_work/arxiv-graph/arxiv-graph/data/arxiv_graph.db");
 
-console.log("Using arXiv graph database at:", DB_PATH);
 
 let _db: Database.Database | null = null;
 
