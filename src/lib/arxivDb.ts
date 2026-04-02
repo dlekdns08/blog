@@ -1,17 +1,20 @@
 import Database from "better-sqlite3";
-import path from "path";
+import fs from "fs";
 
 const DB_PATH =
-  process.env.ARXIV_DB_PATH ??
-  path.resolve(process.cwd(), "/app/actions-runner-arxiv/_work/arxiv-graph/arxiv-graph/data/arxiv_graph.db");
+  process.env.ARXIV_DB_PATH ||
+  "/app/actions-runner-arxiv/_work/arxiv-graph/arxiv-graph/data/arxiv_graph.db";
 
+console.log("[arxivDb] DB_PATH:", DB_PATH);
+console.log("[arxivDb] file exists:", fs.existsSync(DB_PATH));
 
 let _db: Database.Database | null = null;
 
-console.log("Using database path:", DB_PATH);
-
 function getDb(): Database.Database {
   if (!_db) {
+    if (!fs.existsSync(DB_PATH)) {
+      throw new Error(`[arxivDb] DB file not found: ${DB_PATH}`);
+    }
     _db = new Database(DB_PATH, { readonly: true });
   }
   return _db;
@@ -58,7 +61,8 @@ export function getTopPapers(limit = 50): Paper[] {
          LIMIT ?`
       )
       .all(limit) as Paper[];
-  } catch {
+  } catch (e) {
+    console.error("[arxivDb] getTopPapers failed:", e);
     return [];
   }
 }
@@ -70,9 +74,7 @@ export function getStats(): Stats {
       db.prepare("SELECT COUNT(*) as cnt FROM papers").get() as { cnt: number }
     ).cnt;
     const relationCount = (
-      db
-        .prepare("SELECT COUNT(*) as cnt FROM paper_relations")
-        .get() as { cnt: number }
+      db.prepare("SELECT COUNT(*) as cnt FROM paper_relations").get() as { cnt: number }
     ).cnt;
     const authorCount = (
       db.prepare("SELECT COUNT(*) as cnt FROM authors").get() as { cnt: number }
@@ -86,7 +88,8 @@ export function getStats(): Stats {
       )
       .all() as { primary_category: string; cnt: number }[];
     return { paperCount, relationCount, authorCount, categories };
-  } catch {
+  } catch (e) {
+    console.error("[arxivDb] getStats failed:", e);
     return { paperCount: 0, relationCount: 0, authorCount: 0, categories: [] };
   }
 }
@@ -117,7 +120,8 @@ export function getGraphData(limit = 40): { papers: GraphNode[]; relations: Rela
       .all(...ids, ...ids) as Relation[];
 
     return { papers, relations };
-  } catch {
+  } catch (e) {
+    console.error("[arxivDb] getGraphData failed:", e);
     return { papers: [], relations: [] };
   }
 }
