@@ -7,6 +7,7 @@ import { useCommandPalette } from "@/components/CommandPaletteProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { RandomPostButton } from "@/components/RandomPostButton";
 import { BookmarksWidget } from "@/components/BookmarksWidget";
+import { ArxivLiveFeed } from "@/components/ArxivLiveFeed";
 import type { PostMeta } from "@/lib/posts";
 
 // ── 아이콘 ──────────────────────────────────────────────────
@@ -39,6 +40,14 @@ function GameIcon() {
   return (
     <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+    </svg>
+  );
+}
+
+function GraphIcon() {
+  return (
+    <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c-1.2 5.4-4.8 7.8-9 9 4.2 1.2 7.8 3.6 9 9 1.2-5.4 4.8-7.8 9-9-4.2-1.2-7.8-3.6-9-9Z" />
     </svg>
   );
 }
@@ -81,7 +90,8 @@ const NAV = [
   { href: "/",              label: "홈",          icon: <HomeIcon /> },
   { href: "/posts",         label: "글",          icon: <PostsIcon /> },
   { href: "/wordcloud",     label: "워드클라우드",  icon: <WordCloudIcon /> },
-  { href: "/arxiv-graph",   label: "논문 그래프",   icon: <ArxivIcon /> },
+  { href: "/arxiv-graph",      label: "논문 그래프",   icon: <ArxivIcon /> },
+  { href: "/knowledge-graph",  label: "지식 그래프",   icon: <GraphIcon /> },
   { href: "/about",         label: "소개",         icon: <AboutIcon /> },
   { href: "/game",          label: "게임",         icon: <GameIcon /> },
   { href: "/stats",         label: "통계",         icon: <StatsIcon /> },
@@ -154,6 +164,12 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
 
         {/* ── 구분선 ───────────────────────────────────── */}
         <div className="h-px bg-black/6 dark:bg-white/6 mb-5" />
+
+        {/* ── 논문 피드 ────────────────────────────────── */}
+        <ArxivLiveFeed />
+
+        {/* ── 구분선 ───────────────────────────────────── */}
+        <div className="h-px bg-black/6 dark:bg-white/6 my-3" />
 
         {/* ── 북마크 위젯 ──────────────────────────────── */}
         <BookmarksWidget posts={posts} />
