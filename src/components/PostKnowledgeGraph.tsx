@@ -35,46 +35,45 @@ export function PostKnowledgeGraph() {
   const nodesRef = useRef<Node[]>([]);
   const edgesRef = useRef<Edge[]>([]);
   const rafRef = useRef<number>(0);
-  const pendingSimRef = useRef<(() => void) | null>(null);
+  const [graphData, setGraphData] = useState<{
+    nodes: Omit<Node, "x"|"y"|"vx"|"vy"|"r">[];
+    edges: Edge[];
+  } | null>(null);
   const router = useRouter();
 
+  // 1단계: fetch — raw 데이터만 state에 저장 (이 시점엔 canvas가 아직 DOM에 없음)
   useEffect(() => {
     fetch("/api/posts/graph")
       .then((r) => r.ok ? r.json() : { nodes: [], edges: [] })
-      .then(({ nodes: rawNodes, edges }) => {
-        const wrap = wrapRef.current;
-        if (!wrap) return;
-        const W = wrap.clientWidth;
-        const H = Math.round(W * 0.6);
-
-        const nodes: Node[] = rawNodes.map((n: Omit<Node, "x"|"y"|"vx"|"vy"|"r">) => ({
-          ...n,
-          x: W / 2 + (Math.random() - 0.5) * 260,
-          y: H / 2 + (Math.random() - 0.5) * 180,
-          vx: 0, vy: 0,
-          r: 5 + Math.min((n.tags?.length ?? 0) * 1.5, 10),
-        }));
-        nodesRef.current = nodes;
-        edgesRef.current = edges;
-        // canvas는 setLoading(false) 후 React re-render가 완료돼야 DOM에 마운트됨
-        // pendingSimRef에 저장해두고 canvas가 붙은 뒤 실행
-        pendingSimRef.current = () => startSim(nodes, edges, W, H);
+      .then(({ nodes, edges }) => {
+        setGraphData({ nodes, edges });
         setLoading(false);
       })
       .catch(() => setLoading(false));
 
     return () => cancelAnimationFrame(rafRef.current);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 2단계: loading이 false로 바뀐 뒤 React가 canvas를 DOM에 마운트하면 실행
   useEffect(() => {
-    if (!loading && pendingSimRef.current) {
-      const fn = pendingSimRef.current;
-      pendingSimRef.current = null;
-      fn();
-    }
+    if (loading || !graphData) return;
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const W = wrap.clientWidth;
+    const H = Math.round(W * 0.6);
+
+    const nodes: Node[] = graphData.nodes.map((n) => ({
+      ...n,
+      x: W / 2 + (Math.random() - 0.5) * 260,
+      y: H / 2 + (Math.random() - 0.5) * 180,
+      vx: 0, vy: 0,
+      r: 5 + Math.min((n.tags?.length ?? 0) * 1.5, 10),
+    }));
+    nodesRef.current = nodes;
+    edgesRef.current = graphData.edges;
+    startSim(nodes, graphData.edges, W, H);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading]);
+  }, [loading, graphData]);
 
   function startSim(nodes: Node[], edges: Edge[], W: number, H: number) {
     const canvas = canvasRef.current;
