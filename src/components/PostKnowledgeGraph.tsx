@@ -35,6 +35,7 @@ export function PostKnowledgeGraph() {
   const nodesRef = useRef<Node[]>([]);
   const edgesRef = useRef<Edge[]>([]);
   const rafRef = useRef<number>(0);
+  const pendingSimRef = useRef<(() => void) | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -55,14 +56,25 @@ export function PostKnowledgeGraph() {
         }));
         nodesRef.current = nodes;
         edgesRef.current = edges;
+        // canvas는 setLoading(false) 후 React re-render가 완료돼야 DOM에 마운트됨
+        // pendingSimRef에 저장해두고 canvas가 붙은 뒤 실행
+        pendingSimRef.current = () => startSim(nodes, edges, W, H);
         setLoading(false);
-        startSim(nodes, edges, W, H);
       })
       .catch(() => setLoading(false));
 
     return () => cancelAnimationFrame(rafRef.current);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!loading && pendingSimRef.current) {
+      const fn = pendingSimRef.current;
+      pendingSimRef.current = null;
+      fn();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   function startSim(nodes: Node[], edges: Edge[], W: number, H: number) {
     const canvas = canvasRef.current;
