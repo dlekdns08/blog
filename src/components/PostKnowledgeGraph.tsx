@@ -31,36 +31,40 @@ export function PostKnowledgeGraph() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<Node | null>(null);
+  const [isGrabbing, setIsGrabbing] = useState(false);
   const [loading, setLoading] = useState(true);
   const nodesRef = useRef<Node[]>([]);
   const edgesRef = useRef<Edge[]>([]);
   const rafRef = useRef<number>(0);
+  const transformRef = useRef({ tx: 0, ty: 0, scale: 1 });
+  const interactRef = useRef({
+    dragging: null as Node | null,
+    panning: false,
+    startX: 0, startY: 0,
+    lastX: 0, lastY: 0,
+    moved: false,
+  });
   const [graphData, setGraphData] = useState<{
     nodes: Omit<Node, "x"|"y"|"vx"|"vy"|"r">[];
     edges: Edge[];
   } | null>(null);
   const router = useRouter();
 
-  // 1단계: fetch — raw 데이터만 state에 저장 (이 시점엔 canvas가 아직 DOM에 없음)
   useEffect(() => {
     fetch("/api/posts/graph")
       .then((r) => r.ok ? r.json() : { nodes: [], edges: [] })
-      .then(({ nodes, edges }) => {
-        setGraphData({ nodes, edges });
-        setLoading(false);
-      })
+      .then(({ nodes, edges }) => { setGraphData({ nodes, edges }); setLoading(false); })
       .catch(() => setLoading(false));
-
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  // 2단계: loading이 false로 바뀐 뒤 React가 canvas를 DOM에 마운트하면 실행
   useEffect(() => {
     if (loading || !graphData) return;
     const wrap = wrapRef.current;
     if (!wrap) return;
     const W = wrap.clientWidth;
     const H = Math.round(W * 0.6);
+    transformRef.current = { tx: 0, ty: 0, scale: 1 };
 
     const nodes: Node[] = graphData.nodes.map((n) => ({
       ...n,
@@ -71,14 +75,14 @@ export function PostKnowledgeGraph() {
     }));
     nodesRef.current = nodes;
     edgesRef.current = graphData.edges;
-    startSim(nodes, graphData.edges, W, H);
+    return startSim(nodes, graphData.edges, W, H);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, graphData]);
 
-  function startSim(nodes: Node[], edges: Edge[], W: number, H: number) {
+  function startSim(nodes: Node[], edges: Edge[], W: number, H: number): () => void {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current;
-    if (!canvas || !wrap) return;
+    if (!canvas || !wrap) return () => {};
 
     const dpr = window.devicePixelRatio || 1;
     canvas.width = W * dpr;
@@ -90,12 +94,28 @@ export function PostKnowledgeGraph() {
     const isDark = document.documentElement.classList.contains("dark");
     const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const t = transformRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (canvas.width / (dpr * rect.width));
+      const my = (e.clientY - rect.top) * (canvas.height / (dpr * rect.height));
+      const factor = e.deltaY < 0 ? 1.1 : 0.9;
+      const newScale = Math.max(0.15, Math.min(6, t.scale * factor));
+      t.tx = mx - (mx - t.tx) * (newScale / t.scale);
+      t.ty = my - (my - t.ty) * (newScale / t.scale);
+      t.scale = newScale;
+    };
+    canvas.addEventListener("wheel", onWheel, { passive: false });
+
     function tick() {
-      // Forces
+      const t = transformRef.current;
+      const interact = interactRef.current;
+
       for (const n of nodes) {
+        if (interact.dragging === n) continue;
         n.vx += (W / 2 - n.x) * 0.0012;
         n.vy += (H / 2 - n.y) * 0.0012;
-        // Category cluster
         const same = nodes.filter((m) => m !== n && m.category === n.category);
         if (same.length) {
           const cx = same.reduce((s, m) => s + m.x, 0) / same.length;
@@ -112,30 +132,35 @@ export function PostKnowledgeGraph() {
         }
       }
       for (const e of edges) {
-        const s = nodeMap.get(e.source), t = nodeMap.get(e.target);
-        if (!s || !t) continue;
-        const dx = t.x - s.x, dy = t.y - s.y;
+        const s = nodeMap.get(e.source), tgt = nodeMap.get(e.target);
+        if (!s || !tgt) continue;
+        const dx = tgt.x - s.x, dy = tgt.y - s.y;
         const d = Math.sqrt(dx * dx + dy * dy) + 0.001;
-        const ideal = 110, f = ((d - ideal) / d) * 0.03 * e.weight;
+        const f = ((d - 110) / d) * 0.03 * e.weight;
         s.vx += dx * f; s.vy += dy * f;
-        t.vx -= dx * f; t.vy -= dy * f;
+        tgt.vx -= dx * f; tgt.vy -= dy * f;
       }
       for (const n of nodes) {
+        if (interact.dragging === n) continue;
         n.vx *= 0.8; n.vy *= 0.8;
-        n.x = Math.max(n.r + 8, Math.min(W - n.r - 8, n.x + n.vx));
-        n.y = Math.max(n.r + 8, Math.min(H - n.r - 8, n.y + n.vy));
+        n.x += n.vx; n.y += n.vy;
       }
 
-      // Draw
+      // Background (screen space)
       ctx.fillStyle = isDark ? "#0f0f13" : "#f8f8fc";
       ctx.fillRect(0, 0, W, H);
 
-      // Dot grid
+      // Dot grid (screen space — fixed)
       ctx.fillStyle = isDark ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.035)";
       for (let gx = 24; gx < W; gx += 24)
         for (let gy = 24; gy < H; gy += 24) {
           ctx.beginPath(); ctx.arc(gx, gy, 0.8, 0, Math.PI * 2); ctx.fill();
         }
+
+      // World space
+      ctx.save();
+      ctx.translate(t.tx, t.ty);
+      ctx.scale(t.scale, t.scale);
 
       const hovId = canvasRef.current?.dataset.hoveredId ?? "";
       const neighborIds = new Set<string>();
@@ -149,18 +174,18 @@ export function PostKnowledgeGraph() {
 
       // Edges
       for (const e of edges) {
-        const s = nodeMap.get(e.source), t = nodeMap.get(e.target);
-        if (!s || !t) continue;
+        const s = nodeMap.get(e.source), tgt = nodeMap.get(e.target);
+        if (!s || !tgt) continue;
         const dimmed = hovId && !neighborIds.has(e.source) && !neighborIds.has(e.target);
         const alpha = dimmed ? 0.04 : Math.min(0.08 + e.weight * 0.12, 0.3);
         const col = catColor(s.category);
-        const mx = (s.x + t.x) / 2 + (t.y - s.y) * 0.1;
-        const my = (s.y + t.y) / 2 - (t.x - s.x) * 0.1;
+        const mx2 = (s.x + tgt.x) / 2 + (tgt.y - s.y) * 0.1;
+        const my2 = (s.y + tgt.y) / 2 - (tgt.x - s.x) * 0.1;
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
-        ctx.quadraticCurveTo(mx, my, t.x, t.y);
+        ctx.quadraticCurveTo(mx2, my2, tgt.x, tgt.y);
         ctx.strokeStyle = col + Math.round(alpha * 255).toString(16).padStart(2, "0");
-        ctx.lineWidth = dimmed ? 0.5 : Math.min(0.8 + e.weight * 0.5, 2);
+        ctx.lineWidth = (dimmed ? 0.5 : Math.min(0.8 + e.weight * 0.5, 2)) / t.scale;
         ctx.stroke();
       }
 
@@ -182,48 +207,103 @@ export function PostKnowledgeGraph() {
         ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
         ctx.fillStyle = grad; ctx.fill();
         ctx.strokeStyle = col + (dimmed ? "30" : isHov ? "ff" : "99");
-        ctx.lineWidth = isHov ? 2 : 1;
+        ctx.lineWidth = (isHov ? 2 : 1) / t.scale;
         ctx.stroke();
         ctx.shadowBlur = 0;
 
         if ((isHov || n.r > 10) && !dimmed) {
           const label = n.title.length > 20 ? n.title.slice(0, 19) + "…" : n.title;
-          ctx.font = `${isHov ? 600 : 400} ${isHov ? 10 : 8.5}px system-ui`;
+          const fs = (isHov ? 10 : 8.5) / t.scale;
+          ctx.font = `${isHov ? 600 : 400} ${fs}px system-ui`;
           ctx.textAlign = "center";
           ctx.fillStyle = isDark ? `rgba(255,255,255,${dimmed ? 0.2 : 0.8})` : `rgba(15,15,20,${dimmed ? 0.2 : 0.75})`;
           ctx.shadowColor = isDark ? "rgba(0,0,0,0.9)" : "rgba(255,255,255,0.9)";
           ctx.shadowBlur = 3;
-          ctx.fillText(label, n.x, n.y + n.r + 11);
+          ctx.fillText(label, n.x, n.y + n.r + 11 / t.scale);
           ctx.shadowBlur = 0;
           ctx.textAlign = "left";
         }
       }
 
+      ctx.restore();
       rafRef.current = requestAnimationFrame(tick);
     }
     rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      canvas.removeEventListener("wheel", onWheel);
+    };
+  }
+
+  function getCanvasCoords(e: React.MouseEvent<HTMLCanvasElement>) {
+    const canvas = canvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    return {
+      mx: (e.clientX - rect.left) * (canvas.width / (dpr * rect.width)),
+      my: (e.clientY - rect.top) * (canvas.height / (dpr * rect.height)),
+    };
+  }
+
+  function findNode(mx: number, my: number): Node | null {
+    const { tx, ty, scale } = transformRef.current;
+    const wx = (mx - tx) / scale, wy = (my - ty) / scale;
+    for (const n of [...nodesRef.current].reverse()) {
+      if ((n.x - wx) ** 2 + (n.y - wy) ** 2 <= (n.r + 5 / scale) ** 2) return n;
+    }
+    return null;
+  }
+
+  function handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
+    const { mx, my } = getCanvasCoords(e);
+    const node = findNode(mx, my);
+    interactRef.current = { dragging: node, panning: !node, startX: mx, startY: my, lastX: mx, lastY: my, moved: false };
+    setIsGrabbing(true);
   }
 
   function handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    const mx = (e.clientX - rect.left) * (canvas.width / dpr / rect.width);
-    const my = (e.clientY - rect.top) * (canvas.height / dpr / rect.height);
-    let found: Node | null = null;
-    for (const n of [...nodesRef.current].reverse()) {
-      if ((n.x - mx) ** 2 + (n.y - my) ** 2 <= (n.r + 5) ** 2) { found = n; break; }
+    const { mx, my } = getCanvasCoords(e);
+    const interact = interactRef.current;
+    if (Math.abs(mx - interact.startX) > 3 || Math.abs(my - interact.startY) > 3) interact.moved = true;
+
+    if (interact.dragging) {
+      const { tx, ty, scale } = transformRef.current;
+      interact.dragging.x = (mx - tx) / scale;
+      interact.dragging.y = (my - ty) / scale;
+      interact.dragging.vx = 0;
+      interact.dragging.vy = 0;
+      setHovered(interact.dragging);
+      if (canvasRef.current) canvasRef.current.dataset.hoveredId = interact.dragging.id;
+    } else if (interact.panning) {
+      transformRef.current.tx += mx - interact.lastX;
+      transformRef.current.ty += my - interact.lastY;
+      interact.lastX = mx;
+      interact.lastY = my;
+    } else {
+      const found = findNode(mx, my);
+      setHovered(found);
+      if (canvasRef.current) canvasRef.current.dataset.hoveredId = found?.id ?? "";
     }
-    setHovered(found);
-    if (canvasRef.current) canvasRef.current.dataset.hoveredId = found?.id ?? "";
   }
 
-  function handleClick() {
-    if (hovered) router.push(`/posts/${hovered.id}`);
+  function handleMouseUp() {
+    const interact = interactRef.current;
+    const wasNodeDrag = !!interact.dragging;
+    const didMove = interact.moved;
+    interact.dragging = null;
+    interact.panning = false;
+    setIsGrabbing(false);
+    if (!wasNodeDrag && !didMove && hovered) router.push(`/posts/${hovered.id}`);
   }
 
-  // Category legend
+  function handleMouseLeave() {
+    interactRef.current.dragging = null;
+    interactRef.current.panning = false;
+    setIsGrabbing(false);
+    setHovered(null);
+    if (canvasRef.current) canvasRef.current.dataset.hoveredId = "";
+  }
+
   const usedCats = [...new Set(nodesRef.current.map((n) => n.category))];
 
   if (loading) {
@@ -236,10 +316,12 @@ export function PostKnowledgeGraph() {
     <div ref={wrapRef} className="relative rounded-2xl border border-black/8 dark:border-white/10 overflow-hidden">
       <canvas
         ref={canvasRef}
-        className="w-full h-auto cursor-pointer block"
+        className="w-full h-auto block"
+        style={{ cursor: isGrabbing ? "grabbing" : hovered ? "pointer" : "grab" }}
+        onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
-        onMouseLeave={() => { setHovered(null); if (canvasRef.current) canvasRef.current.dataset.hoveredId = ""; }}
-        onClick={handleClick}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
       />
       {/* Legend */}
       <div className="absolute top-3 left-3 flex flex-wrap gap-x-3 gap-y-1.5 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-xl px-3 py-2">
