@@ -35,10 +35,9 @@ function getCat(cat: string) {
   return CAT[cat] ?? DEFAULT_CAT;
 }
 
-/* ── Particle along an edge ───────────────────────────── */
 type Particle = {
   edgeIdx: number;
-  t: number;       // 0→1 along edge
+  t: number;
   speed: number;
 };
 
@@ -52,19 +51,27 @@ export function ArxivForceGraph({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<SimNode | null>(null);
+  const [isGrabbing, setIsGrabbing] = useState(false);
   const nodesRef = useRef<SimNode[]>([]);
   const rafRef = useRef<number>(0);
   const particlesRef = useRef<Particle[]>([]);
+  const transformRef = useRef({ tx: 0, ty: 0, scale: 1 });
+  const interactRef = useRef({
+    dragging: null as SimNode | null,
+    panning: false,
+    startX: 0, startY: 0,
+    lastX: 0, lastY: 0,
+    moved: false,
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current;
     if (!canvas || !wrap || papers.length === 0) return;
 
-    /* ── Hi-DPI setup ────────────────────────────────── */
     const dpr = window.devicePixelRatio || 1;
     const W = wrap.clientWidth;
-    const H = Math.round(W * 0.56);        // 16:9 ish
+    const H = Math.round(W * 0.56);
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width = `${W}px`;
@@ -72,10 +79,10 @@ export function ArxivForceGraph({
 
     const ctx = canvas.getContext("2d")!;
     ctx.scale(dpr, dpr);
-
     const isDark = document.documentElement.classList.contains("dark");
 
-    /* ── Nodes ───────────────────────────────────────── */
+    transformRef.current = { tx: 0, ty: 0, scale: 1 };
+
     const maxScore = Math.max(...papers.map((p) => p.importance_score), 0.01);
     const minR = 5, maxR = 20;
 
@@ -86,8 +93,7 @@ export function ArxivForceGraph({
         ...p,
         x: W / 2 + Math.cos(angle) * dist,
         y: H / 2 + Math.sin(angle) * dist,
-        vx: 0,
-        vy: 0,
+        vx: 0, vy: 0,
         r: minR + (p.importance_score / maxScore) * (maxR - minR),
       };
     });
@@ -95,7 +101,6 @@ export function ArxivForceGraph({
 
     const nodeMap = new Map(nodes.map((n) => [n.arxiv_id, n]));
 
-    /* ── Particles (semantic edges only) ─────────────── */
     const semanticEdges = relations.filter((e) => e.relation_type === "semantic");
     particlesRef.current = semanticEdges.flatMap((_, i) =>
       Array.from({ length: 2 }, () => ({
@@ -105,13 +110,24 @@ export function ArxivForceGraph({
       }))
     );
 
-    /* ── Draw helpers ────────────────────────────────── */
+    // Wheel zoom
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const t = transformRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (canvas.width / (dpr * rect.width));
+      const my = (e.clientY - rect.top) * (canvas.height / (dpr * rect.height));
+      const factor = e.deltaY < 0 ? 1.1 : 0.9;
+      const newScale = Math.max(0.15, Math.min(6, t.scale * factor));
+      t.tx = mx - (mx - t.tx) * (newScale / t.scale);
+      t.ty = my - (my - t.ty) * (newScale / t.scale);
+      t.scale = newScale;
+    };
+    canvas.addEventListener("wheel", onWheel, { passive: false });
+
     function drawBackground() {
-      // Solid bg
       ctx.fillStyle = isDark ? "#0f0f13" : "#f8f8fc";
       ctx.fillRect(0, 0, W, H);
-
-      // Subtle dot grid
       const gridSize = 28;
       ctx.fillStyle = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)";
       for (let gx = gridSize; gx < W; gx += gridSize) {
@@ -123,50 +139,37 @@ export function ArxivForceGraph({
       }
     }
 
-    function drawEdge(
-      s: SimNode,
-      t: SimNode,
-      type: string,
-      weight: number,
-      dimmed: boolean
-    ) {
+    function drawEdge(s: SimNode, t2: SimNode, type: string, weight: number, dimmed: boolean, scale: number) {
       const cat = getCat(s.primary_category);
       const alpha = dimmed ? 0.04 : type === "semantic" ? 0.22 : 0.28;
-
-      // Control point for subtle curve
-      const mx = (s.x + t.x) / 2 + (t.y - s.y) * 0.12;
-      const my = (s.y + t.y) / 2 - (t.x - s.x) * 0.12;
-
-      const grad = ctx.createLinearGradient(s.x, s.y, t.x, t.y);
+      const mx2 = (s.x + t2.x) / 2 + (t2.y - s.y) * 0.12;
+      const my2 = (s.y + t2.y) / 2 - (t2.x - s.x) * 0.12;
+      const grad = ctx.createLinearGradient(s.x, s.y, t2.x, t2.y);
       if (type === "semantic") {
         grad.addColorStop(0, `rgba(${getCat(s.primary_category).rgb},${alpha})`);
-        grad.addColorStop(1, `rgba(${getCat(t.primary_category).rgb},${alpha})`);
+        grad.addColorStop(1, `rgba(${getCat(t2.primary_category).rgb},${alpha})`);
       } else {
         grad.addColorStop(0, `rgba(${cat.rgb},${alpha})`);
         grad.addColorStop(1, `rgba(${cat.rgb},${alpha * 0.5})`);
       }
-
       ctx.beginPath();
       ctx.moveTo(s.x, s.y);
-      ctx.quadraticCurveTo(mx, my, t.x, t.y);
+      ctx.quadraticCurveTo(mx2, my2, t2.x, t2.y);
       ctx.strokeStyle = grad;
-      ctx.lineWidth = dimmed ? 0.5 : Math.min(1 + weight, 2.5);
+      ctx.lineWidth = (dimmed ? 0.5 : Math.min(1 + weight, 2.5)) / scale;
       ctx.stroke();
     }
 
     function drawParticle(p: Particle) {
       const e = semanticEdges[p.edgeIdx];
       const s = nodeMap.get(e.source_id);
-      const t = nodeMap.get(e.target_id);
-      if (!s || !t) return;
-
-      // Quadratic bezier position
-      const mx = (s.x + t.x) / 2 + (t.y - s.y) * 0.12;
-      const my = (s.y + t.y) / 2 - (t.x - s.x) * 0.12;
+      const t2 = nodeMap.get(e.target_id);
+      if (!s || !t2) return;
+      const mx2 = (s.x + t2.x) / 2 + (t2.y - s.y) * 0.12;
+      const my2 = (s.y + t2.y) / 2 - (t2.x - s.x) * 0.12;
       const u = 1 - p.t;
-      const px = u * u * s.x + 2 * u * p.t * mx + p.t * p.t * t.x;
-      const py = u * u * s.y + 2 * u * p.t * my + p.t * p.t * t.y;
-
+      const px = u * u * s.x + 2 * u * p.t * mx2 + p.t * p.t * t2.x;
+      const py = u * u * s.y + 2 * u * p.t * my2 + p.t * p.t * t2.y;
       ctx.beginPath();
       ctx.arc(px, py, 1.5, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(${getCat(s.primary_category).rgb},0.7)`;
@@ -176,86 +179,65 @@ export function ArxivForceGraph({
       ctx.shadowBlur = 0;
     }
 
-    function drawNode(n: SimNode, isHovered: boolean, dimmed: boolean) {
+    function drawNode(n: SimNode, isHovered: boolean, dimmed: boolean, scale: number) {
       const c = getCat(n.primary_category);
-
-      // Outer glow ring (only for hovered / top nodes)
       if (isHovered || n.importance_score / maxScore > 0.7) {
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r + 5, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${c.rgb},${isHovered ? 0.15 : 0.06})`;
         ctx.fill();
       }
-
-      // Shadow glow
       ctx.shadowColor = c.hex;
       ctx.shadowBlur = isHovered ? 20 : dimmed ? 0 : 10;
-
-      // Radial gradient fill
-      const grad = ctx.createRadialGradient(
-        n.x - n.r * 0.3, n.y - n.r * 0.3, n.r * 0.1,
-        n.x, n.y, n.r
-      );
+      const grad = ctx.createRadialGradient(n.x - n.r * 0.3, n.y - n.r * 0.3, n.r * 0.1, n.x, n.y, n.r);
       grad.addColorStop(0, `rgba(${c.rgb},${dimmed ? 0.12 : isHovered ? 0.9 : 0.55})`);
       grad.addColorStop(1, `rgba(${c.rgb},${dimmed ? 0.04 : isHovered ? 0.5 : 0.18})`);
-
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
       ctx.fillStyle = grad;
       ctx.fill();
-
-      // Border ring
       ctx.strokeStyle = `rgba(${c.rgb},${dimmed ? 0.15 : isHovered ? 1 : 0.7})`;
-      ctx.lineWidth = isHovered ? 2 : 1.2;
+      ctx.lineWidth = (isHovered ? 2 : 1.2) / scale;
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      // Label for hovered or large nodes
       const showLabel = isHovered || (n.r > 13 && !dimmed);
       if (showLabel) {
         const label = n.title.length > 28 ? n.title.slice(0, 27) + "…" : n.title;
-        const fontSize = isHovered ? 10 : 8.5;
+        const fontSize = (isHovered ? 10 : 8.5) / scale;
         ctx.font = `${isHovered ? 600 : 400} ${fontSize}px system-ui, sans-serif`;
         ctx.textAlign = "center";
         ctx.fillStyle = isDark
           ? `rgba(255,255,255,${dimmed ? 0.2 : 0.85})`
           : `rgba(15,15,20,${dimmed ? 0.2 : 0.8})`;
-        // Text shadow for readability
         ctx.shadowColor = isDark ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.9)";
         ctx.shadowBlur = 4;
-        ctx.fillText(label, n.x, n.y + n.r + fontSize + 2);
+        ctx.fillText(label, n.x, n.y + n.r + (fontSize + 2));
         ctx.shadowBlur = 0;
         ctx.textAlign = "left";
       }
     }
 
-    /* ── Simulation ──────────────────────────────────── */
     let frame = 0;
-    let hoveredId: string | null = null;
 
     function tick() {
-      // Forces
+      const tr = transformRef.current;
+      const interact = interactRef.current;
+
       for (const n of nodes) {
-        // Gravity to center
+        if (interact.dragging === n) continue;
         n.vx += (W / 2 - n.x) * 0.001;
         n.vy += (H / 2 - n.y) * 0.001;
-
-        // Category clustering: soft pull toward category centroid
-        const samecat = nodes.filter(
-          (m) => m !== n && m.primary_category === n.primary_category
-        );
+        const samecat = nodes.filter((m) => m !== n && m.primary_category === n.primary_category);
         if (samecat.length > 0) {
           const cx = samecat.reduce((s, m) => s + m.x, 0) / samecat.length;
           const cy = samecat.reduce((s, m) => s + m.y, 0) / samecat.length;
           n.vx += (cx - n.x) * 0.0008;
           n.vy += (cy - n.y) * 0.0008;
         }
-
-        // Repulsion
         for (const m of nodes) {
           if (n === m) continue;
-          const dx = n.x - m.x;
-          const dy = n.y - m.y;
+          const dx = n.x - m.x, dy = n.y - m.y;
           const d2 = dx * dx + dy * dy + 1;
           const minDist = (n.r + m.r + 12) ** 2;
           const f = d2 < minDist ? 4000 / d2 : 1800 / d2;
@@ -264,40 +246,32 @@ export function ArxivForceGraph({
         }
       }
 
-      // Spring edges
       for (const e of relations) {
-        const s = nodeMap.get(e.source_id);
-        const t = nodeMap.get(e.target_id);
-        if (!s || !t) continue;
-        const dx = t.x - s.x;
-        const dy = t.y - s.y;
+        const s = nodeMap.get(e.source_id), t2 = nodeMap.get(e.target_id);
+        if (!s || !t2) continue;
+        const dx = t2.x - s.x, dy = t2.y - s.y;
         const d = Math.sqrt(dx * dx + dy * dy) + 0.001;
         const ideal = e.relation_type === "author" ? 90 : 140;
         const f = ((d - ideal) / d) * 0.03;
-        s.vx += dx * f;
-        s.vy += dy * f;
-        t.vx -= dx * f;
-        t.vy -= dy * f;
+        s.vx += dx * f; s.vy += dy * f;
+        t2.vx -= dx * f; t2.vy -= dy * f;
       }
 
-      // Integrate
       for (const n of nodes) {
-        n.vx *= 0.78;
-        n.vy *= 0.78;
-        n.x = Math.max(n.r + 10, Math.min(W - n.r - 10, n.x + n.vx));
-        n.y = Math.max(n.r + 10, Math.min(H - n.r - 10, n.y + n.vy));
+        if (interact.dragging === n) continue;
+        n.vx *= 0.78; n.vy *= 0.78;
+        n.x += n.vx; n.y += n.vy;
       }
 
-      // Advance particles
       for (const p of particlesRef.current) {
         p.t += p.speed;
         if (p.t > 1) p.t = 0;
       }
 
-      /* ── Render ──────────────────────────────────────── */
+      // Background (screen space)
       drawBackground();
 
-      // Determine neighbor set for dimming
+      const hoveredId = canvasRef.current?.dataset.hoveredId ?? "";
       const neighborIds = new Set<string>();
       if (hoveredId) {
         neighborIds.add(hoveredId);
@@ -307,77 +281,107 @@ export function ArxivForceGraph({
         }
       }
 
-      // Edges
+      // World space
+      ctx.save();
+      ctx.translate(tr.tx, tr.ty);
+      ctx.scale(tr.scale, tr.scale);
+
       ctx.save();
       for (const e of relations) {
-        const s = nodeMap.get(e.source_id);
-        const t = nodeMap.get(e.target_id);
-        if (!s || !t) continue;
-        const dimmed =
-          hoveredId !== null &&
-          !neighborIds.has(e.source_id) &&
-          !neighborIds.has(e.target_id);
-        drawEdge(s, t, e.relation_type, e.weight, dimmed);
+        const s = nodeMap.get(e.source_id), t2 = nodeMap.get(e.target_id);
+        if (!s || !t2) continue;
+        const dimmed = hoveredId !== "" && !neighborIds.has(e.source_id) && !neighborIds.has(e.target_id);
+        drawEdge(s, t2, e.relation_type, e.weight, dimmed, tr.scale);
       }
       ctx.restore();
 
-      // Particles (only on non-dimmed edges)
       if (!hoveredId) {
-        for (const p of particlesRef.current) {
-          drawParticle(p);
-        }
+        for (const p of particlesRef.current) drawParticle(p);
       }
 
-      // Nodes (back to front by radius)
       const sorted = [...nodes].sort((a, b) => a.r - b.r);
       for (const n of sorted) {
         const isHov = n.arxiv_id === hoveredId;
-        const dimmed =
-          hoveredId !== null && !neighborIds.has(n.arxiv_id);
-        drawNode(n, isHov, dimmed);
+        const dimmed = hoveredId !== "" && !neighborIds.has(n.arxiv_id);
+        drawNode(n, isHov, dimmed, tr.scale);
       }
 
+      ctx.restore();
       frame++;
       rafRef.current = requestAnimationFrame(tick);
     }
 
     rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      canvas.removeEventListener("wheel", onWheel);
+    };
   }, [papers, relations]);
 
-  /* ── Mouse ───────────────────────────────────────────── */
-  function handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  function getCanvasCoords(e: React.MouseEvent<HTMLCanvasElement>) {
+    const canvas = canvasRef.current!;
     const rect = canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
-    const mx = (e.clientX - rect.left) * (canvas.width / dpr / rect.width);
-    const my = (e.clientY - rect.top) * (canvas.height / dpr / rect.height);
-
-    let found: SimNode | null = null;
-    for (const n of [...nodesRef.current].reverse()) {
-      const dx = n.x - mx;
-      const dy = n.y - my;
-      if (dx * dx + dy * dy <= (n.r + 6) * (n.r + 6)) {
-        found = n;
-        break;
-      }
-    }
-    setHovered(found);
-    // Sync id into closure without re-running effect
-    const el = canvas as HTMLCanvasElement & { _hoveredId?: string | null };
-    el._hoveredId = found?.arxiv_id ?? null;
-
-    // Patch hoveredId used inside tick via canvas attribute
-    canvas.dataset.hoveredId = found?.arxiv_id ?? "";
+    return {
+      mx: (e.clientX - rect.left) * (canvas.width / (dpr * rect.width)),
+      my: (e.clientY - rect.top) * (canvas.height / (dpr * rect.height)),
+    };
   }
 
-  // Sync hoveredId into tick closure via a ref trick
-  const hoveredIdRef = useRef<string | null>(null);
-  hoveredIdRef.current = hovered?.arxiv_id ?? null;
+  function findNode(mx: number, my: number): SimNode | null {
+    const { tx, ty, scale } = transformRef.current;
+    const wx = (mx - tx) / scale, wy = (my - ty) / scale;
+    for (const n of [...nodesRef.current].reverse()) {
+      if ((n.x - wx) ** 2 + (n.y - wy) ** 2 <= (n.r + 6 / scale) ** 2) return n;
+    }
+    return null;
+  }
 
-  /* ── We need hoveredId accessible inside the tick closure.
-        Use a module-level mutable ref via canvas dataset.        */
+  function handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
+    const { mx, my } = getCanvasCoords(e);
+    const node = findNode(mx, my);
+    interactRef.current = { dragging: node, panning: !node, startX: mx, startY: my, lastX: mx, lastY: my, moved: false };
+    setIsGrabbing(true);
+  }
+
+  function handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
+    const { mx, my } = getCanvasCoords(e);
+    const interact = interactRef.current;
+    if (Math.abs(mx - interact.startX) > 3 || Math.abs(my - interact.startY) > 3) interact.moved = true;
+
+    if (interact.dragging) {
+      const { tx, ty, scale } = transformRef.current;
+      interact.dragging.x = (mx - tx) / scale;
+      interact.dragging.y = (my - ty) / scale;
+      interact.dragging.vx = 0;
+      interact.dragging.vy = 0;
+      setHovered(interact.dragging);
+      if (canvasRef.current) canvasRef.current.dataset.hoveredId = interact.dragging.arxiv_id ?? "";
+    } else if (interact.panning) {
+      transformRef.current.tx += mx - interact.lastX;
+      transformRef.current.ty += my - interact.lastY;
+      interact.lastX = mx;
+      interact.lastY = my;
+    } else {
+      const found = findNode(mx, my);
+      setHovered(found);
+      if (canvasRef.current) canvasRef.current.dataset.hoveredId = found?.arxiv_id ?? "";
+    }
+  }
+
+  function handleMouseUp() {
+    interactRef.current.dragging = null;
+    interactRef.current.panning = false;
+    setIsGrabbing(false);
+  }
+
+  function handleMouseLeave() {
+    interactRef.current.dragging = null;
+    interactRef.current.panning = false;
+    setIsGrabbing(false);
+    setHovered(null);
+    if (canvasRef.current) canvasRef.current.dataset.hoveredId = "";
+  }
 
   if (papers.length === 0) {
     return (
@@ -399,12 +403,15 @@ export function ArxivForceGraph({
     >
       <canvas
         ref={canvasRef}
-        className="w-full h-auto cursor-crosshair block"
+        className="w-full h-auto block"
+        style={{ cursor: isGrabbing ? "grabbing" : hovered ? "pointer" : "grab" }}
+        onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
-        onMouseLeave={() => setHovered(null)}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
       />
 
-      {/* Legend — top-left overlay */}
+      {/* Legend */}
       <div className="absolute top-3 left-3 flex flex-col gap-1.5 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-xl px-3 py-2.5">
         {Object.entries(CAT).map(([cat, { hex, label }]) => (
           <div key={cat} className="flex items-center gap-2">
