@@ -22,7 +22,6 @@ export async function GET() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ posts: postInputs }),
-      next: { revalidate: 3600 },
     });
     if (res.ok) {
       const data = await res.json();
@@ -33,7 +32,15 @@ export async function GET() {
   }
 
   // 폴백: 로컬에서 그래프 계산
-  const nodes = postInputs;
+  const nodes = postInputs.map((p) => ({
+    id: p.slug,
+    title: p.title,
+    category: p.category,
+    subcategory: p.subcategory,
+    tags: p.tags,
+    date: p.date,
+  }));
+
   const edges: { source: string; target: string; weight: number }[] = [];
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
@@ -44,7 +51,7 @@ export async function GET() {
       if (a.subcategory && a.subcategory === b.subcategory) w += 0.6;
       const sharedTags = (a.tags ?? []).filter((t) => (b.tags ?? []).includes(t));
       w += sharedTags.length * 0.5;
-      if (w >= 0.4) edges.push({ source: a.slug, target: b.slug, weight: Math.min(w, 2) });
+      if (w >= 0.4) edges.push({ source: a.id, target: b.id, weight: Math.min(w, 2) });
     }
   }
 
