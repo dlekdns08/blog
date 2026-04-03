@@ -14,6 +14,7 @@ import { getAllPosts } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { formatRelativeDate } from "@/lib/date";
 import { TypingText } from "@/components/TypingText";
+import { DailyPaperWidget } from "@/components/DailyPaperWidget";
 
 type Stack = { icon: IconType; label: string; color: string };
 
@@ -172,6 +173,12 @@ export default async function Home() {
             </ul>
           </section>
         )}
+
+        {/* 구분선 */}
+        <div className="h-px bg-black/8 dark:bg-white/8" />
+
+        {/* 오늘의 논문 */}
+        <DailyPaperWidget />
 
         {/* 구분선 */}
         <div className="h-px bg-black/8 dark:bg-white/8" />
