@@ -77,7 +77,7 @@ export default async function Home() {
         {/* 그라디언트 오버레이 */}
         <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/30" />
         {/* 이미지 위 텍스트 */}
-        <div className="absolute bottom-0 left-0 right-0 px-8 pb-8">
+        <div className="absolute bottom-0 left-0 right-0 px-5 sm:px-8 pb-6 sm:pb-8">
           <h1 className="text-2xl font-bold tracking-tight drop-shadow-sm">
             코알라 오딧세이
           </h1>
@@ -94,7 +94,7 @@ export default async function Home() {
       </div>
 
       {/* 본문 */}
-      <div className="px-8 py-10 max-w-3xl space-y-10">
+      <div className="px-4 sm:px-8 py-8 sm:py-10 max-w-3xl space-y-8 sm:space-y-10">
 
         {/* 소개 */}
         <section className="space-y-4">
@@ -108,7 +108,7 @@ export default async function Home() {
           </p>
 
           {/* 인포 카드 */}
-          <div className="flex flex-wrap gap-3 pt-1">
+          <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-3 pt-1">
             <div className="rounded-xl border border-black/8 bg-white px-4 py-3 text-sm shadow-sm dark:border-white/10 dark:bg-white/5">
               <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1 font-medium tracking-wide uppercase">관심사</div>
               <div className="font-semibold text-zinc-800 dark:text-zinc-200">LLM · AI · 생명과학</div>
