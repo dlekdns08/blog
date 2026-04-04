@@ -87,7 +87,7 @@ export default async function PostDetailPage({ params }: PageProps) {
       <ReadingProgress />
       <ScrollToTop />
 
-      <div className="mx-auto w-full max-w-5xl px-6 sm:px-8">
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="xl:flex xl:gap-12">
 
           {/* ── 메인 컨텐츠 — 항상 max-w-3xl 유지 ── */}
@@ -123,7 +123,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                   )}
                 </div>
               )}
-              <h1 className="text-2xl font-bold tracking-tight leading-tight">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight leading-tight">
                 {post.meta.title}
               </h1>
               {post.meta.description && (
