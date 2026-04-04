@@ -121,10 +121,10 @@ export function PostList({ posts }: Props) {
         <div className="mb-5 space-y-2">
 
           {/* 대분류 pills */}
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none -mx-1 px-1">
             <button
               onClick={() => router.push("/posts", { scroll: false })}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all shrink-0 ${
                 !activeCategory
                   ? "bg-violet-600 text-white shadow-sm"
                   : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-white/8 dark:text-zinc-400 dark:hover:bg-white/12"
@@ -147,7 +147,7 @@ export function PostList({ posts }: Props) {
                 <button
                   key={cat}
                   onClick={() => router.push(buildUrl(cat, null, null), { scroll: false })}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all shrink-0 ${
                     active
                       ? "bg-violet-600 text-white shadow-sm"
                       : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-white/8 dark:text-zinc-400 dark:hover:bg-white/12"
@@ -165,7 +165,7 @@ export function PostList({ posts }: Props) {
 
           {/* 소분류 pills */}
           {subCategories.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pl-1">
+            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none pl-1">
               {subCategories.map((sub) => {
                 const count  = posts.filter((p) => p.category === activeCategory && p.subcategory === sub).length;
                 const active = activeSub === sub;
@@ -173,7 +173,7 @@ export function PostList({ posts }: Props) {
                   <button
                     key={sub}
                     onClick={() => router.push(buildUrl(activeCategory, active ? null : sub, null), { scroll: false })}
-                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all ${
+                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all shrink-0 ${
                       active
                         ? "bg-violet-100 text-violet-700 dark:bg-violet-500/25 dark:text-violet-300"
                         : "bg-zinc-100/70 text-zinc-400 hover:bg-zinc-200 dark:bg-white/5 dark:text-zinc-500 dark:hover:bg-white/10"
@@ -190,7 +190,7 @@ export function PostList({ posts }: Props) {
 
           {/* 세분류 pills */}
           {subSubCategories.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pl-2">
+            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none pl-2">
               {subSubCategories.map((ss) => {
                 const count  = posts.filter((p) => p.subcategory === activeSub && p.subSubcategory === ss).length;
                 const active = activeSubSub === ss;
@@ -198,7 +198,7 @@ export function PostList({ posts }: Props) {
                   <button
                     key={ss}
                     onClick={() => router.push(buildUrl(activeCategory, activeSub, active ? null : ss), { scroll: false })}
-                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-all ${
+                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-all shrink-0 ${
                       active
                         ? "bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-400"
                         : "bg-zinc-100/50 text-zinc-400 hover:bg-zinc-200 dark:bg-white/4 dark:text-zinc-500 dark:hover:bg-white/8"
