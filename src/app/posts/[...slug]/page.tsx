@@ -83,7 +83,7 @@ export default async function PostDetailPage({ params }: PageProps) {
   const categoryLabel = catConfig?.label ?? post.meta.category;
 
   return (
-    <main className="py-10">
+    <main className="py-6 sm:py-10">
       <ReadingProgress />
       <ScrollToTop />
 
