@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 };
 
 // Inline script to apply dark class before first render (prevents FOUC)
-const themeScript = `(function(){var t=localStorage.getItem("theme"),d=window.matchMedia("(prefers-color-scheme:dark)").matches;if(t==="dark"||(t!=="light"&&d))document.documentElement.classList.add("dark")})()`;
+const themeScript = `(function(){var t=localStorage.getItem("theme"),d=window.matchMedia("(prefers-color-scheme:dark)").matches;if(t==="dark"||(t!=="light"&&d)){document.documentElement.classList.add("dark")}else if(t==="light"){document.documentElement.classList.add("light")}})()`;
 
 export default async function RootLayout({
   children,
