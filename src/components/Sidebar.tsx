@@ -157,25 +157,29 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
           })}
         </nav>
 
-        {/* ── 랜덤 글 버튼 ─────────────────────────────── */}
-        <div className="mb-4">
-          <RandomPostButton posts={posts} />
+        {/* ── 중간 스크롤 영역 ─────────────────────────── */}
+        <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-0">
+          {/* 랜덤 글 버튼 */}
+          <div className="mb-4 shrink-0">
+            <RandomPostButton posts={posts} />
+          </div>
+
+          {/* 구분선 */}
+          <div className="h-px bg-black/6 dark:bg-white/6 mb-5 shrink-0" />
+
+          {/* 논문 피드 */}
+          <div className="shrink-0">
+            <ArxivLiveFeed />
+          </div>
+
+          {/* 구분선 */}
+          <div className="h-px bg-black/6 dark:bg-white/6 my-3 shrink-0" />
+
+          {/* 북마크 위젯 */}
+          <div className="shrink-0">
+            <BookmarksWidget posts={posts} />
+          </div>
         </div>
-
-        {/* ── 구분선 ───────────────────────────────────── */}
-        <div className="h-px bg-black/6 dark:bg-white/6 mb-5" />
-
-        {/* ── 논문 피드 ────────────────────────────────── */}
-        <ArxivLiveFeed />
-
-        {/* ── 구분선 ───────────────────────────────────── */}
-        <div className="h-px bg-black/6 dark:bg-white/6 my-3" />
-
-        {/* ── 북마크 위젯 ──────────────────────────────── */}
-        <BookmarksWidget posts={posts} />
-
-        {/* ── 여백 채우기 ──────────────────────────────── */}
-        <div className="flex-1" />
 
         {/* ── 하단 고정 영역 (구독 + 푸터) ─────────────── */}
         <div className="shrink-0 pt-3 space-y-4">
