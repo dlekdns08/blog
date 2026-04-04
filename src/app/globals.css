@@ -273,6 +273,16 @@ body {
   color: #c4b5fd;
 }
 
+/* ── Scrollbar hide utility ── */
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* ── Post Card 3D Tilt ── */
 
 .post-card-tilt {
