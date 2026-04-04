@@ -91,7 +91,7 @@ export function PostKnowledgeGraph() {
     canvas.style.height = `${H}px`;
     const ctx = canvas.getContext("2d")!;
     ctx.scale(dpr, dpr);
-    const isDark = document.documentElement.classList.contains("dark");
+    let isDark = document.documentElement.classList.contains("dark");
     const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
     const onWheel = (e: WheelEvent) => {
@@ -109,6 +109,7 @@ export function PostKnowledgeGraph() {
     canvas.addEventListener("wheel", onWheel, { passive: false });
 
     function tick() {
+      isDark = document.documentElement.classList.contains("dark");
       const t = transformRef.current;
       const interact = interactRef.current;
 
