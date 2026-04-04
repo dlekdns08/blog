@@ -79,7 +79,7 @@ export function ArxivForceGraph({
 
     const ctx = canvas.getContext("2d")!;
     ctx.scale(dpr, dpr);
-    const isDark = document.documentElement.classList.contains("dark");
+    let isDark = document.documentElement.classList.contains("dark");
 
     transformRef.current = { tx: 0, ty: 0, scale: 1 };
 
@@ -221,6 +221,7 @@ export function ArxivForceGraph({
     let frame = 0;
 
     function tick() {
+      isDark = document.documentElement.classList.contains("dark");
       const tr = transformRef.current;
       const interact = interactRef.current;
 
