@@ -17,17 +17,28 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
+// 클라이언트에서 현재 실제 테마를 동기적으로 읽는 헬퍼
+function getInitialTheme(): Theme {
+  if (typeof window === "undefined") return "system";
+  return (localStorage.getItem("theme") as Theme | null) ?? "system";
+}
+
+function getInitialResolved(theme: Theme): "light" | "dark" {
+  if (typeof window === "undefined") return "light";
+  // 인라인 스크립트가 이미 .dark 클래스를 설정했으므로 DOM에서 직접 읽음
+  if (document.documentElement.classList.contains("dark")) return "dark";
+  if (theme === "dark") return "dark";
+  if (theme === "light") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("system");
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+  const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() =>
+    getInitialResolved(getInitialTheme())
+  );
 
-  // on mount, read stored preference
-  useEffect(() => {
-    const stored = (localStorage.getItem("theme") as Theme | null) ?? "system";
-    setThemeState(stored);
-  }, []);
-
-  // apply class whenever theme changes
+  // theme 상태가 바뀔 때마다 DOM 클래스와 resolvedTheme을 동기화
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -39,7 +50,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     apply(theme);
 
-    // re-apply when system preference changes (only relevant if theme === "system")
     const listener = () => {
       if (theme === "system") apply("system");
     };
