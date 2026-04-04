@@ -45,6 +45,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     function apply(t: Theme) {
       const isDark = t === "dark" || (t === "system" && mq.matches);
       document.documentElement.classList.toggle("dark", isDark);
+      // OS가 다크 모드일 때 명시적 라이트 선택을 구분하기 위한 마커 클래스
+      document.documentElement.classList.toggle("light", !isDark && t === "light");
       setResolvedTheme(isDark ? "dark" : "light");
     }
 
