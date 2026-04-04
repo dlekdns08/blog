@@ -54,7 +54,7 @@ export default async function RootLayout({
   const categories = buildCategoryTree(posts);
 
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
         {/* Must run before body renders to avoid flash of wrong theme */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
