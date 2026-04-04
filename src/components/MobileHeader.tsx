@@ -108,9 +108,9 @@ export function MobileHeader() {
       <header className="md:hidden sticky top-0 z-40 border-b border-black/10 dark:border-white/10 bg-white/85 dark:bg-zinc-950/85 backdrop-blur-md">
         <div className="flex h-14 items-center justify-between px-4">
           {/* 로고 */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg leading-none">🐨</span>
-            <span className="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">코알라 오딧세이</span>
+          <Link href="/" className="flex items-center gap-2 min-w-0 shrink-0">
+            <span className="text-lg leading-none shrink-0">🐨</span>
+            <span className="text-sm font-bold tracking-tight text-zinc-900 dark:text-white whitespace-nowrap">코알라 오딧세이</span>
           </Link>
 
           {/* 우측 아이콘 영역 */}
@@ -123,7 +123,7 @@ export function MobileHeader() {
               aria-label="검색"
               className="rounded-lg p-2 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-white dark:hover:bg-white/10 transition-colors"
             >
-              <svg className="size-4.5" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+              <svg className="size-5" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 15.803a7.5 7.5 0 0 0 10.607 0Z" />
               </svg>
             </button>
@@ -134,7 +134,7 @@ export function MobileHeader() {
               aria-label="메뉴 열기"
               className="rounded-lg p-2 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-white dark:hover:bg-white/10 transition-colors"
             >
-              <svg className="size-4.5" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+              <svg className="size-5" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
             </button>
@@ -173,7 +173,7 @@ export function MobileHeader() {
             aria-label="메뉴 닫기"
             className="rounded-lg p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:text-white dark:hover:bg-white/10 transition-colors"
           >
-            <svg className="size-4.5" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+            <svg className="size-5" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
           </button>
