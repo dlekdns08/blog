@@ -9,6 +9,18 @@ import { formatRelativeDate } from "@/lib/date";
 
 const PAGE_SIZE = 10;
 
+function getPageNumbers(current: number, total: number): (number | "…")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages: (number | "…")[] = [1];
+  if (current > 3) pages.push("…");
+  for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+    pages.push(i);
+  }
+  if (current < total - 2) pages.push("…");
+  pages.push(total);
+  return pages;
+}
+
 function TagBadge({ tag }: { tag: string }) {
   return (
     <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-500 dark:bg-white/10 dark:text-zinc-400">
@@ -290,17 +302,21 @@ export function PostList({ posts }: Props) {
                 disabled={page === 1}
                 className="rounded-lg px-3 py-1.5 text-sm text-zinc-400 hover:text-zinc-900 disabled:opacity-30 disabled:cursor-not-allowed dark:text-zinc-500 dark:hover:text-white transition-colors"
               >←</button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-                <button
-                  key={n}
-                  onClick={() => changePage(n)}
-                  className={`min-w-[2rem] rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                    n === page
-                      ? "bg-violet-600 text-white dark:bg-violet-500"
-                      : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"
-                  }`}
-                >{n}</button>
-              ))}
+              {getPageNumbers(page, totalPages).map((n, i) =>
+                n === "…" ? (
+                  <span key={`ellipsis-${i}`} className="px-1.5 py-1.5 text-sm text-zinc-300 dark:text-zinc-600 select-none">…</span>
+                ) : (
+                  <button
+                    key={n}
+                    onClick={() => changePage(n)}
+                    className={`min-w-[2rem] rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                      n === page
+                        ? "bg-violet-600 text-white dark:bg-violet-500"
+                        : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"
+                    }`}
+                  >{n}</button>
+                )
+              )}
               <button
                 onClick={() => changePage(page + 1)}
                 disabled={page === totalPages}
