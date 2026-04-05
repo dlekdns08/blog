@@ -194,14 +194,20 @@ export default async function Home() {
             </div>
           </div>
 
-          <div>
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-3">그 외</h2>
-            <div className="flex flex-wrap gap-2">
+          <details className="group">
+            <summary className="flex items-center gap-1.5 cursor-pointer list-none text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-3 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors select-none w-fit">
+              <svg className="size-3 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
+              </svg>
+              그 외
+              <span className="normal-case font-normal text-zinc-300 dark:text-zinc-600 ml-0.5">({OTHER_STACKS.length})</span>
+            </summary>
+            <div className="flex flex-wrap gap-2 mt-3">
               {OTHER_STACKS.map((s) => (
                 <StackBadge key={s.label} {...s} />
               ))}
             </div>
-          </div>
+          </details>
         </section>
       </div>
     </main>
