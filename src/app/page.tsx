@@ -78,10 +78,10 @@ export default async function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent dark:from-[#0a0a0a] dark:via-[#0a0a0a]/30" />
         {/* 이미지 위 텍스트 */}
         <div className="absolute bottom-0 left-0 right-0 px-5 sm:px-8 pb-6 sm:pb-8">
-          <h1 className="text-2xl font-bold tracking-tight drop-shadow-sm">
+          <h1 className="text-2xl font-bold tracking-tight" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.25), 0 0px 2px rgba(0,0,0,0.15)" }}>
             코알라 오딧세이
           </h1>
-          <p className="mt-1 text-sm text-black/60 dark:text-white/60">
+          <p className="mt-1 text-sm text-black/70 dark:text-white/70" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.2)" }}>
             <TypingText
               texts={[
                 "이다운의 여정을 기록하는 블로그",
