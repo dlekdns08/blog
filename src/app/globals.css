@@ -200,6 +200,16 @@ body {
   max-width: 100%;
 }
 
+.prose img::after {
+  content: attr(alt);
+  display: block;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-style: italic;
+  padding: 0.4rem 0;
+}
+
 /* ── Code Copy Button ── */
 
 .prose pre {
