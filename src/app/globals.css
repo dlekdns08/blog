@@ -135,7 +135,7 @@ body {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 0.75rem;
-  padding: 1.1rem 1.25rem;
+  padding: 1.1rem 3rem 1.1rem 1.25rem;
   overflow-x: auto;
   font-size: 0.875rem;
   line-height: 1.7;
