@@ -96,30 +96,6 @@ jobs:
           docker rm blog-${{ steps.color.outputs.current }} || true
           docker rmi blog:${{ steps.color.outputs.current }} || true
 
-      - name: Notify subscribers on new post
-        if: success()
-        env:
-          NOTIFY_API_KEY: ${{ secrets.NOTIFY_API_KEY }}
-        run: |
-          echo "=== DEBUG ==="
-          echo "KEY_LENGTH=${#NOTIFY_API_KEY}"
-          NEW_POST=$(git log --diff-filter=A --name-only --format= HEAD~5..HEAD -- 'content/posts/*.md' 'content/posts/**/*.md' 2>/dev/null | grep '\.md$' | head -1 || true)
-          echo "NEW_POST=$NEW_POST"
-          if [ -n "$NEW_POST" ] && [ -f "$NEW_POST" ]; then
-            TITLE=$(grep -m1 '^title:' "$NEW_POST" 2>/dev/null | sed 's/^title:[[:space:]]*//' | tr -d '"' || basename "$NEW_POST" .md)
-            REL=${NEW_POST#content/posts/}
-            SLUG=${REL%.md}
-            echo "SLUG=$SLUG"
-            PAYLOAD=$(jq -n --arg title "$TITLE" --arg slug "$SLUG" --arg url "https://koala.ai.kr/posts/$SLUG" --arg key "$NOTIFY_API_KEY" \
-              '{"title":$title,"slug":$slug,"url":$url,"api_key":$key}')
-            RESULT=$(curl -s -X POST https://api.koala.ai.kr/subscribe/notify \
-              -H 'Content-Type: application/json' \
-              -d "$PAYLOAD")
-            echo "RESULT=$RESULT"
-          else
-            echo "새 글 없음 또는 파일 미존재"
-          fi
-
       - name: Notify self-healing
         if: failure()
         run: |
