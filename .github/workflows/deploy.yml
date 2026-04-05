@@ -64,8 +64,8 @@ jobs:
             -e GITHUB_OWNER=dlekdns08 \
             -e GITHUB_REPO=blog \
             -e GITHUB_BRANCH=main \
-            -e ARXIV_DB_PATH=/data/arxiv_graph.db \
-            -v /app/actions-runner-arxiv/_work/arxiv-graph/arxiv-graph/data:/data:ro \
+            -e ARXIV_DB_PATH=/root/.arxiv-graph/data/arxiv_graph.db \
+            -v /root/.arxiv-graph/data:/root/.arxiv-graph/data:ro \
             blog:${{ steps.color.outputs.next }}
 
       - name: Health check
