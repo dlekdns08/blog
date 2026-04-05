@@ -158,7 +158,7 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
         </nav>
 
         {/* ── 중간 스크롤 영역 ─────────────────────────── */}
-        <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-0">
+        <div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-0 scrollbar-none">
           {/* 랜덤 글 버튼 */}
           <div className="mb-4 shrink-0">
             <RandomPostButton posts={posts} />
@@ -168,7 +168,7 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
           <div className="h-px bg-black/6 dark:bg-white/6 mb-5 shrink-0" />
 
           {/* 논문 피드 */}
-          <div className="shrink-0">
+          <div className="shrink-0 max-h-64 overflow-y-auto scrollbar-none">
             <ArxivLiveFeed />
           </div>
 
@@ -176,7 +176,7 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
           <div className="h-px bg-black/6 dark:bg-white/6 my-3 shrink-0" />
 
           {/* 북마크 위젯 */}
-          <div className="shrink-0">
+          <div className="shrink-0 max-h-52 overflow-y-auto scrollbar-none">
             <BookmarksWidget posts={posts} />
           </div>
         </div>
