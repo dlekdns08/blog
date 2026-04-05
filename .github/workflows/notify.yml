@@ -1,0 +1,40 @@
+name: Notify New Post
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'content/posts/**'
+
+jobs:
+  notify:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect new post and notify subscribers
+        env:
+          NOTIFY_API_KEY: ${{ secrets.NOTIFY_API_KEY }}
+        run: |
+          NEW_POST=$(git diff --diff-filter=A --name-only HEAD~1 HEAD -- 'content/posts/*.md' 'content/posts/**/*.md' 2>/dev/null | grep '\.md$' | head -1 || true)
+          echo "NEW_POST=$NEW_POST"
+          if [ -n "$NEW_POST" ] && [ -f "$NEW_POST" ]; then
+            TITLE=$(grep -m1 '^title:' "$NEW_POST" 2>/dev/null | sed 's/^title:[[:space:]]*//' | tr -d '"' || basename "$NEW_POST" .md)
+            REL=${NEW_POST#content/posts/}
+            SLUG=${REL%.md}
+            echo "SLUG=$SLUG"
+            PAYLOAD=$(jq -n \
+              --arg title "$TITLE" \
+              --arg slug "$SLUG" \
+              --arg url "https://koala.ai.kr/posts/$SLUG" \
+              --arg key "$NOTIFY_API_KEY" \
+              '{"title":$title,"slug":$slug,"url":$url,"api_key":$key}')
+            RESULT=$(curl -s -X POST https://api.koala.ai.kr/subscribe/notify \
+              -H 'Content-Type: application/json' \
+              -d "$PAYLOAD")
+            echo "RESULT=$RESULT"
+          else
+            echo "새 글 없음 또는 파일 미존재"
+          fi
