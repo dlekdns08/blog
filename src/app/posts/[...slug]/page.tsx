@@ -147,6 +147,9 @@ export default async function PostDetailPage({ params }: PageProps) {
             {/* 구분선 */}
             <div className="mb-10 h-px bg-black/8 dark:bg-white/8" />
 
+            {/* 인라인 목차 (xl 미만) */}
+            {headings.length >= 2 && <CollapsibleTOC headings={headings} />}
+
             {/* 본문 */}
             <Suspense fallback={
               <article className="prose max-w-none" dangerouslySetInnerHTML={{ __html: html }} />
