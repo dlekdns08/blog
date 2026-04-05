@@ -13,6 +13,7 @@ import { ShareButton } from "@/components/ShareButton";
 import { TableOfContents } from "@/components/TableOfContents";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { ViewCounter } from "@/components/ViewCounter";
+import { CollapsibleTOC } from "@/components/CollapsibleTOC";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { injectHeadingIds } from "@/lib/headings";
