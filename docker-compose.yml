@@ -5,7 +5,7 @@ services:
       - "3000:3000"
     environment:
       - CLAUDE_TOKEN=${CLAUDE_TOKEN}
-      - ARXIV_DB_PATH=/data/arxiv_graph.db
+      - ARXIV_DB_PATH=/root/.arxiv-graph/data/arxiv_graph.db
     volumes:
-      - /app/actions-runner-arxiv/_work/arxiv-graph/arxiv-graph/data:/data:ro
+      - /root/.arxiv-graph/data:/root/.arxiv-graph/data:ro
     restart: always
