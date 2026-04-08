@@ -1,0 +1,1256 @@
+[
+  {
+    "date": "2026-04-04",
+    "entries": [
+      {
+        "hash": "ec2b526",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "모바일 헤더의 아이콘 크기 및 로고 스타일 조정"
+      },
+      {
+        "hash": "50dfffb",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "포스트 상세 페이지의 여백 조정"
+      },
+      {
+        "hash": "9b395a1",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "포스트 상세 페이지의 여백 및 제목 크기 조정"
+      },
+      {
+        "hash": "e98e136",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "대분류, 소분류, 세분류 pills의 스타일 개선 및 스크롤 기능 추가"
+      },
+      {
+        "hash": "455e15a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "모바일 헤더에 아이콘 추가 및 드로어 기능 개선"
+      },
+      {
+        "hash": "cd2a7d7",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "스크롤바 숨기기 유틸리티 클래스 추가"
+      },
+      {
+        "hash": "9f9c59a",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "페이지 레이아웃 개선을 위한 여백 및 패딩 조정"
+      },
+      {
+        "hash": "84a87ea",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "isDark 변수를 let으로 변경하여 상태 업데이트를 허용"
+      },
+      {
+        "hash": "4d99257",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "isDark 변수를 let으로 변경하여 상태 업데이트를 허용"
+      },
+      {
+        "hash": "31d8be8",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "다크 모드와 라이트 모드를 구분하기 위한 마커 클래스 추가"
+      },
+      {
+        "hash": "cedfd43",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "themeScript에서 조건문 구문 오류 수정"
+      },
+      {
+        "hash": "50b1e00",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "초기 테마 및 resolvedTheme을 동기적으로 읽도록 ThemeProvider 수정"
+      },
+      {
+        "hash": "cb68827",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "suppressHydrationWarning 속성을 html 요소에 추가"
+      },
+      {
+        "hash": "b12d30a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "body 요소에 배경색 및 색상 전환 효과 추가"
+      },
+      {
+        "hash": "d3334bf",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "사이드바 레이아웃 개선 및 스크롤 영역 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-03",
+    "entries": [
+      {
+        "hash": "b7aa1e7",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "마우스 인터랙션 개선 및 확대/축소 기능 추가"
+      },
+      {
+        "hash": "8939ba9",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "마우스 인터랙션 개선 및 캔버스 확대/축소 기능 추가"
+      },
+      {
+        "hash": "4d147da",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "그래프 데이터 상태 관리 개선 및 시뮬레이션 실행 로직 최적화"
+      },
+      {
+        "hash": "0364d9e",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "시뮬레이션 시작을 위한 pendingSimRef 추가 및 로딩 후 실행 로직 개선"
+      },
+      {
+        "hash": "785194f",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "로컬 그래프 계산에서 노드 ID 참조 수정 및 revalidate 옵션 제거"
+      },
+      {
+        "hash": "8a7d655",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "API URL 설정 및 포스트 입력 형식 수정"
+      },
+      {
+        "hash": "ebd5c11",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "TableOfContents 컴포넌트에 히트맵 기능 추가 및 스크롤 시간 기록"
+      },
+      {
+        "hash": "cb90b49",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "PostKnowledgeGraph 컴포넌트 추가하여 블로그 포스트 관계 시각화"
+      },
+      {
+        "hash": "4fe33bd",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "PostKnowledgeGraph 컴포넌트 추가하여 블로그 포스트 관계 시각화"
+      },
+      {
+        "hash": "192bd27",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "DailyPaperWidget 컴포넌트 추가하여 오늘의 논문을 표시"
+      },
+      {
+        "hash": "22fc8e8",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Add ArxivLiveFeed component to display latest research papers"
+      },
+      {
+        "hash": "8a15a39",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Add KnowledgeGraphPage component to visualize blog post relationships"
+      },
+      {
+        "hash": "53553cc",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Add API endpoint to retrieve posts graph with nodes and edges"
+      },
+      {
+        "hash": "83098d9",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Implement daily paper summary API using Anthropic SDK"
+      },
+      {
+        "hash": "57e96ed",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Add DailyPaperWidget component to display today's paper"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-02",
+    "entries": [
+      {
+        "hash": "c5e1a6a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Refactor ArxivForceGraph component for improved category handling and rendering"
+      },
+      {
+        "hash": "41ac7cb",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Add ARXIV_DB_PATH environment variable and configure volume for arXiv data"
+      },
+      {
+        "hash": "7d1274b",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Add ARXIV_DB_PATH environment variable and configure volume for data"
+      },
+      {
+        "hash": "3f59b89",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "Improve error handling and logging in arxivDb.ts"
+      },
+      {
+        "hash": "e923650",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "Update database path for arxivDb.ts"
+      },
+      {
+        "hash": "596860c",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "correct DB_PATH string formatting and remove console log"
+      },
+      {
+        "hash": "c3e35ed",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "log the database path for arXiv graph database"
+      },
+      {
+        "hash": "6bf0c55",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "update DB_PATH to correct path for arxiv_graph.db"
+      },
+      {
+        "hash": "d6794b3",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "update next.config.ts to use serverExternalPackages for better-sqlite3"
+      },
+      {
+        "hash": "ee55fd9",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "add ArxivGraphPage component for visualizing arXiv papers and their relations"
+      },
+      {
+        "hash": "92b99e9",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "add ArxivForceGraph component for visualizing arXiv papers and relations"
+      },
+      {
+        "hash": "42e3034",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "integrate better-sqlite3 for database operations and add API routes for arxiv data"
+      },
+      {
+        "hash": "b98ebc9",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "arxiv-graph 문서 추가: arXiv 논문 지식 그래프 자동 구축기 설계 및 구현 기록"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-01",
+    "entries": [
+      {
+        "hash": "2558db8",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-31",
+    "entries": [
+      {
+        "hash": "0b59cfd",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix deploy.yml"
+      },
+      {
+        "hash": "e0f8a92",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "f930454",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix package-lock.json"
+      },
+      {
+        "hash": "db6dadc",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add ChatWidget to layout.tsx"
+      },
+      {
+        "hash": "4da8315",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Create ChatWidget.tsx component"
+      },
+      {
+        "hash": "5b16aca",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Create /api/posts/[...slug]/route.ts (post context API)"
+      },
+      {
+        "hash": "76097ee",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Create /api/chat/route.ts (streaming chat endpoint)"
+      },
+      {
+        "hash": "6e6551d",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add @anthropic-ai/sdk to package.json"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-29",
+    "entries": [
+      {
+        "hash": "e5f097e",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "워드 클라우드 동사 제거"
+      },
+      {
+        "hash": "eddc46b",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "feat : Sidebar & MobileHeader"
+      },
+      {
+        "hash": "f16ae25",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Sidebar & MobileHeader 네비게이션 링크 추가"
+      },
+      {
+        "hash": "280fa48",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "PostList URL 검색 파라미터 지원 추가"
+      },
+      {
+        "hash": "fa7f706",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Word cloud 페이지 생성 (src/app/wordcloud/page.tsx)"
+      },
+      {
+        "hash": "2477d22",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "WordCloud 컴포넌트 생성 (src/components/WordCloud.tsx)"
+      },
+      {
+        "hash": "67220b6",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "API route 생성 (src/app/api/wordcloud/route.ts)"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-27",
+    "entries": [
+      {
+        "hash": "f93d438",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix category system"
+      },
+      {
+        "hash": "4ed0fec",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "UASEF 구현기: 설계를 코드로 — 4가지 미해결 과제를 해결하며 글 수정"
+      },
+      {
+        "hash": "90a877e",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "UASEF 구현기: 설계를 코드로 — 4가지 미해결 과제를 해결하며 글 추가"
+      },
+      {
+        "hash": "f77cb04",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "UASEF: 의료 LLM 에이전트를 위한 불확실성 기반 안전 에스컬레이션 프레임워크 설계 글 수정"
+      },
+      {
+        "hash": "6e509c8",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "UASEF: 의료 LLM 에이전트를 위한 불확실성 기반 안전 에스컬레이션 프레임워크 설계 글 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-26",
+    "entries": [
+      {
+        "hash": "ab81307",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "Mamba-3: 상태 공간 원리로 시퀀스 모델링을 한 단계 끌어올리다 글 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-21",
+    "entries": [
+      {
+        "hash": "7609f22",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "OpenJarvis 글 추가"
+      },
+      {
+        "hash": "1bf84be",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix mention"
+      },
+      {
+        "hash": "481c5f6",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "5729b77",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix category + poplist"
+      },
+      {
+        "hash": "e7047ab",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix category"
+      },
+      {
+        "hash": "34f664c",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix sidebar category"
+      },
+      {
+        "hash": "d94358c",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "a9d8cf6",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "07ca347",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "3036012",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "c873570",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix client component"
+      },
+      {
+        "hash": "086dbfb",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "899df97",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "3ba5aa9",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add"
+      },
+      {
+        "hash": "7586343",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add game"
+      },
+      {
+        "hash": "2c0a885",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add"
+      },
+      {
+        "hash": "3deaea6",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add"
+      },
+      {
+        "hash": "2338ab8",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add scroll to top button"
+      },
+      {
+        "hash": "b76a516",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add share Button"
+      },
+      {
+        "hash": "78e4dbc",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add date format utility"
+      },
+      {
+        "hash": "5048844",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "547bd6c",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix fonts type error"
+      },
+      {
+        "hash": "c349937",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "12a8650",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add OG image"
+      },
+      {
+        "hash": "0d14bcb",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-18",
+    "entries": [
+      {
+        "hash": "cbcfb8d",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": " FIX"
+      },
+      {
+        "hash": "fba498f",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "수정"
+      },
+      {
+        "hash": "9e3b77a",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "IX"
+      },
+      {
+        "hash": "72a4490",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "85f9f79",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix : api address"
+      },
+      {
+        "hash": "2c4cdf6",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "FIX"
+      },
+      {
+        "hash": "6e603b1",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "수정 : 소개 페이지 UI/UX 개선"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-17",
+    "entries": [
+      {
+        "hash": "16614be",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "257ec11",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "962b46d",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "FIX"
+      },
+      {
+        "hash": "772585d",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "feat : add new post graphana"
+      },
+      {
+        "hash": "018dd97",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "feat : 포스트 미배포 로직 추가"
+      },
+      {
+        "hash": "233e9c7",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "life 글 삭제"
+      },
+      {
+        "hash": "b6ebb63",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "test 글 추가"
+      },
+      {
+        "hash": "c0caeb2",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add : login logic"
+      },
+      {
+        "hash": "a0e34f0",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add"
+      },
+      {
+        "hash": "65b8c8b",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "feat : 블로그 글 관리 기능"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-16",
+    "entries": [
+      {
+        "hash": "7c19ccf",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "2fc3ce1",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "860af97",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "77adbf2",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "d4f705d",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "feat : fix"
+      },
+      {
+        "hash": "9460a95",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "feat : re store posts"
+      },
+      {
+        "hash": "5540227",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "feat : 3단계 구분 및 UI 개선"
+      },
+      {
+        "hash": "8ecd68f",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "new post"
+      },
+      {
+        "hash": "4135994",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix : deploy and new post"
+      },
+      {
+        "hash": "63c63b2",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add : new post radixattention"
+      },
+      {
+        "hash": "f3937d9",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "835b396",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "22354f0",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix mcp"
+      },
+      {
+        "hash": "472333d",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "FIX"
+      },
+      {
+        "hash": "243668c",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "test"
+      },
+      {
+        "hash": "4e4eb93",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "fbccc5a",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "test"
+      },
+      {
+        "hash": "01d928e",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add : new post mamba"
+      },
+      {
+        "hash": "d42a959",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix address"
+      },
+      {
+        "hash": "1eb3766",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "구독 기능 추가"
+      },
+      {
+        "hash": "b9c2181",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "d0786ab",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "09622b5",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "remove dev dependency"
+      },
+      {
+        "hash": "d46edfa",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "보안 스캔 추가 및 실패 시 로그 전송 기능 개선"
+      },
+      {
+        "hash": "f54cc77",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "배포 실패 시 알림 기능 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-15",
+    "entries": [
+      {
+        "hash": "efc478f",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "새로운 포스트 추가: GraphQLite를 사용한 SQLite 그래프 데이터베이스 기능 소개"
+      },
+      {
+        "hash": "ab3e48a",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add reviews for new AI frameworks and models"
+      },
+      {
+        "hash": "f35067e",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "새로운 포스트 추가: ICCV 2025 딥페이크 탐지 논문 \"DeepShield\" 및 \"HICOM\" 리뷰와 번호판 이미지 생성 프로젝트 총정리"
+      },
+      {
+        "hash": "e2694c2",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "새로운 포스트 추가: Meta의 Omnilingual ASR에 대한 상세한 설명 및 기능 소개"
+      },
+      {
+        "hash": "16282c5",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add summaries for weeks 4-7 of the Image Handling course and a marathon completion post"
+      },
+      {
+        "hash": "6bbfc4a",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "문서 수정: 가격 표기에서 달러 기호 앞에 이스케이프 문자 추가"
+      },
+      {
+        "hash": "1a21e74",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "의존성 추가: remark-gfm 패키지를 추가하고, 포스트 처리에 GFM 지원 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-03-14",
+    "entries": [
+      {
+        "hash": "68712a0",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "배포 워크플로우 개선: 헬스 체크 로직 수정 및 대기 시간 증가"
+      },
+      {
+        "hash": "d7cdaac",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "파비콘 추가: 새로운 파비콘 파일을 src/app 폴더에 추가"
+      },
+      {
+        "hash": "df019ac",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "배포 워크플로우 개선: 컨테이너 빌드 및 시작, 헬스 체크 추가, Nginx 트래픽 전환 및 이전 컨테이너 제거 로직 수정"
+      },
+      {
+        "hash": "9aa25e4",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "파비콘 파일 구조 변경: 기존 파비콘 삭제 및 게시물 폴더에 새 파비콘 추가"
+      },
+      {
+        "hash": "301d264",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "홈페이지 게시물 추가: 블로그와 API 서버 배포 과정 및 아키텍처 설명"
+      },
+      {
+        "hash": "e21294f",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Merge branch 'main' of https://github.com/dlekdns08/blog"
+      },
+      {
+        "hash": "60c53f8",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Update next.config.ts: set output option to 'standalone' for improved deployment configuration."
+      },
+      {
+        "hash": "38eabf9",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Update next.config.ts"
+      },
+      {
+        "hash": "eb0956c",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Deploy configuration update: rename workflow to 'Deploy Blog' and streamline steps for clarity and consistency."
+      }
+    ]
+  },
+  {
+    "date": "2026-03-13",
+    "entries": [
+      {
+        "hash": "adcc78e",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add PostAttachments component to PostDetailPage: display file attachments for posts, enhancing content accessibility and user engagement."
+      },
+      {
+        "hash": "16e1b99",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Enhance PostDetailPage: improve layout and styling for user engagement features, including LikeButton and CommentSection, to create a more visually appealing and interactive experience."
+      },
+      {
+        "hash": "2e46568",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Update dependencies and enhance post processing: add KaTeX and remark plugins for math rendering, update package configurations, and remove outdated blog posts to streamline content."
+      },
+      {
+        "hash": "d84633e",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Update PostDetailPage: improve styling for LikeButton and CommentSection, enhancing user engagement and overall visual appeal."
+      }
+    ]
+  },
+  {
+    "date": "2026-03-12",
+    "entries": [
+      {
+        "hash": "0f5ecbc",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Remove multiple blog post files: delete outdated content including reviews on AI models and training experiences to streamline the repository."
+      },
+      {
+        "hash": "e16a20c",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Refactor PostList component: improve pagination controls, enhance tag and query handling, and optimize post display for better user navigation."
+      },
+      {
+        "hash": "d89bc4c",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add pagination to PostList component: implement page state management, update tag and query handling, and enhance post display with pagination controls for improved user navigation."
+      },
+      {
+        "hash": "420b105",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Update layout component: change sidebar display from block to flex for improved responsiveness and alignment."
+      },
+      {
+        "hash": "f8c7dfa",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Update GitHub link in Sidebar component: change user profile link for accurate navigation"
+      },
+      {
+        "hash": "41efcea",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add LikeButton and CommentSection to PostDetailPage: enhance user interaction with post engagement features"
+      },
+      {
+        "hash": "338d085",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Refactor PostDetailPage component: enhance header layout with improved styling for title, description, and tags, and update back link design for better user experience."
+      },
+      {
+        "hash": "97e617a",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Update PostList component: enhance styling for tags and search input, improve layout spacing, and refine post item presentation for better user experience."
+      },
+      {
+        "hash": "31c4732",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Refactor Home page layout: enhance StackBadge styles, update gradient overlay, and improve text readability. Add link to posts section and adjust spacing for better visual hierarchy."
+      },
+      {
+        "hash": "f760a0b",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Enhance MobileHeader component: add \"소개\" link, update layout for improved aesthetics, and adjust active link styles"
+      },
+      {
+        "hash": "865d334",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add \"소개\" link to sidebar navigation, enhance blog title layout, and improve footer with GitHub link and copyright notice"
+      },
+      {
+        "hash": "dac4319",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Update global styles in CSS: refine color variables, enhance typography, and improve prose formatting for better readability and aesthetics."
+      }
+    ]
+  },
+  {
+    "date": "2026-03-11",
+    "entries": [
+      {
+        "hash": "35e7f45",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Add react-icons package and implement technology stack display"
+      },
+      {
+        "hash": "af67717",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "first commit"
+      },
+      {
+        "hash": "2ff7905",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Initial commit from Create Next App"
+      }
+    ]
+  }
+]
