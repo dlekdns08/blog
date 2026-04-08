@@ -83,7 +83,7 @@ export default function ArxivGraphPage() {
         const [statsRes, papersRes, graphRes] = await Promise.all([
           fetch("/api/arxiv/stats"),
           fetch("/api/arxiv/papers?limit=50"),
-          fetch("/api/arxiv/graph?limit=40"),
+          fetch("/api/arxiv/graph?limit=1000"),
         ]);
         if (statsRes.ok) setStats(await statsRes.json());
         if (papersRes.ok) setPapers(await papersRes.json());
@@ -224,7 +224,7 @@ export default function ArxivGraphPage() {
       {tab === "graph" && (
         <section className="space-y-3">
           <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
-            논문 관계 그래프 — 상위 40편
+            논문 관계 그래프 — 상위 {graphData.papers.length.toLocaleString()}편
           </h2>
           {loading ? (
             <Skeleton className="h-96 w-full rounded-2xl" />
