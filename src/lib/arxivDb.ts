@@ -94,7 +94,7 @@ export function getStats(): Stats {
   }
 }
 
-export function getGraphData(limit = 40): { papers: GraphNode[]; relations: Relation[] } {
+export function getGraphData(limit = 1000): { papers: GraphNode[]; relations: Relation[] } {
   try {
     const db = getDb();
     const papers = db
@@ -115,7 +115,7 @@ export function getGraphData(limit = 40): { papers: GraphNode[]; relations: Rela
         `SELECT source_id, target_id, relation_type, weight
          FROM paper_relations
          WHERE source_id IN (${ph}) AND target_id IN (${ph})
-         LIMIT 300`
+         LIMIT 5000`
       )
       .all(...ids, ...ids) as Relation[];
 
