@@ -65,6 +65,13 @@ function StatsIcon() {
     </svg>
   );
 }
+function ChangelogIcon() {
+  return (
+    <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+  );
+}
 function GitHubIcon() {
   return (
     <svg className="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
@@ -84,6 +91,7 @@ const NAV = [
   { href: "/about",          label: "소개",         icon: <AboutIcon /> },
   { href: "/game",           label: "게임",         icon: <GameIcon /> },
   { href: "/stats",          label: "통계",         icon: <StatsIcon /> },
+  { href: "/changelog",      label: "업데이트 기록",  icon: <ChangelogIcon /> },
 ];
 
 // ── 컴포넌트 ───────────────────────────────────────────────
