@@ -35,6 +35,51 @@ function getCat(cat: string) {
   return CAT[cat] ?? DEFAULT_CAT;
 }
 
+// ── Spatial Hash Grid for O(N) approximate repulsion ────────
+class SpatialGrid {
+  private cells = new Map<string, SimNode[]>();
+  private cellSize: number;
+
+  constructor(cellSize: number) {
+    this.cellSize = cellSize;
+  }
+
+  clear() {
+    this.cells.clear();
+  }
+
+  insert(node: SimNode) {
+    const key = this.key(node.x, node.y);
+    let cell = this.cells.get(key);
+    if (!cell) {
+      cell = [];
+      this.cells.set(key, cell);
+    }
+    cell.push(node);
+  }
+
+  private key(x: number, y: number) {
+    return `${Math.floor(x / this.cellSize)},${Math.floor(y / this.cellSize)}`;
+  }
+
+  getNeighbors(node: SimNode): SimNode[] {
+    const cx = Math.floor(node.x / this.cellSize);
+    const cy = Math.floor(node.y / this.cellSize);
+    const result: SimNode[] = [];
+    for (let dx = -1; dx <= 1; dx++) {
+      for (let dy = -1; dy <= 1; dy++) {
+        const cell = this.cells.get(`${cx + dx},${cy + dy}`);
+        if (cell) {
+          for (const n of cell) {
+            if (n !== node) result.push(n);
+          }
+        }
+      }
+    }
+    return result;
+  }
+}
+
 type Particle = {
   edgeIdx: number;
   t: number;
@@ -69,6 +114,9 @@ export function ArxivForceGraph({
     const wrap = wrapRef.current;
     if (!canvas || !wrap || papers.length === 0) return;
 
+    const N = papers.length;
+    const isLarge = N > 200;
+
     const dpr = window.devicePixelRatio || 1;
     const W = wrap.clientWidth;
     const H = Math.round(W * 0.56);
@@ -81,14 +129,24 @@ export function ArxivForceGraph({
     ctx.scale(dpr, dpr);
     let isDark = document.documentElement.classList.contains("dark");
 
-    transformRef.current = { tx: 0, ty: 0, scale: 1 };
+    // For large graphs, zoom out initially
+    const initScale = isLarge ? Math.max(0.3, Math.min(1, 200 / Math.sqrt(N))) : 1;
+    transformRef.current = {
+      tx: W * (1 - initScale) / 2,
+      ty: H * (1 - initScale) / 2,
+      scale: initScale,
+    };
 
     const maxScore = Math.max(...papers.map((p) => p.importance_score), 0.01);
-    const minR = 5, maxR = 20;
+    const minR = isLarge ? 3 : 5;
+    const maxR = isLarge ? 12 : 20;
+
+    // Spread initial positions wider for large graphs
+    const spreadFactor = isLarge ? Math.sqrt(N) * 2 : 1;
 
     const nodes: SimNode[] = papers.map((p) => {
       const angle = Math.random() * Math.PI * 2;
-      const dist = 80 + Math.random() * 140;
+      const dist = (80 + Math.random() * 140) * (isLarge ? spreadFactor / 10 : 1);
       return {
         ...p,
         x: W / 2 + Math.cos(angle) * dist,
@@ -101,14 +159,28 @@ export function ArxivForceGraph({
 
     const nodeMap = new Map(nodes.map((n) => [n.arxiv_id, n]));
 
+    // Limit particles for performance
     const semanticEdges = relations.filter((e) => e.relation_type === "semantic");
-    particlesRef.current = semanticEdges.flatMap((_, i) =>
-      Array.from({ length: 2 }, () => ({
-        edgeIdx: i,
-        t: Math.random(),
-        speed: 0.0015 + Math.random() * 0.001,
-      }))
-    );
+    const maxParticles = isLarge ? Math.min(semanticEdges.length, 200) : semanticEdges.length * 2;
+    particlesRef.current = Array.from({ length: maxParticles }, (_, i) => ({
+      edgeIdx: i % semanticEdges.length,
+      t: Math.random(),
+      speed: 0.0015 + Math.random() * 0.001,
+    }));
+
+    // Spatial grid for repulsion (cell size ~ interaction range)
+    const grid = new SpatialGrid(isLarge ? 60 : 50);
+
+    // Precompute category groups for attraction
+    const catGroups = new Map<string, SimNode[]>();
+    for (const n of nodes) {
+      let arr = catGroups.get(n.primary_category);
+      if (!arr) {
+        arr = [];
+        catGroups.set(n.primary_category, arr);
+      }
+      arr.push(n);
+    }
 
     // Wheel zoom
     const onWheel = (e: WheelEvent) => {
@@ -118,7 +190,7 @@ export function ArxivForceGraph({
       const mx = (e.clientX - rect.left) * (canvas.width / (dpr * rect.width));
       const my = (e.clientY - rect.top) * (canvas.height / (dpr * rect.height));
       const factor = e.deltaY < 0 ? 1.1 : 0.9;
-      const newScale = Math.max(0.15, Math.min(6, t.scale * factor));
+      const newScale = Math.max(0.08, Math.min(8, t.scale * factor));
       t.tx = mx - (mx - t.tx) * (newScale / t.scale);
       t.ty = my - (my - t.ty) * (newScale / t.scale);
       t.scale = newScale;
@@ -142,22 +214,32 @@ export function ArxivForceGraph({
     function drawEdge(s: SimNode, t2: SimNode, type: string, weight: number, dimmed: boolean, scale: number) {
       const cat = getCat(s.primary_category);
       const alpha = dimmed ? 0.04 : type === "semantic" ? 0.22 : 0.28;
-      const mx2 = (s.x + t2.x) / 2 + (t2.y - s.y) * 0.12;
-      const my2 = (s.y + t2.y) / 2 - (t2.x - s.x) * 0.12;
-      const grad = ctx.createLinearGradient(s.x, s.y, t2.x, t2.y);
-      if (type === "semantic") {
-        grad.addColorStop(0, `rgba(${getCat(s.primary_category).rgb},${alpha})`);
-        grad.addColorStop(1, `rgba(${getCat(t2.primary_category).rgb},${alpha})`);
+      // Use straight lines for large graphs (faster than quadratic curves)
+      if (isLarge) {
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(t2.x, t2.y);
+        ctx.strokeStyle = `rgba(${cat.rgb},${alpha * 0.6})`;
+        ctx.lineWidth = (dimmed ? 0.3 : Math.min(0.5 + weight * 0.3, 1.2)) / scale;
+        ctx.stroke();
       } else {
-        grad.addColorStop(0, `rgba(${cat.rgb},${alpha})`);
-        grad.addColorStop(1, `rgba(${cat.rgb},${alpha * 0.5})`);
+        const mx2 = (s.x + t2.x) / 2 + (t2.y - s.y) * 0.12;
+        const my2 = (s.y + t2.y) / 2 - (t2.x - s.x) * 0.12;
+        const grad = ctx.createLinearGradient(s.x, s.y, t2.x, t2.y);
+        if (type === "semantic") {
+          grad.addColorStop(0, `rgba(${getCat(s.primary_category).rgb},${alpha})`);
+          grad.addColorStop(1, `rgba(${getCat(t2.primary_category).rgb},${alpha})`);
+        } else {
+          grad.addColorStop(0, `rgba(${cat.rgb},${alpha})`);
+          grad.addColorStop(1, `rgba(${cat.rgb},${alpha * 0.5})`);
+        }
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.quadraticCurveTo(mx2, my2, t2.x, t2.y);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = (dimmed ? 0.5 : Math.min(1 + weight, 2.5)) / scale;
+        ctx.stroke();
       }
-      ctx.beginPath();
-      ctx.moveTo(s.x, s.y);
-      ctx.quadraticCurveTo(mx2, my2, t2.x, t2.y);
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = (dimmed ? 0.5 : Math.min(1 + weight, 2.5)) / scale;
-      ctx.stroke();
     }
 
     function drawParticle(p: Particle) {
@@ -165,45 +247,75 @@ export function ArxivForceGraph({
       const s = nodeMap.get(e.source_id);
       const t2 = nodeMap.get(e.target_id);
       if (!s || !t2) return;
-      const mx2 = (s.x + t2.x) / 2 + (t2.y - s.y) * 0.12;
-      const my2 = (s.y + t2.y) / 2 - (t2.x - s.x) * 0.12;
-      const u = 1 - p.t;
-      const px = u * u * s.x + 2 * u * p.t * mx2 + p.t * p.t * t2.x;
-      const py = u * u * s.y + 2 * u * p.t * my2 + p.t * p.t * t2.y;
-      ctx.beginPath();
-      ctx.arc(px, py, 1.5, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${getCat(s.primary_category).rgb},0.7)`;
-      ctx.shadowColor = getCat(s.primary_category).hex;
-      ctx.shadowBlur = 6;
-      ctx.fill();
-      ctx.shadowBlur = 0;
+      if (isLarge) {
+        const px = s.x + (t2.x - s.x) * p.t;
+        const py = s.y + (t2.y - s.y) * p.t;
+        ctx.beginPath();
+        ctx.arc(px, py, 1, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${getCat(s.primary_category).rgb},0.5)`;
+        ctx.fill();
+      } else {
+        const mx2 = (s.x + t2.x) / 2 + (t2.y - s.y) * 0.12;
+        const my2 = (s.y + t2.y) / 2 - (t2.x - s.x) * 0.12;
+        const u = 1 - p.t;
+        const px = u * u * s.x + 2 * u * p.t * mx2 + p.t * p.t * t2.x;
+        const py = u * u * s.y + 2 * u * p.t * my2 + p.t * p.t * t2.y;
+        ctx.beginPath();
+        ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${getCat(s.primary_category).rgb},0.7)`;
+        ctx.shadowColor = getCat(s.primary_category).hex;
+        ctx.shadowBlur = 6;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
     }
 
     function drawNode(n: SimNode, isHovered: boolean, dimmed: boolean, scale: number) {
       const c = getCat(n.primary_category);
-      if (isHovered || n.importance_score / maxScore > 0.7) {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r + 5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${c.rgb},${isHovered ? 0.15 : 0.06})`;
-        ctx.fill();
-      }
-      ctx.shadowColor = c.hex;
-      ctx.shadowBlur = isHovered ? 20 : dimmed ? 0 : 10;
-      const grad = ctx.createRadialGradient(n.x - n.r * 0.3, n.y - n.r * 0.3, n.r * 0.1, n.x, n.y, n.r);
-      grad.addColorStop(0, `rgba(${c.rgb},${dimmed ? 0.12 : isHovered ? 0.9 : 0.55})`);
-      grad.addColorStop(1, `rgba(${c.rgb},${dimmed ? 0.04 : isHovered ? 0.5 : 0.18})`);
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-      ctx.strokeStyle = `rgba(${c.rgb},${dimmed ? 0.15 : isHovered ? 1 : 0.7})`;
-      ctx.lineWidth = (isHovered ? 2 : 1.2) / scale;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
 
-      const showLabel = isHovered || (n.r > 13 && !dimmed);
+      // Skip glow effects for small nodes in large graphs
+      if (!isLarge || isHovered || n.importance_score / maxScore > 0.7) {
+        if (isHovered || n.importance_score / maxScore > 0.7) {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r + 5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${c.rgb},${isHovered ? 0.15 : 0.06})`;
+          ctx.fill();
+        }
+      }
+
+      if (!isLarge) {
+        ctx.shadowColor = c.hex;
+        ctx.shadowBlur = isHovered ? 20 : dimmed ? 0 : 10;
+      }
+
+      // Simplified rendering for large graphs
+      if (isLarge && !isHovered) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${c.rgb},${dimmed ? 0.08 : 0.4})`;
+        ctx.fill();
+        ctx.strokeStyle = `rgba(${c.rgb},${dimmed ? 0.1 : 0.5})`;
+        ctx.lineWidth = 0.8 / scale;
+        ctx.stroke();
+      } else {
+        const grad = ctx.createRadialGradient(n.x - n.r * 0.3, n.y - n.r * 0.3, n.r * 0.1, n.x, n.y, n.r);
+        grad.addColorStop(0, `rgba(${c.rgb},${dimmed ? 0.12 : isHovered ? 0.9 : 0.55})`);
+        grad.addColorStop(1, `rgba(${c.rgb},${dimmed ? 0.04 : isHovered ? 0.5 : 0.18})`);
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.strokeStyle = `rgba(${c.rgb},${dimmed ? 0.15 : isHovered ? 1 : 0.7})`;
+        ctx.lineWidth = (isHovered ? 2 : 1.2) / scale;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      // Labels: show for hovered or top nodes only
+      const labelThreshold = isLarge ? 0.85 : 0.5;
+      const showLabel = isHovered || (n.importance_score / maxScore > labelThreshold && !dimmed);
       if (showLabel) {
-        const label = n.title.length > 28 ? n.title.slice(0, 27) + "…" : n.title;
+        const label = n.title.length > 28 ? n.title.slice(0, 27) + "\u2026" : n.title;
         const fontSize = (isHovered ? 10 : 8.5) / scale;
         ctx.font = `${isHovered ? 600 : 400} ${fontSize}px system-ui, sans-serif`;
         ctx.textAlign = "center";
@@ -218,6 +330,14 @@ export function ArxivForceGraph({
       }
     }
 
+    // ── Viewport culling helper ──────────────────────────
+    function isVisible(x: number, y: number, margin: number): boolean {
+      const { tx, ty, scale } = transformRef.current;
+      const sx = x * scale + tx;
+      const sy = y * scale + ty;
+      return sx > -margin && sx < W + margin && sy > -margin && sy < H + margin;
+    }
+
     let frame = 0;
 
     function tick() {
@@ -225,51 +345,72 @@ export function ArxivForceGraph({
       const tr = transformRef.current;
       const interact = interactRef.current;
 
+      // ── Physics step ─────────────────────────────────
+      // Center gravity
       for (const n of nodes) {
         if (interact.dragging === n) continue;
         n.vx += (W / 2 - n.x) * 0.001;
         n.vy += (H / 2 - n.y) * 0.001;
-        const samecat = nodes.filter((m) => m !== n && m.primary_category === n.primary_category);
-        if (samecat.length > 0) {
-          const cx = samecat.reduce((s, m) => s + m.x, 0) / samecat.length;
-          const cy = samecat.reduce((s, m) => s + m.y, 0) / samecat.length;
-          n.vx += (cx - n.x) * 0.0008;
-          n.vy += (cy - n.y) * 0.0008;
+      }
+
+      // Category attraction (use precomputed centroids, update periodically)
+      if (frame % 5 === 0) {
+        for (const [, group] of catGroups) {
+          if (group.length < 2) continue;
+          const cx = group.reduce((s, m) => s + m.x, 0) / group.length;
+          const cy = group.reduce((s, m) => s + m.y, 0) / group.length;
+          for (const n of group) {
+            if (interact.dragging === n) continue;
+            n.vx += (cx - n.x) * 0.0008;
+            n.vy += (cy - n.y) * 0.0008;
+          }
         }
-        for (const m of nodes) {
-          if (n === m) continue;
+      }
+
+      // Repulsion via spatial grid (O(N * k) instead of O(N^2))
+      grid.clear();
+      for (const n of nodes) grid.insert(n);
+
+      for (const n of nodes) {
+        if (interact.dragging === n) continue;
+        const neighbors = grid.getNeighbors(n);
+        for (const m of neighbors) {
           const dx = n.x - m.x, dy = n.y - m.y;
           const d2 = dx * dx + dy * dy + 1;
-          const minDist = (n.r + m.r + 12) ** 2;
+          const minDist = (n.r + m.r + (isLarge ? 8 : 12)) ** 2;
           const f = d2 < minDist ? 4000 / d2 : 1800 / d2;
           n.vx += dx * f * 0.001;
           n.vy += dy * f * 0.001;
         }
       }
 
+      // Edge spring forces
       for (const e of relations) {
         const s = nodeMap.get(e.source_id), t2 = nodeMap.get(e.target_id);
         if (!s || !t2) continue;
         const dx = t2.x - s.x, dy = t2.y - s.y;
         const d = Math.sqrt(dx * dx + dy * dy) + 0.001;
-        const ideal = e.relation_type === "author" ? 90 : 140;
+        const ideal = e.relation_type === "author" ? (isLarge ? 50 : 90) : (isLarge ? 80 : 140);
         const f = ((d - ideal) / d) * 0.03;
-        s.vx += dx * f; s.vy += dy * f;
-        t2.vx -= dx * f; t2.vy -= dy * f;
+        if (interact.dragging !== s) { s.vx += dx * f; s.vy += dy * f; }
+        if (interact.dragging !== t2) { t2.vx -= dx * f; t2.vy -= dy * f; }
       }
 
+      // Velocity damping and integration
+      const damping = isLarge ? 0.82 : 0.78;
       for (const n of nodes) {
         if (interact.dragging === n) continue;
-        n.vx *= 0.78; n.vy *= 0.78;
+        n.vx *= damping; n.vy *= damping;
         n.x += n.vx; n.y += n.vy;
       }
 
+      // Particles
       for (const p of particlesRef.current) {
         p.t += p.speed;
         if (p.t > 1) p.t = 0;
       }
 
-      // Background (screen space)
+      // ── Render ─────────────────────────────────────
       drawBackground();
 
       const hoveredId = canvasRef.current?.dataset.hoveredId ?? "";
@@ -282,26 +423,33 @@ export function ArxivForceGraph({
         }
       }
 
-      // World space
       ctx.save();
       ctx.translate(tr.tx, tr.ty);
       ctx.scale(tr.scale, tr.scale);
 
+      // Edges - batch by stroke style for performance
+      const visMargin = 50 / tr.scale;
       ctx.save();
       for (const e of relations) {
         const s = nodeMap.get(e.source_id), t2 = nodeMap.get(e.target_id);
         if (!s || !t2) continue;
+        // Cull edges outside viewport
+        if (!isVisible(s.x, s.y, visMargin) && !isVisible(t2.x, t2.y, visMargin)) continue;
         const dimmed = hoveredId !== "" && !neighborIds.has(e.source_id) && !neighborIds.has(e.target_id);
         drawEdge(s, t2, e.relation_type, e.weight, dimmed, tr.scale);
       }
       ctx.restore();
 
+      // Particles
       if (!hoveredId) {
         for (const p of particlesRef.current) drawParticle(p);
       }
 
+      // Nodes - sort by radius, draw small first
       const sorted = [...nodes].sort((a, b) => a.r - b.r);
       for (const n of sorted) {
+        // Cull nodes outside viewport
+        if (!isVisible(n.x, n.y, n.r * 3)) continue;
         const isHov = n.arxiv_id === hoveredId;
         const dimmed = hoveredId !== "" && !neighborIds.has(n.arxiv_id);
         drawNode(n, isHov, dimmed, tr.scale);
@@ -434,6 +582,13 @@ export function ArxivForceGraph({
           <span className="inline-block w-4 h-px bg-emerald-400/60" />
           <span className="text-[10px] text-white/50">공저자</span>
         </div>
+      </div>
+
+      {/* Node count badge */}
+      <div className="absolute top-3 right-3 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-lg px-2.5 py-1.5">
+        <span className="text-[10px] font-medium text-white/60 tabular-nums">
+          {papers.length.toLocaleString()} papers
+        </span>
       </div>
 
       {/* Tooltip */}
