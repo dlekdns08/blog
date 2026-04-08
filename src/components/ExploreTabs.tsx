@@ -5,6 +5,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { WordCloud } from "@/components/WordCloud";
 import { ArxivForceGraph } from "@/components/ArxivForceGraph";
 import { PostKnowledgeGraph } from "@/components/PostKnowledgeGraph";
+import { Container } from "@/components/Container";
+import { WordCloudIcon, ArxivIcon, GraphIcon } from "@/components/Icons";
 
 // ── 타입 ───────────────────────────────────────────────────
 type CategoryInfo = {
@@ -51,7 +53,7 @@ type Stats = {
 const TABS = [
   { id: "wordcloud", label: "워드클라우드", icon: WordCloudIcon },
   { id: "arxiv", label: "논문 그래프", icon: ArxivIcon },
-  { id: "knowledge", label: "지식 그래프", icon: KnowledgeIcon },
+  { id: "knowledge", label: "지식 그래프", icon: GraphIcon },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -67,31 +69,6 @@ const SCORE_WEIGHTS = [
   { label: "인용수", pct: 40, color: "bg-blue-500" },
   { label: "PageRank", pct: 30, color: "bg-emerald-500" },
 ];
-
-// ── 아이콘 ─────────────────────────────────────────────────
-function WordCloudIcon() {
-  return (
-    <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-    </svg>
-  );
-}
-
-function ArxivIcon() {
-  return (
-    <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-    </svg>
-  );
-}
-
-function KnowledgeIcon() {
-  return (
-    <svg className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c-1.2 5.4-4.8 7.8-9 9 4.2 1.2 7.8 3.6 9 9 1.2-5.4 4.8-7.8 9-9-4.2-1.2-7.8-3.6-9-9Z" />
-    </svg>
-  );
-}
 
 // ── 유틸 ───────────────────────────────────────────────────
 function Skeleton({ className }: { className?: string }) {
@@ -159,7 +136,9 @@ export function ExploreTabs({
   const maxScore = Math.max(...papers.map((p) => p.importance_score), 0.01);
 
   return (
-    <main className="px-8 py-10 max-w-3xl space-y-8">
+    <main className="py-10">
+      <Container>
+        <div className="space-y-8">
       {/* 헤더 */}
       <div>
         <h1 className="text-xl font-bold tracking-tight mb-1">탐색</h1>
@@ -428,6 +407,8 @@ export function ExploreTabs({
           </section>
         </div>
       )}
+        </div>
+      </Container>
     </main>
   );
 }

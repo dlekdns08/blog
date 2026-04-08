@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Container } from "@/components/Container";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 
 type PostStat = {
@@ -85,7 +86,9 @@ export default function StatsPage() {
   const maxCatViews = sortedCats[0]?.[1] ?? 1;
 
   return (
-    <main className="px-8 py-10 max-w-3xl space-y-10">
+    <main className="py-10">
+      <Container>
+        <div className="space-y-10">
       <div>
         <h1 className="text-xl font-bold tracking-tight mb-1">방문 통계</h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -233,6 +236,8 @@ export default function StatsPage() {
           </section>
         </>
       )}
+        </div>
+      </Container>
     </main>
   );
 }
