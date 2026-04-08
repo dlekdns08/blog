@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "changelog": "node scripts/generate-changelog.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.54.0",
