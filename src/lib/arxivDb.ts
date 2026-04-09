@@ -5,8 +5,6 @@ const DB_PATH =
   process.env.ARXIV_DB_PATH ||
   "/app/actions-runner-arxiv/_work/arxiv-graph/arxiv-graph/data/arxiv_graph.db";
 
-console.log("[arxivDb] DB_PATH:", DB_PATH);
-console.log("[arxivDb] file exists:", fs.existsSync(DB_PATH));
 
 let _db: Database.Database | null = null;
 

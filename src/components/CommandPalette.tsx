@@ -32,6 +32,7 @@ export function CommandPalette({ posts, open, onClose }: Props) {
   const [selected, setSelected] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const filtered = query.trim()
     ? posts
@@ -102,6 +103,28 @@ export function CommandPalette({ posts, open, onClose }: Props) {
     item?.scrollIntoView({ block: "nearest" });
   }, [selected]);
 
+  // 포커스 트랩
+  useEffect(() => {
+    if (!open) return;
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const focusable = dialog.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    function onTab(e: KeyboardEvent) {
+      if (e.key !== "Tab") return;
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      }
+    }
+    dialog.addEventListener("keydown", onTab);
+    return () => dialog.removeEventListener("keydown", onTab);
+  }, [open]);
+
   if (!open) return null;
 
   return (
@@ -114,6 +137,10 @@ export function CommandPalette({ posts, open, onClose }: Props) {
       <div className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm" />
 
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="명령어 팔레트"
         className="relative w-full max-w-xl bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-black/10 dark:border-white/10 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >

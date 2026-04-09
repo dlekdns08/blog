@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
+import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
 
 export type Attachment = {
@@ -78,7 +79,11 @@ function resolveFilePath(slug: string): string {
   return base.endsWith(".md") || base.endsWith(".mdx") ? base : `${base}.md`;
 }
 
+let postsCache: PostMeta[] | null = null;
+
 export async function getAllPosts(): Promise<PostMeta[]> {
+  if (postsCache) return postsCache;
+
   const slugInfos = await collectSlugs();
 
   const metas = await Promise.all(
@@ -87,12 +92,13 @@ export async function getAllPosts(): Promise<PostMeta[]> {
     )
   );
 
-  return metas.sort((a, b) => {
+  postsCache = metas.sort((a, b) => {
     const ad = Date.parse(a.date);
     const bd = Date.parse(b.date);
     if (Number.isNaN(ad) || Number.isNaN(bd)) return a.slug.localeCompare(b.slug);
     return bd - ad;
   });
+  return postsCache;
 }
 
 async function getPostMeta(
@@ -147,6 +153,7 @@ export async function getPostBySlug(slug: string): Promise<{
     .use(remarkMath)
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeKatex)
+    .use(rehypeHighlight)
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content);
 

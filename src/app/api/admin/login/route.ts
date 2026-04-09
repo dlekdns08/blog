@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { SignJWT } from 'jose'
 
-const getSecret = () =>
-  new TextEncoder().encode(process.env.JWT_SECRET ?? 'please-set-jwt-secret-in-env')
+const getSecret = () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is required')
+  }
+  return new TextEncoder().encode(process.env.JWT_SECRET)
+}
 
 export async function POST(request: NextRequest) {
   const { password } = await request.json()

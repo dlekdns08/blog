@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
+import "highlight.js/styles/github-dark.css";
 import { Sidebar } from "@/components/Sidebar";
 import { MobileHeader } from "@/components/MobileHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
@@ -32,6 +33,12 @@ export const metadata: Metadata = {
   },
   description:
     "코알라의 여정을 기록하는 블로그. LLM/IT 기술, 전문연구요원 일상, AI 개발의 도전과 성취를 나눕니다.",
+  alternates: {
+    canonical: SITE_URL,
+    types: {
+      "application/rss+xml": `${SITE_URL}/rss.xml`,
+    },
+  },
   openGraph: {
     siteName: "이다운의 코알라 오딧세이",
     images: [{ url: DEFAULT_OG, width: 1200, height: 630 }],
@@ -62,6 +69,12 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50 text-zinc-950 antialiased dark:bg-black dark:text-zinc-50`}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-black focus:top-2 focus:left-2 focus:rounded"
+        >
+          본문으로 건너뛰기
+        </a>
         <ThemeProvider>
           <CommandPaletteProvider posts={posts}>
             <CursorTrail />
@@ -76,7 +89,7 @@ export default async function RootLayout({
               </div>
 
               {/* 본문 */}
-              <div className="flex-1 min-w-0">
+              <div id="main-content" className="flex-1 min-w-0">
                 {children}
               </div>
             </div>

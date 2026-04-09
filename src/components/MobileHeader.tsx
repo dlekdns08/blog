@@ -6,22 +6,8 @@ import { usePathname } from "next/navigation";
 import { useCommandPalette } from "@/components/CommandPaletteProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SubscribeForm } from "@/components/SubscribeForm";
-import {
-  HomeIcon, PostsIcon, GraphIcon, AboutIcon,
-  GameIcon, StatsIcon, ChangelogIcon, GitHubIcon,
-} from "@/components/Icons";
-
-// ── 네비게이션 ─────────────────────────────────────────────
-
-const NAV = [
-  { href: "/",               label: "홈",          icon: <HomeIcon /> },
-  { href: "/posts",          label: "글",          icon: <PostsIcon /> },
-  { href: "/explore",        label: "탐색",          icon: <GraphIcon /> },
-  { href: "/about",          label: "소개",         icon: <AboutIcon /> },
-  { href: "/game",           label: "게임",         icon: <GameIcon /> },
-  { href: "/stats",          label: "통계",         icon: <StatsIcon /> },
-  { href: "/changelog",      label: "업데이트 기록",  icon: <ChangelogIcon /> },
-];
+import { GitHubIcon } from "@/components/Icons";
+import { NAV } from "@/lib/nav";
 
 // ── 컴포넌트 ───────────────────────────────────────────────
 

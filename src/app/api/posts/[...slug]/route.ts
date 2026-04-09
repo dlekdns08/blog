@@ -15,6 +15,11 @@ export async function GET(
   const slugPath = slug.map(decodeURIComponent).join("/");
   const filePath = path.join(POSTS_DIR, `${slugPath}.md`);
 
+  // Prevent path traversal attacks
+  if (!filePath.startsWith(POSTS_DIR + path.sep) && filePath !== POSTS_DIR) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   try {
     const raw = await fs.readFile(filePath, "utf8");
     const { data, content } = matter(raw);

@@ -4,6 +4,7 @@ import { Container } from "@/components/Container";
 
 export const metadata = {
   title: "업데이트 기록",
+  description: "코알라 오딧세이 블로그의 업데이트 및 변경사항 기록입니다.",
 };
 
 // ── 타입 ───────────────────────────────────────────────────

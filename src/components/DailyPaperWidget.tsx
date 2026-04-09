@@ -54,7 +54,7 @@ export function DailyPaperWidget() {
         <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
           오늘의 논문
         </h2>
-        <Link href="/arxiv-graph" className="text-xs text-violet-600 dark:text-violet-400 hover:underline">
+        <Link href="/explore?tab=arxiv" className="text-xs text-violet-600 dark:text-violet-400 hover:underline">
           더 보기 →
         </Link>
       </div>

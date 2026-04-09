@@ -1,16 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-function getClientId(): string {
-  const key = "blog_client_id";
-  let id = localStorage.getItem(key);
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem(key, id);
-  }
-  return id;
-}
+import { getClientId } from "@/lib/clientId";
 
 export function LikeButton({ slug }: { slug: string }) {
   const [liked, setLiked] = useState(false);

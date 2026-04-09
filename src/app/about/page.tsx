@@ -2,6 +2,7 @@ import { Container } from "@/components/Container";
 
 export const metadata = {
   title: "소개",
+  description: "AI 개발자 코알라의 소개 페이지. 생명과학과 빅데이터 출신으로 현재 LLM/AI 개발을 하며 블로그를 운영합니다.",
 };
 
 export default function AboutPage() {

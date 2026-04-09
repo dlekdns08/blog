@@ -136,7 +136,7 @@ export function ChatWidget() {
     <>
       {/* 채팅 패널 */}
       {open && (
-        <div className="fixed bottom-20 right-4 z-50 w-80 sm:w-96 flex flex-col rounded-2xl shadow-2xl border border-black/8 dark:border-white/10 bg-white dark:bg-zinc-900 overflow-hidden" style={{ maxHeight: "min(560px, calc(100dvh - 100px))" }}>
+        <div role="dialog" aria-modal="true" aria-label="AI 채팅" className="fixed bottom-20 right-4 z-50 w-80 sm:w-96 flex flex-col rounded-2xl shadow-2xl border border-black/8 dark:border-white/10 bg-white dark:bg-zinc-900 overflow-hidden" style={{ maxHeight: "min(560px, calc(100dvh - 100px))" }}>
 
           {/* 헤더 */}
           <div className="flex items-center gap-2.5 px-4 py-3 border-b border-black/6 dark:border-white/8 bg-gradient-to-r from-violet-50 to-violet-100/50 dark:from-violet-500/10 dark:to-violet-600/5 shrink-0">

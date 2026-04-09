@@ -6,6 +6,15 @@ services:
     environment:
       - CLAUDE_TOKEN=${CLAUDE_TOKEN}
       - ARXIV_DB_PATH=/root/.arxiv-graph/data/arxiv_graph.db
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_OWNER=${GITHUB_OWNER}
+      - GITHUB_REPO=${GITHUB_REPO}
+      - GITHUB_BRANCH=${GITHUB_BRANCH:-main}
+      - API_URL=${API_URL}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
     volumes:
       - /root/.arxiv-graph/data:/root/.arxiv-graph/data:ro
     restart: always

@@ -43,6 +43,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: post.meta.title,
       description: post.meta.description,
+      alternates: {
+        canonical: `${BASE}/posts/${slugStr}`,
+      },
       openGraph: {
         title: post.meta.title,
         description: post.meta.description,
@@ -83,8 +86,23 @@ export default async function PostDetailPage({ params }: PageProps) {
   const catConfig = CATEGORY_CONFIG[post.meta.category];
   const categoryLabel = catConfig?.label ?? post.meta.category;
 
+  const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://koala.ai.kr";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.meta.title,
+    datePublished: post.meta.date,
+    author: { "@type": "Person", name: "이다운 (Koala)" },
+    url: `${BASE}/posts/${slugStr}`,
+    ...(post.meta.description && { description: post.meta.description }),
+  };
+
   return (
     <main className="py-6 sm:py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ReadingProgress />
       <ScrollToTop />
 

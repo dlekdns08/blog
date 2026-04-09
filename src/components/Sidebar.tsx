@@ -8,23 +8,9 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { RandomPostButton } from "@/components/RandomPostButton";
 import { BookmarksWidget } from "@/components/BookmarksWidget";
 import { ArxivLiveFeed } from "@/components/ArxivLiveFeed";
-import {
-  HomeIcon, PostsIcon, GraphIcon, AboutIcon,
-  GameIcon, StatsIcon, ChangelogIcon, GitHubIcon, SearchIcon,
-} from "@/components/Icons";
+import { GitHubIcon, SearchIcon } from "@/components/Icons";
+import { NAV } from "@/lib/nav";
 import type { PostMeta } from "@/lib/posts";
-
-// ── 메인 컴포넌트 ───────────────────────────────────────────
-
-const NAV = [
-  { href: "/",              label: "홈",          icon: <HomeIcon /> },
-  { href: "/posts",         label: "글",          icon: <PostsIcon /> },
-  { href: "/explore",       label: "탐색",          icon: <GraphIcon /> },
-  { href: "/about",         label: "소개",         icon: <AboutIcon /> },
-  { href: "/game",          label: "게임",         icon: <GameIcon /> },
-  { href: "/stats",         label: "통계",         icon: <StatsIcon /> },
-  { href: "/changelog",     label: "업데이트 기록",  icon: <ChangelogIcon /> },
-];
 
 export function Sidebar({ categories: _categories, posts }: { categories: unknown[]; posts: PostMeta[] }) {
   const pathname = usePathname();

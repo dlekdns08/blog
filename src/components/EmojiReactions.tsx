@@ -2,19 +2,11 @@
 
 import { useEffect, useState } from "react";
 
+import { getClientId } from "@/lib/clientId";
+
 const EMOJIS = ["❤️", "👍", "😄", "🤔", "🚀", "🎉"];
 
 type ReactionCount = { emoji: string; count: number; reacted: boolean };
-
-function getClientId(): string {
-  const key = "blog_client_id";
-  let id = localStorage.getItem(key);
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem(key, id);
-  }
-  return id;
-}
 
 export function EmojiReactions({ slug }: { slug: string }) {
   const [reactions, setReactions] = useState<ReactionCount[]>([]);

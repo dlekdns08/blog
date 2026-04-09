@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
 
-const getSecret = () =>
-  new TextEncoder().encode(process.env.JWT_SECRET ?? 'please-set-jwt-secret-in-env')
+const getSecret = () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is required')
+  }
+  return new TextEncoder().encode(process.env.JWT_SECRET)
+}
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const isAdminPage = pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')
   const isAdminApi =

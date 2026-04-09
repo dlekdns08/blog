@@ -19,7 +19,7 @@ export function ScrollToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="맨 위로"
-      className="fixed bottom-6 right-6 z-40 flex items-center justify-center size-10 rounded-full border border-black/10 bg-white shadow-md text-zinc-500 hover:border-violet-200 hover:text-violet-600 hover:shadow-lg dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-violet-500/30 dark:hover:text-violet-400 transition-all duration-150"
+      className="fixed bottom-20 right-6 z-40 flex items-center justify-center size-10 rounded-full border border-black/10 bg-white shadow-md text-zinc-500 hover:border-violet-200 hover:text-violet-600 hover:shadow-lg dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-violet-500/30 dark:hover:text-violet-400 transition-all duration-150"
     >
       <svg
         className="size-4"
