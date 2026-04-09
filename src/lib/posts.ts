@@ -7,6 +7,7 @@ import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
+import rehypeExternalLinks from "rehype-external-links";
 import rehypeStringify from "rehype-stringify";
 
 export type Attachment = {
@@ -25,6 +26,7 @@ export type PostMeta = {
   tags?: string[];
   attachments?: Attachment[];
   image?: string;          // OG 이미지 경로 (e.g. "/images/posts/my-post.png")
+  readingTime?: number;    // 읽기 예상 시간 (분)
 };
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
@@ -108,11 +110,14 @@ async function getPostMeta(
   subSubcategory?: string
 ): Promise<PostMeta> {
   const raw = await fs.readFile(resolveFilePath(slug), "utf8");
-  const { data } = matter(raw);
+  const { data, content } = matter(raw);
 
   if (!data.title || !data.date) {
     throw new Error(`Post frontmatter must include title and date: ${slug}`);
   }
+
+  const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+  const readingTime = Math.max(1, Math.round(wordCount / 200));
 
   return {
     slug,
@@ -125,6 +130,7 @@ async function getPostMeta(
     tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
     attachments: parseAttachments(data.attachments),
     image: data.image ? String(data.image) : undefined,
+    readingTime,
   };
 }
 
@@ -154,6 +160,7 @@ export async function getPostBySlug(slug: string): Promise<{
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeKatex)
     .use(rehypeHighlight)
+    .use(rehypeExternalLinks, { target: "_blank", rel: ["noopener", "noreferrer"] })
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content);
 

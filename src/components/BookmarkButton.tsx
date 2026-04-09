@@ -46,7 +46,7 @@ export function BookmarkButton({ slug, title }: { slug: string; title: string })
   return (
     <button
       onClick={toggle}
-      aria-label={saved ? "북마크 해제" : "북마크 추가"}
+      aria-label={saved ? `"${title}" 북마크 해제` : `"${title}" 북마크에 저장`}
       title={saved ? "북마크 해제" : "북마크에 저장"}
       className={`flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium transition-all duration-200 ${
         flash ? "scale-125" : "scale-100"

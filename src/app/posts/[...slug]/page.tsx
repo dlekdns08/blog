@@ -15,6 +15,7 @@ import { BookmarkButton } from "@/components/BookmarkButton";
 import { ViewCounter } from "@/components/ViewCounter";
 import { CollapsibleTOC } from "@/components/CollapsibleTOC";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { RelatedPosts } from "@/components/RelatedPosts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { injectHeadingIds } from "@/lib/headings";
 import { formatDate } from "@/lib/date";
@@ -35,10 +36,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const post = await getPostBySlug(slugStr);
     const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://koala.ai.kr";
 
-    // 프론트매터에 image가 있으면 그걸 사용, 없으면 정적 기본 이미지
+    // 프론트매터에 image가 있으면 그걸 사용, 없으면 동적 OG 이미지 생성
     const ogImageUrl = post.meta.image
       ? (post.meta.image.startsWith("http") ? post.meta.image : `${BASE}${post.meta.image}`)
-      : `${BASE}/coala_odsey2.png`;
+      : `${BASE}/api/og?title=${encodeURIComponent(post.meta.title)}&category=${encodeURIComponent(post.meta.category)}&date=${encodeURIComponent(post.meta.date)}`;
 
     return {
       title: post.meta.title,
@@ -154,6 +155,11 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
                   {formatDate(post.meta.date)}
                 </time>
+                {post.meta.readingTime && (
+                  <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                    · {post.meta.readingTime}분 읽기
+                  </span>
+                )}
                 <ViewCounter slug={slugStr} />
                 <div className="flex items-center gap-1 ml-auto">
                   <BookmarkButton slug={slugStr} title={post.meta.title} />
@@ -184,6 +190,9 @@ export default async function PostDetailPage({ params }: PageProps) {
             <div className="mt-12 flex justify-center">
               <EmojiReactions slug={slugStr} />
             </div>
+
+            {/* 관련 글 */}
+            <RelatedPosts current={post.meta} all={allPosts} />
 
             {/* 이전 / 다음 포스트 */}
             <PostNav prev={prevPost} next={nextPost} />

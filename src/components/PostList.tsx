@@ -23,9 +23,13 @@ function getPageNumbers(current: number, total: number): (number | "…")[] {
 
 function TagBadge({ tag }: { tag: string }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-500 dark:bg-white/10 dark:text-zinc-400">
+    <Link
+      href={`/tags/${encodeURIComponent(tag)}`}
+      onClick={(e) => e.stopPropagation()}
+      className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-500 hover:bg-violet-100 hover:text-violet-700 dark:bg-white/10 dark:text-zinc-400 dark:hover:bg-violet-500/20 dark:hover:text-violet-300 transition-colors"
+    >
       {tag}
-    </span>
+    </Link>
   );
 }
 
@@ -276,6 +280,11 @@ export function PostList({ posts }: Props) {
                           </span>
                         );
                       })()}
+                      {p.readingTime && (
+                        <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
+                          {p.readingTime}분
+                        </span>
+                      )}
                       <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums" title={p.date}>
                         {formatRelativeDate(p.date)}
                       </time>
