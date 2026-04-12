@@ -97,6 +97,15 @@ export function ArxivForceGraph({
   const wrapRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<SimNode | null>(null);
   const [isGrabbing, setIsGrabbing] = useState(false);
+  const [is3D, setIs3D] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [FG3D, setFG3D] = useState<React.ComponentType<any> | null>(null);
+  const [fg3DLoading, setFg3DLoading] = useState(false);
+  const [containerW, setContainerW] = useState(800);
+  const [isDark, setIsDark] = useState(false);
+  const is3DRef = useRef(false);
+  is3DRef.current = is3D;
+
   const nodesRef = useRef<SimNode[]>([]);
   const rafRef = useRef<number>(0);
   const particlesRef = useRef<Particle[]>([]);
@@ -108,6 +117,35 @@ export function ArxivForceGraph({
     lastX: 0, lastY: 0,
     moved: false,
   });
+
+  // Track dark mode
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+    const obs = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+
+  // Lazy load ForceGraph3D when 3D is first activated
+  const toggle3D = () => {
+    const next = !is3D;
+    setIs3D(next);
+    if (next && !FG3D && !fg3DLoading) {
+      setFg3DLoading(true);
+      import("react-force-graph").then((mod) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setFG3D(() => (mod as any).ForceGraph3D as React.ComponentType<any>);
+        setFg3DLoading(false);
+      });
+    }
+  };
+
+  // Track container width for 3D sizing
+  useEffect(() => {
+    if (wrapRef.current) setContainerW(wrapRef.current.clientWidth);
+  }, [papers]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -127,7 +165,6 @@ export function ArxivForceGraph({
 
     const ctx = canvas.getContext("2d")!;
     ctx.scale(dpr, dpr);
-    let isDark = document.documentElement.classList.contains("dark");
 
     // For large graphs, zoom out initially
     const initScale = isLarge ? Math.max(0.3, Math.min(1, 200 / Math.sqrt(N))) : 1;
@@ -142,7 +179,7 @@ export function ArxivForceGraph({
     const maxR = isLarge ? 12 : 20;
 
     // Spread initial positions wider for large graphs
-    const spreadFactor = isLarge ? Math.sqrt(N) * 2 : 1;
+    const spreadFactor = isLarge ? Math.sqrt(N) * 2.5 : 1;
 
     const nodes: SimNode[] = papers.map((p) => {
       const angle = Math.random() * Math.PI * 2;
@@ -163,22 +200,18 @@ export function ArxivForceGraph({
     const semanticEdges = relations.filter((e) => e.relation_type === "semantic");
     const maxParticles = isLarge ? Math.min(semanticEdges.length, 200) : semanticEdges.length * 2;
     particlesRef.current = Array.from({ length: maxParticles }, (_, i) => ({
-      edgeIdx: i % semanticEdges.length,
+      edgeIdx: i % Math.max(semanticEdges.length, 1),
       t: Math.random(),
       speed: 0.0015 + Math.random() * 0.001,
     }));
 
-    // Spatial grid for repulsion (cell size ~ interaction range)
     const grid = new SpatialGrid(isLarge ? 60 : 50);
 
     // Precompute category groups for attraction
     const catGroups = new Map<string, SimNode[]>();
     for (const n of nodes) {
       let arr = catGroups.get(n.primary_category);
-      if (!arr) {
-        arr = [];
-        catGroups.set(n.primary_category, arr);
-      }
+      if (!arr) { arr = []; catGroups.set(n.primary_category, arr); }
       arr.push(n);
     }
 
@@ -198,10 +231,11 @@ export function ArxivForceGraph({
     canvas.addEventListener("wheel", onWheel, { passive: false });
 
     function drawBackground() {
-      ctx.fillStyle = isDark ? "#0f0f13" : "#f8f8fc";
+      const curIsDark = document.documentElement.classList.contains("dark");
+      ctx.fillStyle = curIsDark ? "#0f0f13" : "#f8f8fc";
       ctx.fillRect(0, 0, W, H);
       const gridSize = 28;
-      ctx.fillStyle = isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)";
+      ctx.fillStyle = curIsDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.04)";
       for (let gx = gridSize; gx < W; gx += gridSize) {
         for (let gy = gridSize; gy < H; gy += gridSize) {
           ctx.beginPath();
@@ -214,7 +248,6 @@ export function ArxivForceGraph({
     function drawEdge(s: SimNode, t2: SimNode, type: string, weight: number, dimmed: boolean, scale: number) {
       const cat = getCat(s.primary_category);
       const alpha = dimmed ? 0.04 : type === "semantic" ? 0.22 : 0.28;
-      // Use straight lines for large graphs (faster than quadratic curves)
       if (isLarge) {
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
@@ -272,8 +305,8 @@ export function ArxivForceGraph({
 
     function drawNode(n: SimNode, isHovered: boolean, dimmed: boolean, scale: number) {
       const c = getCat(n.primary_category);
+      const curIsDark = document.documentElement.classList.contains("dark");
 
-      // Skip glow effects for small nodes in large graphs
       if (!isLarge || isHovered || n.importance_score / maxScore > 0.7) {
         if (isHovered || n.importance_score / maxScore > 0.7) {
           ctx.beginPath();
@@ -288,7 +321,6 @@ export function ArxivForceGraph({
         ctx.shadowBlur = isHovered ? 20 : dimmed ? 0 : 10;
       }
 
-      // Simplified rendering for large graphs
       if (isLarge && !isHovered) {
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
@@ -311,7 +343,6 @@ export function ArxivForceGraph({
         ctx.shadowBlur = 0;
       }
 
-      // Labels: show for hovered or top nodes only
       const labelThreshold = isLarge ? 0.85 : 0.5;
       const showLabel = isHovered || (n.importance_score / maxScore > labelThreshold && !dimmed);
       if (showLabel) {
@@ -319,10 +350,10 @@ export function ArxivForceGraph({
         const fontSize = (isHovered ? 10 : 8.5) / scale;
         ctx.font = `${isHovered ? 600 : 400} ${fontSize}px system-ui, sans-serif`;
         ctx.textAlign = "center";
-        ctx.fillStyle = isDark
+        ctx.fillStyle = curIsDark
           ? `rgba(255,255,255,${dimmed ? 0.2 : 0.85})`
           : `rgba(15,15,20,${dimmed ? 0.2 : 0.8})`;
-        ctx.shadowColor = isDark ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.9)";
+        ctx.shadowColor = curIsDark ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.9)";
         ctx.shadowBlur = 4;
         ctx.fillText(label, n.x, n.y + n.r + (fontSize + 2));
         ctx.shadowBlur = 0;
@@ -330,7 +361,6 @@ export function ArxivForceGraph({
       }
     }
 
-    // ── Viewport culling helper ──────────────────────────
     function isVisible(x: number, y: number, margin: number): boolean {
       const { tx, ty, scale } = transformRef.current;
       const sx = x * scale + tx;
@@ -341,11 +371,15 @@ export function ArxivForceGraph({
     let frame = 0;
 
     function tick() {
-      isDark = document.documentElement.classList.contains("dark");
+      // Skip physics and drawing when in 3D mode
+      if (is3DRef.current) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
       const tr = transformRef.current;
       const interact = interactRef.current;
 
-      // ── Physics step ─────────────────────────────────
       // Center gravity
       for (const n of nodes) {
         if (interact.dragging === n) continue;
@@ -353,7 +387,7 @@ export function ArxivForceGraph({
         n.vy += (H / 2 - n.y) * 0.001;
       }
 
-      // Category attraction (use precomputed centroids, update periodically)
+      // Category attraction (precomputed centroids, updated periodically)
       if (frame % 5 === 0) {
         for (const [, group] of catGroups) {
           if (group.length < 2) continue;
@@ -367,7 +401,7 @@ export function ArxivForceGraph({
         }
       }
 
-      // Repulsion via spatial grid (O(N * k) instead of O(N^2))
+      // Repulsion via spatial grid
       grid.clear();
       for (const n of nodes) grid.insert(n);
 
@@ -410,7 +444,7 @@ export function ArxivForceGraph({
         if (p.t > 1) p.t = 0;
       }
 
-      // ── Render ─────────────────────────────────────
+      // ── Render ──────────────────────────────────
       drawBackground();
 
       const hoveredId = canvasRef.current?.dataset.hoveredId ?? "";
@@ -427,28 +461,23 @@ export function ArxivForceGraph({
       ctx.translate(tr.tx, tr.ty);
       ctx.scale(tr.scale, tr.scale);
 
-      // Edges - batch by stroke style for performance
       const visMargin = 50 / tr.scale;
       ctx.save();
       for (const e of relations) {
         const s = nodeMap.get(e.source_id), t2 = nodeMap.get(e.target_id);
         if (!s || !t2) continue;
-        // Cull edges outside viewport
         if (!isVisible(s.x, s.y, visMargin) && !isVisible(t2.x, t2.y, visMargin)) continue;
         const dimmed = hoveredId !== "" && !neighborIds.has(e.source_id) && !neighborIds.has(e.target_id);
         drawEdge(s, t2, e.relation_type, e.weight, dimmed, tr.scale);
       }
       ctx.restore();
 
-      // Particles
       if (!hoveredId) {
         for (const p of particlesRef.current) drawParticle(p);
       }
 
-      // Nodes - sort by radius, draw small first
       const sorted = [...nodes].sort((a, b) => a.r - b.r);
       for (const n of sorted) {
-        // Cull nodes outside viewport
         if (!isVisible(n.x, n.y, n.r * 3)) continue;
         const isHov = n.arxiv_id === hoveredId;
         const dimmed = hoveredId !== "" && !neighborIds.has(n.arxiv_id);
@@ -502,15 +531,13 @@ export function ArxivForceGraph({
       const { tx, ty, scale } = transformRef.current;
       interact.dragging.x = (mx - tx) / scale;
       interact.dragging.y = (my - ty) / scale;
-      interact.dragging.vx = 0;
-      interact.dragging.vy = 0;
+      interact.dragging.vx = 0; interact.dragging.vy = 0;
       setHovered(interact.dragging);
       if (canvasRef.current) canvasRef.current.dataset.hoveredId = interact.dragging.arxiv_id ?? "";
     } else if (interact.panning) {
       transformRef.current.tx += mx - interact.lastX;
       transformRef.current.ty += my - interact.lastY;
-      interact.lastX = mx;
-      interact.lastY = my;
+      interact.lastX = mx; interact.lastY = my;
     } else {
       const found = findNode(mx, my);
       setHovered(found);
@@ -544,21 +571,99 @@ export function ArxivForceGraph({
     );
   }
 
+  const maxScore = Math.max(...papers.map((p) => p.importance_score), 0.01);
+  const graphH = Math.round(containerW * 0.56);
+
+  // 3D graph data
+  const g3DData = {
+    nodes: papers.map((p) => ({
+      id: p.arxiv_id,
+      name: p.title.length > 60 ? p.title.slice(0, 59) + "…" : p.title,
+      color: getCat(p.primary_category).hex,
+      val: 2 + (p.importance_score / maxScore) * 10,
+      category: p.primary_category,
+    })),
+    links: relations.map((r) => ({
+      source: r.source_id,
+      target: r.target_id,
+      type: r.relation_type,
+      value: r.weight,
+    })),
+  };
+
   return (
     <div
       ref={wrapRef}
       className="relative rounded-2xl border border-black/8 dark:border-white/10 overflow-hidden"
       style={{ background: "transparent" }}
     >
+      {/* 2D Canvas — always mounted, hidden in 3D mode */}
       <canvas
         ref={canvasRef}
         className="w-full h-auto block"
-        style={{ cursor: isGrabbing ? "grabbing" : hovered ? "pointer" : "grab" }}
+        style={{
+          cursor: isGrabbing ? "grabbing" : hovered ? "pointer" : "grab",
+          display: is3D ? "none" : "block",
+        }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       />
+
+      {/* 3D Graph */}
+      {is3D && (
+        <div style={{ width: containerW, height: graphH }} className="bg-[#0a0a10]">
+          {FG3D ? (
+            <FG3D
+              graphData={g3DData}
+              nodeId="id"
+              nodeColor="color"
+              nodeVal="val"
+              nodeLabel="name"
+              linkColor={(link: { type: string }) =>
+                link.type === "semantic"
+                  ? "rgba(167,139,250,0.35)"
+                  : "rgba(52,211,153,0.35)"
+              }
+              linkWidth={(link: { value: number }) => Math.max(0.3, link.value * 0.8)}
+              width={containerW}
+              height={graphH}
+              backgroundColor={isDark ? "#0a0a10" : "#f0f0f6"}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-zinc-400 text-sm gap-2">
+              <svg className="animate-spin size-4" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+              3D 로딩 중...
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 2D/3D Toggle button */}
+      <button
+        onClick={toggle3D}
+        className="absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-semibold bg-black/25 backdrop-blur-sm text-white/70 hover:text-white hover:bg-black/40 transition-colors border border-white/10 select-none"
+      >
+        {is3D ? (
+          <>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+            </svg>
+            2D
+          </>
+        ) : (
+          <>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            3D
+          </>
+        )}
+      </button>
 
       {/* Legend */}
       <div className="absolute top-3 left-3 flex flex-col gap-1.5 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-xl px-3 py-2.5">
@@ -573,26 +678,39 @@ export function ArxivForceGraph({
             </span>
           </div>
         ))}
-        <div className="mt-1 h-px bg-white/10" />
-        <div className="flex items-center gap-2">
-          <span className="inline-block w-4 h-px bg-violet-400/60" />
-          <span className="text-[10px] text-white/50">시맨틱</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="inline-block w-4 h-px bg-emerald-400/60" />
-          <span className="text-[10px] text-white/50">공저자</span>
-        </div>
+        {!is3D && (
+          <>
+            <div className="mt-1 h-px bg-white/10" />
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-px bg-violet-400/60" />
+              <span className="text-[10px] text-white/50">시맨틱</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-px bg-emerald-400/60" />
+              <span className="text-[10px] text-white/50">공저자</span>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Node count badge */}
-      <div className="absolute top-3 right-3 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-lg px-2.5 py-1.5">
-        <span className="text-[10px] font-medium text-white/60 tabular-nums">
-          {papers.length.toLocaleString()} papers
-        </span>
-      </div>
+      {/* Node count badge (2D mode — 3D toggle button takes that spot) */}
+      {!is3D && (
+        <div className="absolute top-10 right-3 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-lg px-2.5 py-1.5">
+          <span className="text-[10px] font-medium text-white/60 tabular-nums">
+            {papers.length.toLocaleString()} papers
+          </span>
+        </div>
+      )}
+      {is3D && (
+        <div className="absolute top-10 right-3 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-lg px-2.5 py-1.5">
+          <span className="text-[10px] font-medium text-white/60 tabular-nums">
+            {papers.length.toLocaleString()} papers
+          </span>
+        </div>
+      )}
 
-      {/* Tooltip */}
-      {hovered && (
+      {/* Tooltip (2D only) */}
+      {!is3D && hovered && (
         <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/10 bg-black/60 backdrop-blur-md px-4 py-3 shadow-xl pointer-events-none">
           <div className="flex items-start gap-2.5">
             <span
