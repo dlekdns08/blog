@@ -677,6 +677,7 @@ export function KoalaGame() {
                   localStorage.setItem("koala_high_score", String(finalScore));
                   setHighScore(finalScore);
                 }
+                window.dispatchEvent(new CustomEvent("koala:gameover", { detail: { score: finalScore } }));
               } catch { /* ignore */ }
               setGameOver(true);
             }
@@ -701,6 +702,7 @@ export function KoalaGame() {
                   localStorage.setItem("koala_high_score", String(finalScore));
                   setHighScore(finalScore);
                 }
+                window.dispatchEvent(new CustomEvent("koala:gameover", { detail: { score: finalScore } }));
               } catch { /* ignore */ }
               setGameOver(true);
             }
