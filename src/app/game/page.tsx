@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { KoalaGame } from "@/components/KoalaGame";
+import { KoalaRanking } from "@/components/KoalaRanking";
 
 export const metadata: Metadata = {
   title: "코알라 점프",
