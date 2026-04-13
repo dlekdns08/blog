@@ -19,6 +19,7 @@ export default function GamePage() {
           </p>
         </div>
         <KoalaGame />
+        <KoalaRanking />
       </Container>
     </main>
   );
