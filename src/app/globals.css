@@ -11,11 +11,28 @@
   --border: rgba(0, 0, 0, 0.10);
   --accent: #6d28d9;
   --accent-muted: rgba(109, 40, 217, 0.12);
+
+  /* ── Design tokens (Tailwind 유틸로 노출) ── */
+  --token-subtle:  #a1a1aa;            /* zinc-400 — 캡션, 메타 */
+  --token-muted:   #71717a;            /* zinc-500 — 라벨, 보조 텍스트 */
+  --token-body:    #27272a;            /* zinc-800 — 본문 */
+  --token-line:    rgba(0, 0, 0, 0.08);/* card 외곽 (subtle border) */
+  --token-divider: #e4e4e7;            /* zinc-200 — 구분선 (solid border) */
+  --token-surface: #ffffff;            /* card surface */
+  --token-panel:   #ffffff;            /* elevated panel/modal */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent:     var(--accent);
+  --color-subtle:     var(--token-subtle);
+  --color-muted:      var(--token-muted);
+  --color-body:       var(--token-body);
+  --color-line:       var(--token-line);
+  --color-divider:    var(--token-divider);
+  --color-surface:    var(--token-surface);
+  --color-panel:      var(--token-panel);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -29,6 +46,14 @@
   --border: rgba(255, 255, 255, 0.12);
   --accent: #a78bfa;
   --accent-muted: rgba(167, 139, 250, 0.12);
+
+  --token-subtle:  #71717a;            /* zinc-500 */
+  --token-muted:   #a1a1aa;            /* zinc-400 */
+  --token-body:    #e4e4e7;            /* zinc-200 */
+  --token-line:    rgba(255, 255, 255, 0.10);
+  --token-divider: #27272a;            /* zinc-800 */
+  --token-surface: rgba(255, 255, 255, 0.05);
+  --token-panel:   #18181b;            /* zinc-900 */
 }
 
 /* Fallback for no-JS: still respect system preference */
@@ -41,6 +66,14 @@
     --border: rgba(255, 255, 255, 0.12);
     --accent: #a78bfa;
     --accent-muted: rgba(167, 139, 250, 0.12);
+
+    --token-subtle:  #71717a;
+    --token-muted:   #a1a1aa;
+    --token-body:    #e4e4e7;
+    --token-line:    rgba(255, 255, 255, 0.10);
+    --token-divider: #27272a;
+    --token-surface: rgba(255, 255, 255, 0.05);
+    --token-panel:   #18181b;
   }
 }
 
