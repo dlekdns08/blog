@@ -135,6 +135,47 @@ export function PostContent({ html }: { html: string }) {
     return () => cancelAnimationFrame(id);
   }, [html, searchQuery]);
 
+  // 이미지 lightbox — prose 안 img 클릭 시 풀스크린 오버레이
+  useEffect(() => {
+    if (!ref.current) return;
+    const article = ref.current;
+
+    function openLightbox(src: string, alt: string) {
+      const overlay = document.createElement("div");
+      overlay.className = "image-lightbox-overlay";
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-label", alt || "이미지 보기");
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = alt;
+      overlay.appendChild(img);
+      const close = () => {
+        overlay.remove();
+        document.removeEventListener("keydown", onEsc);
+      };
+      const onEsc = (e: KeyboardEvent) => {
+        if (e.key === "Escape") close();
+      };
+      overlay.addEventListener("click", close);
+      document.addEventListener("keydown", onEsc);
+      document.body.appendChild(overlay);
+    }
+
+    function onClick(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+      if (target.tagName === "IMG") {
+        const img = target as HTMLImageElement;
+        // 링크로 감싸진 이미지는 무시 (외부 링크가 우선)
+        if (img.closest("a")) return;
+        e.preventDefault();
+        openLightbox(img.src, img.alt);
+      }
+    }
+
+    article.addEventListener("click", onClick);
+    return () => article.removeEventListener("click", onClick);
+  }, [html]);
+
   // Mermaid 다이어그램 렌더링 (lazy + 테마 토글 시 재렌더)
   useEffect(() => {
     if (!ref.current) return;
