@@ -27,7 +27,16 @@ export type PostMeta = {
   attachments?: Attachment[];
   image?: string;          // OG 이미지 경로 (e.g. "/images/posts/my-post.png")
   readingTime?: number;    // 읽기 예상 시간 (분)
+  series?: { name: string; order: number };  // 시리즈/연재 정보 (frontmatter: series + seriesOrder)
 };
+
+function parseSeries(raw: unknown, orderRaw: unknown): { name: string; order: number } | undefined {
+  if (!raw) return undefined;
+  const name = String(raw).trim();
+  if (!name) return undefined;
+  const order = typeof orderRaw === "number" ? orderRaw : Number(orderRaw);
+  return { name, order: Number.isFinite(order) ? order : 0 };
+}
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 
@@ -131,6 +140,7 @@ async function getPostMeta(
     attachments: parseAttachments(data.attachments),
     image: data.image ? String(data.image) : undefined,
     readingTime,
+    series: parseSeries(data.series, data.seriesOrder),
   };
 }
 
@@ -183,6 +193,7 @@ export async function getPostBySlug(slug: string): Promise<{
       tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
       attachments: parseAttachments(data.attachments),
       image: data.image ? String(data.image) : undefined,
+      series: parseSeries(data.series, data.seriesOrder),
     },
     html: String(processed),
   };
