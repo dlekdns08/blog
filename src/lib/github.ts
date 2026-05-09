@@ -38,7 +38,7 @@ async function getFileSha(
   return data.sha as string
 }
 
-/** 파일 생성 또는 업데이트 */
+/** 파일 생성 또는 업데이트 (텍스트) */
 export async function upsertGitHubFile(filePath: string, content: string, message: string) {
   const { token, owner, repo, branch } = getConfig()
 
@@ -61,6 +61,36 @@ export async function upsertGitHubFile(filePath: string, content: string, messag
   if (!res.ok) {
     const err = await res.json().catch(() => ({}))
     throw new Error(`GitHub 커밋 실패: ${err.message ?? res.status}`)
+  }
+}
+
+/** 파일 생성 또는 업데이트 (바이너리 — 이미지/PDF 등 첨부 파일용) */
+export async function upsertGitHubBinary(
+  filePath: string,
+  buffer: Buffer,
+  message: string,
+) {
+  const { token, owner, repo, branch } = getConfig()
+
+  const sha = await getFileSha(token, owner, repo, branch, filePath)
+  const encoded = buffer.toString('base64')
+
+  const body: Record<string, string> = { message, content: encoded, branch }
+  if (sha) body.sha = sha
+
+  const res = await fetch(`${GITHUB_API}/repos/${owner}/${repo}/contents/${filePath}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}))
+    throw new Error(`GitHub 바이너리 커밋 실패: ${err.message ?? res.status}`)
   }
 }
 
