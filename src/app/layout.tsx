@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
-import "highlight.js/styles/github-dark.css";
+import "highlight.js/styles/github.css";
 import { Sidebar } from "@/components/Sidebar";
 import { MobileHeader } from "@/components/MobileHeader";
 import { CommandPaletteProvider } from "@/components/CommandPaletteProvider";
@@ -71,7 +71,7 @@ export default async function RootLayout({
       >
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-black focus:top-2 focus:left-2 focus:rounded"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-black dark:focus:bg-zinc-900 dark:focus:text-white focus:top-2 focus:left-2 focus:rounded"
         >
           본문으로 건너뛰기
         </a>
