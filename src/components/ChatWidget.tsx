@@ -5,6 +5,14 @@ import { usePathname } from "next/navigation";
 
 type Message = { role: "user" | "assistant"; content: string };
 
+type PostIndexEntry = {
+  slug: string;
+  title: string;
+  description: string | null;
+  tags: string[];
+  category: string;
+};
+
 function ChatIcon() {
   return (
     <svg className="size-5" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
@@ -44,9 +52,20 @@ export function ChatWidget() {
   const [loading, setLoading] = useState(false);
   const [context, setContext] = useState<string | null>(null);
   const [contextTitle, setContextTitle] = useState<string | null>(null);
+  const [postIndex, setPostIndex] = useState<PostIndexEntry[] | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const pathname = usePathname();
+
+  // 글 인덱스(슬러그·제목·설명) 1회 로드 — 포스트 외 페이지에서 RAG 컨텍스트로 사용
+  useEffect(() => {
+    fetch("/api/posts/index")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (Array.isArray(data)) setPostIndex(data);
+      })
+      .catch(() => {});
+  }, []);
 
   // 포스트 페이지라면 글 내용을 컨텍스트로 가져오기
   useEffect(() => {
@@ -94,6 +113,7 @@ export function ChatWidget() {
         body: JSON.stringify({
           messages: newMessages,
           context: context ?? undefined,
+          index: !context && postIndex ? postIndex : undefined,
         }),
       });
 
