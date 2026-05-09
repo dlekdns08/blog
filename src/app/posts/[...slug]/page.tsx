@@ -24,14 +24,17 @@ import { TTSButton } from "@/components/TTSButton";
 import { EditSuggestion } from "@/components/EditSuggestion";
 import { ReadingPositionRestore } from "@/components/ReadingPositionRestore";
 import { ReadHistoryTracker } from "@/components/ReadHistoryTracker";
+import { LangToggle } from "@/components/LangToggle";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { injectHeadingIds } from "@/lib/headings";
 import { formatDate } from "@/lib/date";
 import { getTldr } from "@/lib/tldrs";
 import { getBacklinks } from "@/lib/backlinks";
+import { getAvailableLanguages, getTranslation } from "@/lib/translations";
 
 type PageProps = {
   params: Promise<{ slug: string[] }>;
+  searchParams: Promise<{ lang?: string }>;
 };
 
 export async function generateStaticParams() {
