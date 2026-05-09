@@ -15,7 +15,7 @@ export default async function BookmarksPage() {
       <div className="max-w-3xl mx-auto">
         <header className="mb-8">
           <h1 className="text-2xl font-bold">저장한 글</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          <p className="text-sm text-muted mt-1">
             브라우저에 저장된 북마크 (서버에 전송되지 않음)
           </p>
         </header>
