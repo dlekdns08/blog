@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 
 type DailyPaper = {
   arxiv_id: string;
@@ -50,14 +51,15 @@ export function DailyPaperWidget() {
 
   return (
     <section className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
-          오늘의 논문
-        </h2>
-        <Link href="/explore?tab=arxiv" className="text-xs text-accent hover:underline">
-          더 보기 →
-        </Link>
-      </div>
+      <SectionHeader
+        action={
+          <Link href="/explore?tab=arxiv" className="text-xs text-accent hover:underline">
+            더 보기 →
+          </Link>
+        }
+      >
+        오늘의 논문
+      </SectionHeader>
 
       <div className="space-y-2.5">
         {papers.map((p, i) => {
