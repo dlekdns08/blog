@@ -31,6 +31,13 @@ export default async function EditPostPage({ searchParams }: Props) {
   const tagsRaw = frontmatter.tags
   const tagsStr = Array.isArray(tagsRaw) ? tagsRaw.join(', ') : ''
 
+  const attachmentsRaw = frontmatter.attachments
+  const initialAttachments = Array.isArray(attachmentsRaw)
+    ? attachmentsRaw
+        .filter((a) => a && typeof a.name === 'string' && typeof a.file === 'string')
+        .map((a) => ({ name: String(a.name), file: String(a.file) }))
+    : []
+
   return (
     <main className="py-8 px-4 md:px-6">
       <div className="max-w-5xl mx-auto">
@@ -56,6 +63,7 @@ export default async function EditPostPage({ searchParams }: Props) {
           initialDescription={String(frontmatter.description ?? '')}
           initialTags={tagsStr}
           initialContent={content}
+          initialAttachments={initialAttachments}
         />
       </div>
     </main>
