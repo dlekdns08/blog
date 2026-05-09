@@ -91,7 +91,7 @@ export default function StatsPage() {
         <div className="space-y-10">
       <div>
         <h1 className="text-xl font-bold tracking-tight mb-1">방문 통계</h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="text-sm text-muted">
           포스트별 조회수 및 반응 현황
         </p>
       </div>
@@ -100,7 +100,7 @@ export default function StatsPage() {
       <div className="grid grid-cols-3 gap-3">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-4">
+            <div key={i} className="rounded-xl border border-line bg-surface p-4">
               <Skeleton className="h-3 w-16 mb-2" />
               <Skeleton className="h-6 w-20" />
             </div>
@@ -113,9 +113,9 @@ export default function StatsPage() {
           ].map((s) => (
             <div
               key={s.label}
-              className="rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-4"
+              className="rounded-xl border border-line bg-surface p-4"
             >
-              <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1">{s.label}</div>
+              <div className="text-xs text-subtle mb-1">{s.label}</div>
               <div className="text-xl font-bold tabular-nums">
                 {s.value}
                 <span className="text-xs font-normal text-zinc-400 ml-1">{s.unit}</span>
@@ -128,7 +128,7 @@ export default function StatsPage() {
       {/* 카테고리별 조회 */}
       {!loading && sortedCats.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+          <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
             카테고리별 조회
           </h2>
           <div className="space-y-2">
@@ -147,7 +147,7 @@ export default function StatsPage() {
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                  <span className="w-10 text-right text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
+                  <span className="w-10 text-right text-xs tabular-nums text-subtle">
                     {v}
                   </span>
                 </div>
@@ -161,7 +161,7 @@ export default function StatsPage() {
 
       {/* 조회수 TOP 10 */}
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+        <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
           조회수 TOP 10
         </h2>
         {loading ? (
@@ -171,7 +171,7 @@ export default function StatsPage() {
             ))}
           </div>
         ) : byViews.filter((p) => p.views > 0).length === 0 ? (
-          <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-8">
+          <p className="text-sm text-subtle text-center py-8">
             아직 조회 데이터가 없어요
           </p>
         ) : (
@@ -180,15 +180,15 @@ export default function StatsPage() {
               <li key={p.slug}>
                 <Link
                   href={`/posts/${p.slug}`}
-                  className="group flex items-center gap-3 rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 transition-all"
+                  className="group flex items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 transition-all"
                 >
                   <span className="text-xs tabular-nums font-bold text-zinc-300 dark:text-zinc-600 w-5 shrink-0">
                     {i + 1}
                   </span>
-                  <span className="flex-1 text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
+                  <span className="flex-1 text-sm font-medium text-body group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
                     {p.title}
                   </span>
-                  <div className="flex items-center gap-3 shrink-0 text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
+                  <div className="flex items-center gap-3 shrink-0 text-xs text-subtle tabular-nums">
                     <span className="flex items-center gap-1">
                       <svg className="size-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178Z" />
@@ -210,7 +210,7 @@ export default function StatsPage() {
         <>
           <div className="h-px bg-black/8 dark:bg-white/8" />
           <section className="space-y-3">
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
               반응 TOP 10
             </h2>
             <ol className="space-y-2">
@@ -218,15 +218,15 @@ export default function StatsPage() {
                 <li key={p.slug}>
                   <Link
                     href={`/posts/${p.slug}`}
-                    className="group flex items-center gap-3 rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 transition-all"
+                    className="group flex items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 transition-all"
                   >
                     <span className="text-xs tabular-nums font-bold text-zinc-300 dark:text-zinc-600 w-5 shrink-0">
                       {i + 1}
                     </span>
-                    <span className="flex-1 text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
+                    <span className="flex-1 text-sm font-medium text-body group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
                       {p.title}
                     </span>
-                    <span className="shrink-0 text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
+                    <span className="shrink-0 text-xs tabular-nums text-subtle">
                       {p.reactions}개 반응
                     </span>
                   </Link>
