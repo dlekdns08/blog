@@ -132,6 +132,54 @@ export function PostContent({ html }: { html: string }) {
     return () => cancelAnimationFrame(id);
   }, [html, searchQuery]);
 
+  // Mermaid 다이어그램 렌더링 (lazy)
+  useEffect(() => {
+    if (!ref.current) return;
+    const blocks = ref.current.querySelectorAll<HTMLElement>(
+      "pre code.language-mermaid"
+    );
+    if (blocks.length === 0) return;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const m = await import("mermaid");
+        if (cancelled) return;
+        const mermaid = m.default;
+        const isDark =
+          typeof document !== "undefined" &&
+          document.documentElement.classList.contains("dark");
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: isDark ? "dark" : "default",
+          securityLevel: "loose",
+        });
+        for (let i = 0; i < blocks.length; i++) {
+          const code = blocks[i];
+          const text = code.textContent ?? "";
+          const id = `mermaid-${Date.now()}-${i}`;
+          try {
+            const { svg } = await mermaid.render(id, text);
+            if (cancelled) return;
+            const wrapper = document.createElement("div");
+            wrapper.className = "mermaid-rendered my-4 flex justify-center overflow-x-auto";
+            wrapper.innerHTML = svg;
+            const pre = code.closest("pre");
+            pre?.replaceWith(wrapper);
+          } catch (err) {
+            console.error("mermaid render failed:", err);
+          }
+        }
+      } catch (err) {
+        console.error("mermaid load failed:", err);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [html]);
+
   return (
     <article
       ref={ref}
