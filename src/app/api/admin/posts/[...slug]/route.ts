@@ -33,7 +33,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
   const { slug } = await params
   const localPath = getLocalPath(slug)
   const repoPath = getRepoPath(slug)
-  const { title, date, description, tags, content } = await request.json()
+  const { title, date, description, tags, content, attachments } = await request.json()
 
   if (!title || !date) {
     return NextResponse.json({ error: 'title, date는 필수입니다.' }, { status: 400 })
@@ -48,6 +48,11 @@ export async function PUT(request: NextRequest, { params }: Params) {
   const frontmatter: Record<string, unknown> = { title, date }
   if (description) frontmatter.description = description
   if (Array.isArray(tags) && tags.length > 0) frontmatter.tags = tags
+  if (Array.isArray(attachments) && attachments.length > 0) {
+    frontmatter.attachments = attachments
+      .filter((a) => a && typeof a.name === 'string' && typeof a.file === 'string')
+      .map((a) => ({ name: a.name, file: a.file }))
+  }
 
   const fileContent = matter.stringify(content ?? '', frontmatter)
 
