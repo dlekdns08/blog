@@ -8,6 +8,8 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { RandomPostButton } from "@/components/RandomPostButton";
 import { BookmarksWidget } from "@/components/BookmarksWidget";
 import { ArxivLiveFeed } from "@/components/ArxivLiveFeed";
+import { ReadingMap } from "@/components/ReadingMap";
+import { GitHubActivityWidget } from "@/components/GitHubActivityWidget";
 import { GitHubIcon, SearchIcon } from "@/components/Icons";
 import { NAV } from "@/lib/nav";
 import type { PostMeta } from "@/lib/posts";
@@ -77,12 +79,22 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
             <RandomPostButton posts={posts} />
           </div>
 
+          {/* 읽기 진행 */}
+          <div className="mb-3 shrink-0">
+            <ReadingMap totalPosts={posts.length} />
+          </div>
+
           {/* 구분선 */}
-          <div className="h-px bg-black/6 dark:bg-white/6 mb-5 shrink-0" />
+          <div className="h-px bg-black/6 dark:bg-white/6 mb-4 shrink-0" />
 
           {/* 논문 피드 */}
           <div className="shrink-0 max-h-64 overflow-y-auto scrollbar-none">
             <ArxivLiveFeed />
+          </div>
+
+          {/* GitHub 활동 */}
+          <div className="mt-3 shrink-0">
+            <GitHubActivityWidget />
           </div>
 
           {/* 구분선 */}
