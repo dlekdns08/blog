@@ -105,7 +105,18 @@ export async function getAllPosts(): Promise<PostMeta[]> {
     )
   );
 
-  postsCache = metas.sort((a, b) => {
+  // 예약 발행 — date가 미래(현재시각보다 뒤)인 글은 프로덕션에서 숨김
+  // 개발 환경에서는 모두 보임 (작성·미리보기용)
+  const isProd = process.env.NODE_ENV === "production";
+  const now = Date.now();
+  const filtered = isProd
+    ? metas.filter((m) => {
+        const d = Date.parse(m.date);
+        return Number.isNaN(d) || d <= now;
+      })
+    : metas;
+
+  postsCache = filtered.sort((a, b) => {
     const ad = Date.parse(a.date);
     const bd = Date.parse(b.date);
     if (Number.isNaN(ad) || Number.isNaN(bd)) return a.slug.localeCompare(b.slug);
@@ -193,11 +204,13 @@ export async function getPostBySlug(slug: string): Promise<{
       subSubcategory,
       title: String(data.title),
       date: String(data.date),
+      updated: data.updated ? String(data.updated) : undefined,
       description: data.description ? String(data.description) : undefined,
       tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
       attachments: parseAttachments(data.attachments),
       image: data.image ? String(data.image) : undefined,
       series: parseSeries(data.series, data.seriesOrder),
+      featured: data.featured === true,
     },
     html: String(processed),
   };
