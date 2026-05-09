@@ -582,13 +582,13 @@ export function PostKnowledgeGraph() {
       {/* ── 2D/3D Toggle ─────────────────────────────────────── */}
       <button
         onClick={() => setIs3D((v) => !v)}
-        className="absolute top-3 right-3 z-20 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-semibold bg-black/25 backdrop-blur-sm text-white/70 hover:text-white hover:bg-black/40 transition-colors border border-white/10 select-none"
+        className="absolute top-3 right-3 z-20 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-semibold bg-zinc-900/75 backdrop-blur-sm text-white hover:bg-zinc-800/85 transition-colors border border-white/10 select-none"
       >
         {is3D ? <><Icon2D />2D</> : <><Icon3D />3D</>}
       </button>
 
       {/* ── Legend ───────────────────────────────────────────── */}
-      <div className="absolute top-3 left-3 z-20 flex flex-wrap gap-x-3 gap-y-1.5 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-xl px-3 py-2">
+      <div className="absolute top-3 left-3 z-20 flex flex-wrap gap-x-3 gap-y-1.5 bg-zinc-900/75 backdrop-blur-sm rounded-xl px-3 py-2">
         {Object.entries(CAT_COLORS)
           .filter(([c]) => usedCats.includes(c))
           .map(([cat, color]) => (
@@ -601,7 +601,7 @@ export function PostKnowledgeGraph() {
 
       {/* ── 2D Tooltip ───────────────────────────────────────── */}
       {!is3D && hovered && (
-        <div className="absolute bottom-3 left-3 right-3 z-20 rounded-xl border border-white/10 bg-black/60 backdrop-blur-md px-4 py-3 pointer-events-none">
+        <div className="absolute bottom-3 left-3 right-3 z-20 rounded-xl border border-white/10 bg-zinc-900/85 backdrop-blur-md px-4 py-3 pointer-events-none">
           <p className="text-xs font-semibold text-white line-clamp-1">{hovered.title}</p>
           <div className="mt-1 flex items-center gap-2 text-[10px] text-white/50">
             <span style={{ color: catColor(hovered.category) }}>{hovered.category}</span>
