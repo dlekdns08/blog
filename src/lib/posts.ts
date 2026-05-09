@@ -22,12 +22,14 @@ export type PostMeta = {
   subSubcategory?: string; // e.g. "papers" (3rd dir segment, if any)
   title: string;
   date: string;
+  updated?: string;        // 최종 수정일 (frontmatter: updated)
   description?: string;
   tags?: string[];
   attachments?: Attachment[];
   image?: string;          // OG 이미지 경로 (e.g. "/images/posts/my-post.png")
   readingTime?: number;    // 읽기 예상 시간 (분)
   series?: { name: string; order: number };  // 시리즈/연재 정보 (frontmatter: series + seriesOrder)
+  featured?: boolean;      // 홈 상단 노출 여부 (frontmatter: featured: true)
 };
 
 function parseSeries(raw: unknown, orderRaw: unknown): { name: string; order: number } | undefined {
@@ -135,12 +137,14 @@ async function getPostMeta(
     subSubcategory,
     title: String(data.title),
     date: String(data.date),
+    updated: data.updated ? String(data.updated) : undefined,
     description: data.description ? String(data.description) : undefined,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : undefined,
     attachments: parseAttachments(data.attachments),
     image: data.image ? String(data.image) : undefined,
     readingTime,
     series: parseSeries(data.series, data.seriesOrder),
+    featured: data.featured === true,
   };
 }
 
