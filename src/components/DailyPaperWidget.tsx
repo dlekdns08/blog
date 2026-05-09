@@ -89,7 +89,10 @@ export function DailyPaperWidget() {
                   <div className="flex items-center gap-2 text-[10px]">
                     <span
                       className="rounded-full px-1.5 py-0.5 font-medium"
-                      style={{ backgroundColor: color + "22", color }}
+                      style={{
+                        backgroundColor: `color-mix(in srgb, ${color} 18%, transparent)`,
+                        color,
+                      }}
                     >
                       {p.primary_category}
                     </span>
