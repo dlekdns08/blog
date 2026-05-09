@@ -77,8 +77,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function PostDetailPage({ params }: PageProps) {
+export default async function PostDetailPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const { lang } = await searchParams;
   const slugStr = slug.map(decodeURIComponent).join("/");
 
   let post: Awaited<ReturnType<typeof getPostBySlug>>;
@@ -88,8 +89,20 @@ export default async function PostDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  // 번역본 적용 (lang=en 등)
+  const availableLangs = await getAvailableLanguages(slugStr);
+  const requestedLang = lang && lang !== "ko" ? lang : null;
+  const translation =
+    requestedLang && availableLangs.includes(requestedLang)
+      ? await getTranslation(slugStr, requestedLang)
+      : null;
+
+  const displayTitle = translation?.title ?? post.meta.title;
+  const displayDescription = translation?.description || post.meta.description;
+  const sourceHtml = translation?.html ?? post.html;
+
   // 헤딩 ID 주입 및 목차 추출
-  const { html, headings } = injectHeadingIds(post.html);
+  const { html, headings } = injectHeadingIds(sourceHtml);
 
   // 이전 / 다음 포스트
   const allPosts = await getAllPosts();
@@ -163,12 +176,15 @@ export default async function PostDetailPage({ params }: PageProps) {
                   )}
                 </div>
               )}
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight leading-tight">
-                {post.meta.title}
-              </h1>
-              {post.meta.description && (
+              <div className="flex items-start justify-between gap-3">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight leading-tight flex-1">
+                  {displayTitle}
+                </h1>
+                <LangToggle availableLanguages={availableLangs} />
+              </div>
+              {displayDescription && (
                 <p className="text-base text-muted leading-relaxed">
-                  {post.meta.description}
+                  {displayDescription}
                 </p>
               )}
               <div className="flex items-center gap-3 pt-1 flex-wrap">
