@@ -398,6 +398,88 @@ body {
   font-weight: 600;
 }
 
+/* ── Image Lightbox 오버레이 ── */
+
+.image-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  animation: lb-fade 0.18s ease;
+  padding: 2rem;
+}
+
+.image-lightbox-overlay img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+@keyframes lb-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.prose img {
+  cursor: zoom-in;
+}
+
+/* ── Print 스타일 ── */
+@media print {
+  /* 사이드바, 헤더, 위젯 숨김 */
+  aside,
+  nav,
+  header,
+  .copy-btn,
+  .lang-badge,
+  [aria-label="AI 채팅"],
+  [aria-label="AI 어시스턴트 열기"],
+  [aria-label="채팅 닫기"],
+  [aria-label*="모드로 전환"] {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+
+  a {
+    color: black !important;
+    text-decoration: underline;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+
+  .prose pre {
+    border: 1px solid #ccc !important;
+    background: #f5f5f5 !important;
+    page-break-inside: avoid;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3 {
+    page-break-after: avoid;
+    color: black !important;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+}
+
 /* ── Post Card 3D Tilt ── */
 
 .post-card-tilt {
