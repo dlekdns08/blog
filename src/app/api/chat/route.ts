@@ -12,23 +12,43 @@ const BASE_SYSTEM = `당신은 '코알라 오딧세이' 블로그의 AI 어시�
 
 type Message = { role: "user" | "assistant"; content: string };
 
+type PostIndexEntry = {
+  slug: string;
+  title: string;
+  description: string | null;
+  tags: string[];
+  category: string;
+};
+
 export async function POST(req: NextRequest) {
   if (!process.env.CLAUDE_TOKEN) {
     return new Response("CLAUDE_TOKEN is not configured", { status: 503 });
   }
 
-  const { messages, context } = (await req.json()) as {
+  const { messages, context, index } = (await req.json()) as {
     messages: Message[];
     context?: string;
+    index?: PostIndexEntry[];
   };
 
   if (!messages || messages.length === 0) {
     return new Response("messages is required", { status: 400 });
   }
 
-  const system = context
-    ? `${BASE_SYSTEM}\n\n현재 독자가 읽고 있는 글의 내용:\n\`\`\`\n${context.slice(0, 8000)}\n\`\`\``
-    : BASE_SYSTEM;
+  let system = BASE_SYSTEM;
+  if (context) {
+    system += `\n\n현재 독자가 읽고 있는 글의 내용:\n\`\`\`\n${context.slice(0, 8000)}\n\`\`\``;
+  } else if (index && index.length > 0) {
+    const list = index
+      .slice(0, 50)
+      .map((p) => {
+        const tags = p.tags.length > 0 ? ` [${p.tags.join(", ")}]` : "";
+        const desc = p.description ? ` — ${p.description}` : "";
+        return `- "${p.title}" (/posts/${p.slug})${desc}${tags}`;
+      })
+      .join("\n");
+    system += `\n\n블로그에 있는 글 목록 (최근 ${Math.min(index.length, 50)}개):\n${list}\n\n사용자의 질문이 특정 주제에 관한 것이라면 위 목록에서 관련 글을 추천하고 정확한 경로(/posts/...)를 인용하세요. 목록에 없는 내용을 지어내지 마세요.`;
+  }
 
   try {
     const anthropicStream = client.messages.stream({
