@@ -16,9 +16,12 @@ import { ViewCounter } from "@/components/ViewCounter";
 import { CollapsibleTOC } from "@/components/CollapsibleTOC";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { RelatedPosts } from "@/components/RelatedPosts";
+import { SeriesNav } from "@/components/SeriesNav";
+import { PostTldr } from "@/components/PostTldr";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { injectHeadingIds } from "@/lib/headings";
 import { formatDate } from "@/lib/date";
+import { getTldr } from "@/lib/tldrs";
 
 type PageProps = {
   params: Promise<{ slug: string[] }>;
@@ -83,6 +86,10 @@ export default async function PostDetailPage({ params }: PageProps) {
   const idx = allPosts.findIndex((p) => p.slug === slugStr);
   const prevPost = idx < allPosts.length - 1 ? allPosts[idx + 1] : null; // 더 오래된
   const nextPost = idx > 0 ? allPosts[idx - 1] : null;                   // 더 최근
+
+  // allPosts에는 series 정보가 채워져 있음 — 현재 글 메타에도 동일 정보 주입
+  const currentMeta = allPosts.find((p) => p.slug === slugStr) ?? post.meta;
+  const tldr = await getTldr(slugStr);
 
   const catConfig = CATEGORY_CONFIG[post.meta.category];
   const categoryLabel = catConfig?.label ?? post.meta.category;
@@ -170,6 +177,12 @@ export default async function PostDetailPage({ params }: PageProps) {
 
             {/* 구분선 */}
             <div className="mb-10 h-px bg-black/8 dark:bg-white/8" />
+
+            {/* 시리즈 네비게이션 */}
+            <SeriesNav current={currentMeta} all={allPosts} />
+
+            {/* AI 3줄 요약 */}
+            <PostTldr summary={tldr} />
 
             {/* 인라인 목차 (xl 미만) */}
             {headings.length >= 2 && <CollapsibleTOC headings={headings} />}
