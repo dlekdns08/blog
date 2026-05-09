@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Icon2D, Icon3D, Spinner } from "@/components/Icons";
 
 // ── Types ─────────────────────────────────────────────────
 type GraphNode = {
@@ -59,30 +60,6 @@ class SpatialGrid {
       }
     return result;
   }
-}
-
-// ── Icons ─────────────────────────────────────────────────
-function Icon2D() {
-  return (
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-      <rect x="3" y="3" width="18" height="18" rx="2" />
-    </svg>
-  );
-}
-function Icon3D() {
-  return (
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-    </svg>
-  );
-}
-function Spinner() {
-  return (
-    <svg className="animate-spin size-4" viewBox="0 0 24 24" fill="none">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-    </svg>
-  );
 }
 
 // ── Component ─────────────────────────────────────────────
