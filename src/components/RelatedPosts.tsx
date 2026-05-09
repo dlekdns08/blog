@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { formatRelativeDate } from "@/lib/date";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 
 function getRelated(current: PostMeta, all: PostMeta[], limit = 3): PostMeta[] {
   const others = all.filter((p) => p.slug !== current.slug);
@@ -33,9 +34,7 @@ export function RelatedPosts({ current, all }: { current: PostMeta; all: PostMet
 
   return (
     <section className="mt-12">
-      <h2 className="mb-4 text-sm font-semibold text-muted uppercase tracking-widest">
-        관련 글
-      </h2>
+      <SectionHeader className="mb-4">관련 글</SectionHeader>
       <ul className="space-y-2">
         {related.map((p) => {
           const catLabel = CATEGORY_CONFIG[p.category]?.label ?? p.category;
