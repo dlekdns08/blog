@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.koala.ai.kr";
 
@@ -133,13 +134,9 @@ function CommentForm({
               취소
             </button>
           )}
-          <button
-            type="submit"
-            disabled={submitting}
-            className="rounded-lg bg-violet-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-60 transition-colors"
-          >
+          <PrimaryButton type="submit" size="sm" disabled={submitting}>
             {submitting ? "등록 중…" : isReply ? "답글 등록" : "댓글 등록"}
-          </button>
+          </PrimaryButton>
         </div>
       </div>
     </form>
