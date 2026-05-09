@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTheme } from "@/components/ThemeProvider";
 
 const COPY_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
 const CHECK_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
@@ -74,6 +75,8 @@ export function PostContent({ html }: { html: string }) {
   const ref = useRef<HTMLElement>(null);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q") ?? "";
+  const themeCtx = useTheme();
+  const resolvedTheme = themeCtx?.resolvedTheme ?? "light";
 
   useEffect(() => {
     if (!ref.current) return;
@@ -132,13 +135,26 @@ export function PostContent({ html }: { html: string }) {
     return () => cancelAnimationFrame(id);
   }, [html, searchQuery]);
 
-  // Mermaid 다이어그램 렌더링 (lazy)
+  // Mermaid 다이어그램 렌더링 (lazy + 테마 토글 시 재렌더)
   useEffect(() => {
     if (!ref.current) return;
-    const blocks = ref.current.querySelectorAll<HTMLElement>(
-      "pre code.language-mermaid"
-    );
-    if (blocks.length === 0) return;
+
+    // 첫 렌더(pre code.language-mermaid) + 이미 렌더된(.mermaid-rendered[data-source]) 둘 다 수집
+    const sources: { el: Element; src: string }[] = [];
+    ref.current
+      .querySelectorAll<HTMLElement>("pre code.language-mermaid")
+      .forEach((code) => {
+        const pre = code.closest("pre");
+        if (pre) sources.push({ el: pre, src: code.textContent ?? "" });
+      });
+    ref.current
+      .querySelectorAll<HTMLElement>(".mermaid-rendered[data-source]")
+      .forEach((div) => {
+        const src = div.getAttribute("data-source") ?? "";
+        if (src) sources.push({ el: div, src });
+      });
+
+    if (sources.length === 0) return;
 
     let cancelled = false;
     (async () => {
@@ -146,26 +162,23 @@ export function PostContent({ html }: { html: string }) {
         const m = await import("mermaid");
         if (cancelled) return;
         const mermaid = m.default;
-        const isDark =
-          typeof document !== "undefined" &&
-          document.documentElement.classList.contains("dark");
         mermaid.initialize({
           startOnLoad: false,
-          theme: isDark ? "dark" : "default",
+          theme: resolvedTheme === "dark" ? "dark" : "default",
           securityLevel: "loose",
         });
-        for (let i = 0; i < blocks.length; i++) {
-          const code = blocks[i];
-          const text = code.textContent ?? "";
+        for (let i = 0; i < sources.length; i++) {
+          const { el, src } = sources[i];
           const id = `mermaid-${Date.now()}-${i}`;
           try {
-            const { svg } = await mermaid.render(id, text);
+            const { svg } = await mermaid.render(id, src);
             if (cancelled) return;
             const wrapper = document.createElement("div");
-            wrapper.className = "mermaid-rendered my-4 flex justify-center overflow-x-auto";
+            wrapper.className =
+              "mermaid-rendered my-4 flex justify-center overflow-x-auto";
+            wrapper.setAttribute("data-source", src);
             wrapper.innerHTML = svg;
-            const pre = code.closest("pre");
-            pre?.replaceWith(wrapper);
+            el.replaceWith(wrapper);
           } catch (err) {
             console.error("mermaid render failed:", err);
           }
@@ -178,7 +191,7 @@ export function PostContent({ html }: { html: string }) {
     return () => {
       cancelled = true;
     };
-  }, [html]);
+  }, [html, resolvedTheme]);
 
   return (
     <article
