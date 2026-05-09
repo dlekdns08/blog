@@ -293,6 +293,78 @@ body {
   display: none;
 }
 
+/* ── Highlight.js — github.css 임포트 + 다크모드 토큰 오버라이드 ── */
+
+/* 양쪽 모두 .prose pre의 배경을 살리도록 hljs 자체 배경 무효화 */
+.hljs {
+  background: transparent !important;
+}
+
+.dark .hljs {
+  color: #c9d1d9;
+}
+.dark .hljs-doctag,
+.dark .hljs-keyword,
+.dark .hljs-meta .hljs-keyword,
+.dark .hljs-template-tag,
+.dark .hljs-template-variable,
+.dark .hljs-type,
+.dark .hljs-variable.language_ {
+  color: #ff7b72;
+}
+.dark .hljs-title,
+.dark .hljs-title.class_,
+.dark .hljs-title.class_.inherited__,
+.dark .hljs-title.function_ {
+  color: #d2a8ff;
+}
+.dark .hljs-attr,
+.dark .hljs-attribute,
+.dark .hljs-literal,
+.dark .hljs-meta,
+.dark .hljs-number,
+.dark .hljs-operator,
+.dark .hljs-variable,
+.dark .hljs-selector-attr,
+.dark .hljs-selector-class,
+.dark .hljs-selector-id {
+  color: #79c0ff;
+}
+.dark .hljs-regexp,
+.dark .hljs-string,
+.dark .hljs-meta .hljs-string {
+  color: #a5d6ff;
+}
+.dark .hljs-built_in,
+.dark .hljs-symbol {
+  color: #ffa657;
+}
+.dark .hljs-comment,
+.dark .hljs-code,
+.dark .hljs-formula,
+.dark .hljs-quote {
+  color: #8b949e;
+}
+.dark .hljs-name,
+.dark .hljs-section,
+.dark .hljs-selector-tag {
+  color: #7ee787;
+}
+.dark .hljs-bullet,
+.dark .hljs-deletion {
+  color: #ffa198;
+}
+.dark .hljs-addition {
+  color: #aff5b4;
+  background-color: rgba(46, 160, 67, 0.15);
+}
+.dark .hljs-emphasis {
+  font-style: italic;
+}
+.dark .hljs-strong {
+  font-weight: 600;
+}
+
 /* ── Post Card 3D Tilt ── */
 
 .post-card-tilt {
