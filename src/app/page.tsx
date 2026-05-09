@@ -15,6 +15,7 @@ import { CATEGORY_CONFIG } from "@/lib/categories";
 import { formatRelativeDate } from "@/lib/date";
 import { TypingText } from "@/components/TypingText";
 import { DailyPaperWidget } from "@/components/DailyPaperWidget";
+import { FeaturedPosts } from "@/components/FeaturedPosts";
 
 type Stack = { icon: IconType; label: string; color: string };
 
@@ -60,7 +61,8 @@ function StackBadge({ icon: Icon, label, color }: Stack) {
 }
 
 export default async function Home() {
-  const recentPosts = (await getAllPosts()).slice(0, 5);
+  const allPosts = await getAllPosts();
+  const recentPosts = allPosts.slice(0, 5);
 
   return (
     <main className="flex flex-col min-h-dvh">
@@ -129,6 +131,9 @@ export default async function Home() {
 
         {/* 구분선 */}
         <div className="h-px bg-black/8 dark:bg-white/8" />
+
+        {/* Featured 글 */}
+        <FeaturedPosts posts={allPosts} />
 
         {/* 최근 글 */}
         {recentPosts.length > 0 && (
