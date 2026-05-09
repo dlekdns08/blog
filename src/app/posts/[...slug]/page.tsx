@@ -18,10 +18,17 @@ import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import { SeriesNav } from "@/components/SeriesNav";
 import { PostTldr } from "@/components/PostTldr";
+import { Backlinks } from "@/components/Backlinks";
+import { LastUpdated } from "@/components/LastUpdated";
+import { TTSButton } from "@/components/TTSButton";
+import { EditSuggestion } from "@/components/EditSuggestion";
+import { ReadingPositionRestore } from "@/components/ReadingPositionRestore";
+import { ReadHistoryTracker } from "@/components/ReadHistoryTracker";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { injectHeadingIds } from "@/lib/headings";
 import { formatDate } from "@/lib/date";
 import { getTldr } from "@/lib/tldrs";
+import { getBacklinks } from "@/lib/backlinks";
 
 type PageProps = {
   params: Promise<{ slug: string[] }>;
@@ -90,6 +97,7 @@ export default async function PostDetailPage({ params }: PageProps) {
   // allPosts에는 series 정보가 채워져 있음 — 현재 글 메타에도 동일 정보 주입
   const currentMeta = allPosts.find((p) => p.slug === slugStr) ?? post.meta;
   const tldr = await getTldr(slugStr);
+  const backlinks = await getBacklinks(slugStr);
 
   const catConfig = CATEGORY_CONFIG[post.meta.category];
   const categoryLabel = catConfig?.label ?? post.meta.category;
@@ -113,6 +121,8 @@ export default async function PostDetailPage({ params }: PageProps) {
       />
       <ReadingProgress />
       <ScrollToTop />
+      <ReadingPositionRestore slug={slugStr} />
+      <ReadHistoryTracker slug={slugStr} />
 
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="xl:flex xl:gap-12">
@@ -206,6 +216,14 @@ export default async function PostDetailPage({ params }: PageProps) {
 
             {/* 관련 글 */}
             <RelatedPosts current={post.meta} all={allPosts} />
+
+            {/* 인용 (백링크) */}
+            <Backlinks posts={backlinks} />
+
+            {/* 편집 제안 */}
+            <div className="mt-8 flex justify-end">
+              <EditSuggestion slug={slugStr} />
+            </div>
 
             {/* 이전 / 다음 포스트 */}
             <PostNav prev={prevPost} next={nextPost} />
