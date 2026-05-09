@@ -176,6 +176,139 @@ export function PostContent({ html }: { html: string }) {
     return () => article.removeEventListener("click", onClick);
   }, [html]);
 
+  // Pyodide 코드 플레이그라운드 — `# @run` 마커가 첫 줄인 python 블록만 활성화
+  useEffect(() => {
+    if (!ref.current) return;
+    const codes = ref.current.querySelectorAll<HTMLElement>(
+      "pre code.language-python"
+    );
+    type Target = { pre: HTMLElement; code: string };
+    const targets: Target[] = [];
+
+    codes.forEach((codeEl) => {
+      const text = codeEl.textContent ?? "";
+      const firstLine = text.split("\n")[0]?.trim() ?? "";
+      if (firstLine !== "# @run" && firstLine !== "# @playground") return;
+      const pre = codeEl.closest("pre") as HTMLElement | null;
+      if (!pre || pre.dataset.playgroundReady === "1") return;
+      pre.dataset.playgroundReady = "1";
+      targets.push({ pre, code: text });
+    });
+
+    if (targets.length === 0) return;
+
+    // Pyodide는 한 번만 로드해서 모든 블록이 공유
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    type Pyodide = any;
+    let pyodidePromise: Promise<Pyodide> | null = null;
+    function loadPyodideOnce(): Promise<Pyodide> {
+      if (pyodidePromise) return pyodidePromise;
+      pyodidePromise = (async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const w = window as any;
+        if (!w.loadPyodide) {
+          await new Promise<void>((resolve, reject) => {
+            const s = document.createElement("script");
+            s.src = "https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js";
+            s.onload = () => resolve();
+            s.onerror = () => reject(new Error("Pyodide 로드 실패"));
+            document.head.appendChild(s);
+          });
+        }
+        return await w.loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.27.2/full/",
+        });
+      })();
+      return pyodidePromise;
+    }
+
+    for (const { pre, code } of targets) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "pyodide-playground";
+
+      const bar = document.createElement("div");
+      bar.className = "pyodide-bar";
+
+      const runBtn = document.createElement("button");
+      runBtn.className = "pyodide-run-btn";
+      runBtn.type = "button";
+      runBtn.innerHTML = "▶ 실행";
+      runBtn.setAttribute("aria-label", "Python 코드 실행");
+
+      const clearBtn = document.createElement("button");
+      clearBtn.className = "pyodide-clear-btn";
+      clearBtn.type = "button";
+      clearBtn.innerHTML = "지우기";
+      clearBtn.style.display = "none";
+
+      const status = document.createElement("span");
+      status.className = "pyodide-status";
+
+      const output = document.createElement("pre");
+      output.className = "pyodide-output";
+      output.style.display = "none";
+
+      bar.appendChild(runBtn);
+      bar.appendChild(clearBtn);
+      bar.appendChild(status);
+      wrapper.appendChild(bar);
+      wrapper.appendChild(output);
+
+      runBtn.addEventListener("click", async () => {
+        runBtn.disabled = true;
+        clearBtn.style.display = "none";
+        output.style.display = "block";
+        output.textContent = "";
+        status.textContent = "Pyodide 초기화 중... (~10MB, 첫 실행만 시간 소요)";
+
+        try {
+          const pyodide = await loadPyodideOnce();
+          status.textContent = "실행 중...";
+          let buf = "";
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const setStream = (kind: "stdout" | "stderr") => {
+            const fn = (s: string) => {
+              buf += s + "\n";
+              output.textContent = buf;
+            };
+            if (kind === "stdout") pyodide.setStdout({ batched: fn });
+            else pyodide.setStderr({ batched: fn });
+          };
+          setStream("stdout");
+          setStream("stderr");
+
+          // 현재 DOM에서 코드 다시 읽기 (첫 줄 마커 포함 — Python 주석이라 무해)
+          const codeNow = pre.querySelector("code")?.textContent ?? code;
+          const result = await pyodide.runPythonAsync(codeNow);
+          if (
+            result !== undefined &&
+            result !== null &&
+            String(result) !== "undefined"
+          ) {
+            buf += String(result);
+          }
+          output.textContent = buf || "(출력 없음)";
+          status.textContent = "완료";
+        } catch (err) {
+          output.textContent = `에러: ${err instanceof Error ? err.message : String(err)}`;
+          status.textContent = "실패";
+        } finally {
+          runBtn.disabled = false;
+          clearBtn.style.display = "inline-flex";
+        }
+      });
+
+      clearBtn.addEventListener("click", () => {
+        output.textContent = "";
+        output.style.display = "none";
+        status.textContent = "";
+        clearBtn.style.display = "none";
+      });
+
+      pre.parentNode?.insertBefore(wrapper, pre.nextSibling);
+    }
+  }, [html]);
+
   // Mermaid 다이어그램 렌더링 (lazy + 테마 토글 시 재렌더)
   useEffect(() => {
     if (!ref.current) return;
