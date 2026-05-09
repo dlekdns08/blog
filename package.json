@@ -11,6 +11,7 @@
     "tldr": "node scripts/generate-tldrs.mjs",
     "translate": "node scripts/generate-translations.mjs",
     "translate:en": "node scripts/generate-translations.mjs en",
+    "digest": "node scripts/send-digest.mjs",
     "check:tokens": "bash scripts/check-design-tokens.sh"
   },
   "dependencies": {
