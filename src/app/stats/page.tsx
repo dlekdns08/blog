@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Container } from "@/components/Container";
 import { CATEGORY_CONFIG } from "@/lib/categories";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 type PostStat = {
   slug: string;
@@ -98,39 +101,26 @@ export default function StatsPage() {
 
       {/* 요약 카드 */}
       <div className="grid grid-cols-3 gap-3">
-        {loading ? (
-          Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-line bg-surface p-4">
-              <Skeleton className="h-3 w-16 mb-2" />
-              <Skeleton className="h-6 w-20" />
-            </div>
-          ))
-        ) : (
-          [
-            { label: "전체 글", value: stats.length, unit: "개" },
-            { label: "누적 조회", value: totalViews.toLocaleString(), unit: "회" },
-            { label: "누적 반응", value: totalReactions.toLocaleString(), unit: "개" },
-          ].map((s) => (
-            <div
-              key={s.label}
-              className="rounded-xl border border-line bg-surface p-4"
-            >
-              <div className="text-xs text-subtle mb-1">{s.label}</div>
-              <div className="text-xl font-bold tabular-nums">
-                {s.value}
-                <span className="text-xs font-normal text-zinc-400 ml-1">{s.unit}</span>
+        {loading
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="rounded-xl border border-line bg-surface p-4">
+                <Skeleton className="h-3 w-16 mb-2" />
+                <Skeleton className="h-6 w-20" />
               </div>
-            </div>
-          ))
-        )}
+            ))
+          : [
+              { label: "전체 글", value: stats.length, unit: "개" },
+              { label: "누적 조회", value: totalViews, unit: "회" },
+              { label: "누적 반응", value: totalReactions, unit: "개" },
+            ].map((s) => (
+              <MetricCard key={s.label} label={s.label} value={s.value} unit={s.unit} />
+            ))}
       </div>
 
       {/* 카테고리별 조회 */}
       {!loading && sortedCats.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
-            카테고리별 조회
-          </h2>
+          <SectionHeader>카테고리별 조회</SectionHeader>
           <div className="space-y-2">
             {sortedCats.map(([cat, v]) => {
               const config = CATEGORY_CONFIG[cat];
@@ -161,9 +151,7 @@ export default function StatsPage() {
 
       {/* 조회수 TOP 10 */}
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
-          조회수 TOP 10
-        </h2>
+        <SectionHeader>조회수 TOP 10</SectionHeader>
         {loading ? (
           <div className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -171,9 +159,7 @@ export default function StatsPage() {
             ))}
           </div>
         ) : byViews.filter((p) => p.views > 0).length === 0 ? (
-          <p className="text-sm text-subtle text-center py-8">
-            아직 조회 데이터가 없어요
-          </p>
+          <EmptyState title="아직 조회 데이터가 없어요" />
         ) : (
           <ol className="space-y-2">
             {byViews.filter((p) => p.views > 0).slice(0, 10).map((p, i) => (
@@ -210,9 +196,7 @@ export default function StatsPage() {
         <>
           <div className="h-px bg-black/8 dark:bg-white/8" />
           <section className="space-y-3">
-            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
-              반응 TOP 10
-            </h2>
+            <SectionHeader>반응 TOP 10</SectionHeader>
             <ol className="space-y-2">
               {byReactions.slice(0, 10).map((p, i) => (
                 <li key={p.slug}>
