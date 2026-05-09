@@ -692,7 +692,7 @@ export function ArxivForceGraph({
       </button>
 
       {/* ── Category legend ───────────────────────────────────── */}
-      <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-xl px-3 py-2.5">
+      <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5 bg-zinc-900/75 backdrop-blur-sm rounded-xl px-3 py-2.5">
         {Object.entries(CAT).map(([cat, { hex, label }]) => (
           <div key={cat} className="flex items-center gap-2">
             <span className="inline-block size-2 rounded-full" style={{ backgroundColor: hex, boxShadow: `0 0 6px ${hex}` }} />
@@ -715,7 +715,7 @@ export function ArxivForceGraph({
       </div>
 
       {/* ── Paper count badge ────────────────────────────────── */}
-      <div className="absolute top-10 right-3 z-20 bg-black/20 dark:bg-black/30 backdrop-blur-sm rounded-lg px-2.5 py-1.5">
+      <div className="absolute top-10 right-3 z-20 bg-zinc-900/75 backdrop-blur-sm rounded-lg px-2.5 py-1.5">
         <span className="text-[10px] font-medium text-white/60 tabular-nums">
           {papers.length.toLocaleString()} papers
         </span>
