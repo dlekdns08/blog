@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import { PrimaryButton } from '@/components/ui/PrimaryButton'
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState('')
@@ -72,13 +73,9 @@ export default function AdminLoginPage() {
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 px-4 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
-          >
+          <PrimaryButton type="submit" disabled={loading} className="w-full py-2.5">
             {loading ? '로그인 중...' : '로그인'}
-          </button>
+          </PrimaryButton>
         </form>
       </div>
     </div>
