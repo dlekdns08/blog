@@ -15,7 +15,7 @@ export default async function AdminDashboard() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold">관리자 패널</h1>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-sm text-muted mt-1">
               총 {posts.length}개의 글
             </p>
           </div>
@@ -31,10 +31,10 @@ export default async function AdminDashboard() {
         </div>
 
         {/* 포스트 목록 */}
-        <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+        <div className="rounded-xl border border-divider overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50">
+              <tr className="border-b border-divider bg-zinc-50 dark:bg-zinc-900/50">
                 <th className="text-left px-4 py-3 font-medium text-zinc-500">제목</th>
                 <th className="text-left px-4 py-3 font-medium text-zinc-500 hidden md:table-cell">
                   경로
@@ -70,7 +70,7 @@ export default async function AdminDashboard() {
                     <div className="flex items-center gap-2 justify-end">
                       <Link
                         href={`/admin/posts/edit?slug=${post.slug}`}
-                        className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 hover:border-violet-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                        className="px-3 py-1 text-xs font-medium rounded-md border border-divider hover:border-violet-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
                       >
                         수정
                       </Link>
