@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.koala.ai.kr";
 
@@ -51,13 +52,9 @@ export function SubscribeForm() {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-lg border border-violet-200 dark:border-violet-500/25 bg-panel/50 px-3 py-1.5 text-xs text-foreground placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:focus:ring-violet-500/40 transition-shadow"
           />
-          <button
-            type="submit"
-            disabled={status === "loading"}
-            className="w-full rounded-lg bg-violet-600 hover:bg-violet-700 disabled:opacity-50 px-3 py-1.5 text-xs font-semibold text-white transition-colors shadow-sm"
-          >
+          <PrimaryButton type="submit" size="sm" disabled={status === "loading"} className="w-full shadow-sm">
             {status === "loading" ? "전송 중..." : "구독하기"}
-          </button>
+          </PrimaryButton>
           {status === "error" && (
             <p className="text-xs text-red-500">{message}</p>
           )}
