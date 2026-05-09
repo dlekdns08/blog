@@ -35,7 +35,7 @@ export default function AdminLoginPage() {
         <div className="mb-8 text-center">
           <div className="inline-flex size-12 items-center justify-center rounded-xl bg-violet-100 dark:bg-violet-900/30 mb-4">
             <svg
-              className="size-6 text-violet-600 dark:text-violet-400"
+              className="size-6 text-accent"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold tracking-tight">관리자 로그인</h1>
-          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">블로그 관리자 패널</p>
+          <p className="mt-2 text-sm text-muted">블로그 관리자 패널</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
               placeholder="관리자 비밀번호 입력"
               required
               autoFocus
-              className="w-full px-3 py-2.5 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-none focus:ring-2 focus:ring-violet-500 transition-shadow"
+              className="w-full px-3 py-2.5 text-sm rounded-lg border border-divider bg-panel outline-none focus:ring-2 focus:ring-violet-500 transition-shadow"
             />
           </div>
 
