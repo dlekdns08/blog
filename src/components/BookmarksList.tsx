@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
 import { CATEGORY_CONFIG } from "@/lib/categories";
 import { formatRelativeDate } from "@/lib/date";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 const KEY = "koala_bookmarks";
 
