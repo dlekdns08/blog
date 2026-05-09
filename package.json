@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "changelog": "node scripts/generate-changelog.mjs",
-    "tldr": "node scripts/generate-tldrs.mjs"
+    "tldr": "node scripts/generate-tldrs.mjs",
+    "check:tokens": "bash scripts/check-design-tokens.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.54.0",
