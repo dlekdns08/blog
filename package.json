@@ -9,6 +9,8 @@
     "lint": "eslint",
     "changelog": "node scripts/generate-changelog.mjs",
     "tldr": "node scripts/generate-tldrs.mjs",
+    "translate": "node scripts/generate-translations.mjs",
+    "translate:en": "node scripts/generate-translations.mjs en",
     "check:tokens": "bash scripts/check-design-tokens.sh"
   },
   "dependencies": {
