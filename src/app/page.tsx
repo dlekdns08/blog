@@ -54,7 +54,7 @@ function StackBadge({ icon: Icon, label, color }: Stack) {
   return (
     <div className="flex items-center gap-1.5 rounded-lg border border-black/8 bg-white px-3 py-2 text-xs shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8">
       <Icon style={{ color }} className="size-3.5 shrink-0" />
-      <span className="font-medium text-zinc-700 dark:text-zinc-300">{label}</span>
+      <span className="font-medium text-body">{label}</span>
     </div>
   );
 }
@@ -110,12 +110,12 @@ export default async function Home() {
           {/* 인포 카드 */}
           <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-3 pt-1">
             <div className="rounded-xl border border-black/8 bg-white px-4 py-3 text-sm shadow-sm dark:border-white/10 dark:bg-white/5">
-              <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1 font-medium tracking-wide uppercase">관심사</div>
-              <div className="font-semibold text-zinc-800 dark:text-zinc-200">LLM · AI · 생명과학</div>
+              <div className="text-xs text-subtle mb-1 font-medium tracking-wide uppercase">관심사</div>
+              <div className="font-semibold text-body">LLM · AI · 생명과학</div>
             </div>
             <div className="rounded-xl border border-black/8 bg-white px-4 py-3 text-sm shadow-sm dark:border-white/10 dark:bg-white/5">
-              <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1 font-medium tracking-wide uppercase">현재</div>
-              <div className="font-semibold text-zinc-800 dark:text-zinc-200">전문연구요원 AI 개발</div>
+              <div className="text-xs text-subtle mb-1 font-medium tracking-wide uppercase">현재</div>
+              <div className="font-semibold text-body">전문연구요원 AI 개발</div>
             </div>
             <Link
               href="/posts"
@@ -134,12 +134,12 @@ export default async function Home() {
         {recentPosts.length > 0 && (
           <section className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+              <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
                 최근 글
               </h2>
               <Link
                 href="/posts"
-                className="text-xs text-violet-600 dark:text-violet-400 hover:underline"
+                className="text-xs text-accent hover:underline"
               >
                 전체 보기 →
               </Link>
@@ -151,7 +151,7 @@ export default async function Home() {
                   <li key={post.slug}>
                     <Link
                       href={`/posts/${post.slug}`}
-                      className="group flex items-center justify-between gap-3 rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 hover:shadow-sm transition-all duration-150"
+                      className="group flex items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 hover:shadow-sm transition-all duration-150"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         {catConfig && (
@@ -159,11 +159,11 @@ export default async function Home() {
                             {catConfig.icon}
                           </span>
                         )}
-                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
+                        <span className="text-sm font-medium text-body group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors truncate">
                           {post.title}
                         </span>
                       </div>
-                      <time className="text-xs text-zinc-400 dark:text-zinc-500 shrink-0 tabular-nums">
+                      <time className="text-xs text-subtle shrink-0 tabular-nums">
                         {formatRelativeDate(post.date)}
                       </time>
                     </Link>
@@ -186,7 +186,7 @@ export default async function Home() {
         {/* 기술 스택 */}
         <section className="space-y-6">
           <div>
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-3">주력 스택</h2>
+            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest mb-3">주력 스택</h2>
             <div className="flex flex-wrap gap-2">
               {PRIMARY_STACKS.map((s) => (
                 <StackBadge key={s.label} {...s} />
@@ -195,7 +195,7 @@ export default async function Home() {
           </div>
 
           <details className="group">
-            <summary className="flex items-center gap-1.5 cursor-pointer list-none text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-3 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors select-none w-fit">
+            <summary className="flex items-center gap-1.5 cursor-pointer list-none text-xs font-semibold text-subtle uppercase tracking-widest mb-3 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors select-none w-fit">
               <svg className="size-3 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
               </svg>
