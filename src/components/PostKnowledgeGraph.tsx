@@ -615,7 +615,7 @@ export function PostKnowledgeGraph() {
       {/* ── 3D hint ──────────────────────────────────────────── */}
       {is3D && (
         <div className="absolute bottom-3 left-0 right-0 z-20 flex justify-center pointer-events-none">
-          <span className="rounded-lg px-3 py-1.5 text-[10px] text-white/40 bg-black/20 backdrop-blur-sm">
+          <span className="rounded-lg px-3 py-1.5 text-[10px] text-white/80 bg-zinc-900/75 backdrop-blur-sm">
             드래그 = 회전 · 스크롤 = 줌 · 우클릭 드래그 = 이동
           </span>
         </div>
