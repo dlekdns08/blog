@@ -723,7 +723,7 @@ export function ArxivForceGraph({
 
       {/* ── 2D Tooltip ───────────────────────────────────────── */}
       {!is3D && hovered && (
-        <div className="absolute bottom-3 left-3 right-3 z-20 rounded-xl border border-white/10 bg-black/60 backdrop-blur-md px-4 py-3 shadow-xl pointer-events-none">
+        <div className="absolute bottom-3 left-3 right-3 z-20 rounded-xl border border-white/10 bg-zinc-900/85 backdrop-blur-md px-4 py-3 shadow-xl pointer-events-none">
           <div className="flex items-start gap-2.5">
             <span
               className="mt-0.5 size-2 rounded-full shrink-0 ring-2 ring-white/20"
@@ -744,7 +744,7 @@ export function ArxivForceGraph({
       {/* ── 3D hint ──────────────────────────────────────────── */}
       {is3D && (
         <div className="absolute bottom-3 left-0 right-0 z-20 flex justify-center pointer-events-none">
-          <span className="rounded-lg px-3 py-1.5 text-[10px] text-white/40 bg-black/20 backdrop-blur-sm">
+          <span className="rounded-lg px-3 py-1.5 text-[10px] text-white/80 bg-zinc-900/75 backdrop-blur-sm">
             드래그 = 회전 · 스크롤 = 줌 · 우클릭 드래그 = 이동
           </span>
         </div>
