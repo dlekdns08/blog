@@ -134,7 +134,7 @@ export default async function PostDetailPage({ params }: PageProps) {
             {/* 포스트 헤더 */}
             <header className="mb-10 space-y-3">
               {categoryLabel && (
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-accent uppercase tracking-widest">
                   <span>{categoryLabel}</span>
                   {post.meta.subcategory && (
                     <>
@@ -154,16 +154,16 @@ export default async function PostDetailPage({ params }: PageProps) {
                 {post.meta.title}
               </h1>
               {post.meta.description && (
-                <p className="text-base text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <p className="text-base text-muted leading-relaxed">
                   {post.meta.description}
                 </p>
               )}
               <div className="flex items-center gap-3 pt-1 flex-wrap">
-                <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
+                <time className="text-xs text-subtle tabular-nums">
                   {formatDate(post.meta.date)}
                 </time>
                 {post.meta.readingTime && (
-                  <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                  <span className="text-xs text-subtle">
                     · {post.meta.readingTime}분 읽기
                   </span>
                 )}
