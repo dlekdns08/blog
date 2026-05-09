@@ -45,14 +45,10 @@ export function BookmarksList({ posts }: { posts: PostMeta[] }) {
   }
   if (bookmarks.length === 0) {
     return (
-      <div className="rounded-xl border border-divider p-8 text-center">
-        <p className="text-sm text-muted mb-1">
-          아직 저장한 글이 없어요.
-        </p>
-        <p className="text-xs text-subtle">
-          글 페이지에서 북마크 버튼을 눌러 저장해 보세요.
-        </p>
-      </div>
+      <EmptyState
+        title="아직 저장한 글이 없어요."
+        description="글 페이지에서 북마크 버튼을 눌러 저장해 보세요."
+      />
     );
   }
 
