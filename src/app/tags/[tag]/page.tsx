@@ -46,13 +46,13 @@ export default async function TagPage({ params }: PageProps) {
                 글 목록
               </Link>
               <span className="text-zinc-300 dark:text-zinc-600">/</span>
-              <span className="text-xs text-zinc-400 dark:text-zinc-500">태그</span>
+              <span className="text-xs text-subtle">태그</span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight">
-              <span className="text-violet-600 dark:text-violet-400">#</span>
+              <span className="text-accent">#</span>
               {decoded}
             </h1>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-muted">
               {posts.length}개의 글
             </p>
           </header>
@@ -68,7 +68,7 @@ export default async function TagPage({ params }: PageProps) {
                     className="group block rounded-xl border border-black/8 bg-white p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/8"
                   >
                     {catLabel && (
-                      <p className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 mb-1">
+                      <p className="text-[11px] font-medium text-subtle mb-1">
                         {catLabel}
                         {p.subcategory && <> / {p.subcategory}</>}
                       </p>
@@ -79,15 +79,15 @@ export default async function TagPage({ params }: PageProps) {
                       </span>
                       <div className="shrink-0 flex items-center gap-2">
                         {p.readingTime && (
-                          <span className="text-xs text-zinc-400 dark:text-zinc-500">{p.readingTime}분</span>
+                          <span className="text-xs text-subtle">{p.readingTime}분</span>
                         )}
-                        <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
+                        <time className="text-xs text-subtle tabular-nums">
                           {formatRelativeDate(p.date)}
                         </time>
                       </div>
                     </div>
                     {p.description && (
-                      <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                      <p className="mt-1.5 text-sm text-muted leading-relaxed">
                         {p.description}
                       </p>
                     )}
