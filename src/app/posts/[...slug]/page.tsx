@@ -177,8 +177,10 @@ export default async function PostDetailPage({ params }: PageProps) {
                     · {post.meta.readingTime}분 읽기
                   </span>
                 )}
+                <LastUpdated date={post.meta.date} updated={post.meta.updated} />
                 <ViewCounter slug={slugStr} />
                 <div className="flex items-center gap-1 ml-auto">
+                  <TTSButton />
                   <BookmarkButton slug={slugStr} title={post.meta.title} />
                   <ShareButton />
                 </div>
