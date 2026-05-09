@@ -836,7 +836,7 @@ export function KoalaGame() {
   return (
     <div className="flex flex-col items-center gap-4">
       <div
-        className="relative w-full max-w-[700px] cursor-pointer rounded-2xl overflow-hidden shadow-xl border border-black/10 dark:border-white/10"
+        className="relative w-full max-w-[700px] cursor-pointer rounded-2xl overflow-hidden shadow-xl border border-line"
         onClick={jump}
         onTouchStart={(e) => { e.preventDefault(); jump(); }}
         style={{ touchAction: "none" }}
@@ -849,7 +849,7 @@ export function KoalaGame() {
           style={{ imageRendering: "pixelated" }}
         />
       </div>
-      <div className="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400 flex-wrap justify-center">
+      <div className="flex items-center gap-4 text-sm text-muted flex-wrap justify-center">
         <span>
           점수: <span className="font-bold tabular-nums text-zinc-700 dark:text-zinc-200">{displayScore}</span>
         </span>

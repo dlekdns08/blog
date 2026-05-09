@@ -26,7 +26,7 @@ export function SeriesNav({
           시리즈
         </span>
         <h3 className="text-sm font-semibold">{seriesName}</h3>
-        <span className="ml-auto text-xs text-zinc-500 dark:text-zinc-400 tabular-nums">
+        <span className="ml-auto text-xs text-muted tabular-nums">
           {idx >= 0 ? idx + 1 : "?"}/{seriesPosts.length}편
         </span>
       </div>

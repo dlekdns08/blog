@@ -25,7 +25,7 @@ export function PostTldr({ summary }: { summary: string | null }) {
         {lines.map((line, i) => (
           <li
             key={i}
-            className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed flex gap-2"
+            className="text-sm text-body leading-relaxed flex gap-2"
           >
             <span className="text-amber-500 shrink-0">•</span>
             <span>{line}</span>

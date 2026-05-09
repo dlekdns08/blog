@@ -196,14 +196,14 @@ function CommentItem({
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
             <div className={`size-6 rounded-full flex items-center justify-center shrink-0 ${isReply ? "bg-zinc-100 dark:bg-white/10" : "bg-violet-100 dark:bg-violet-500/20"}`}>
-              <span className={`text-xs font-semibold ${isReply ? "text-zinc-500 dark:text-zinc-400" : "text-violet-600 dark:text-violet-300"}`}>
+              <span className={`text-xs font-semibold ${isReply ? "text-muted" : "text-violet-600 dark:text-violet-300"}`}>
                 {comment.nickname.charAt(0).toUpperCase()}
               </span>
             </div>
-            <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 truncate">
+            <span className="text-sm font-semibold text-body truncate">
               {comment.nickname}
             </span>
-            <time className="text-xs text-zinc-400 dark:text-zinc-500 shrink-0">
+            <time className="text-xs text-subtle shrink-0">
               {formatDate(comment.created_at)}
             </time>
           </div>
@@ -363,7 +363,7 @@ export function CommentSection({ slug }: { slug: string }) {
           ))}
         </div>
       ) : comments.length === 0 ? (
-        <p className="py-6 text-center text-sm text-zinc-400 dark:text-zinc-500">
+        <p className="py-6 text-center text-sm text-subtle">
           첫 번째 댓글을 남겨보세요 🐨
         </p>
       ) : (

@@ -148,7 +148,7 @@ export function PostList({ posts }: Props) {
             >
               <span className="text-xs">📋</span>
               <span>전체</span>
-              <span className={`text-xs tabular-nums ${!activeCategory ? "text-violet-200" : "text-zinc-400 dark:text-zinc-500"}`}>
+              <span className={`text-xs tabular-nums ${!activeCategory ? "text-violet-200" : "text-subtle"}`}>
                 {posts.length}
               </span>
             </button>
@@ -171,7 +171,7 @@ export function PostList({ posts }: Props) {
                 >
                   <span className="text-xs">{icon}</span>
                   <span>{label}</span>
-                  <span className={`text-xs tabular-nums ${active ? "text-violet-200" : "text-zinc-400 dark:text-zinc-500"}`}>
+                  <span className={`text-xs tabular-nums ${active ? "text-violet-200" : "text-subtle"}`}>
                     {count}
                   </span>
                 </button>
@@ -235,9 +235,9 @@ export function PostList({ posts }: Props) {
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-16 text-center">
           <span className="text-4xl select-none">🔍</span>
-          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">검색 결과가 없습니다</p>
+          <p className="text-sm font-medium text-muted">검색 결과가 없습니다</p>
           {query && (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">&ldquo;{query}&rdquo;에 맞는 글이 없어요</p>
+            <p className="text-xs text-subtle">&ldquo;{query}&rdquo;에 맞는 글이 없어요</p>
           )}
         </div>
       ) : (
@@ -258,7 +258,7 @@ export function PostList({ posts }: Props) {
                   onMouseLeave={(e) => { e.currentTarget.style.transform = ""; }}
                 >
                   {(p.category || p.subcategory) && (
-                    <div className="mb-1.5 flex items-center gap-1 text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
+                    <div className="mb-1.5 flex items-center gap-1 text-[11px] font-medium text-subtle">
                       {p.category && <span>{CATEGORY_CONFIG[p.category]?.label ?? p.category}</span>}
                       {p.subcategory && <><span>/</span><span>{p.subcategory}</span></>}
                       {p.subSubcategory && <><span>/</span><span>{p.subSubcategory}</span></>}
@@ -274,24 +274,24 @@ export function PostList({ posts }: Props) {
                         const top = Object.entries(reactions).filter(([, cnt]) => cnt > 0).sort(([, a], [, b]) => b - a)[0];
                         if (!top) return null;
                         return (
-                          <span className="inline-flex items-center gap-0.5 text-xs text-zinc-400 dark:text-zinc-500">
+                          <span className="inline-flex items-center gap-0.5 text-xs text-subtle">
                             <span>{top[0]}</span>
                             <span className="tabular-nums">{top[1]}</span>
                           </span>
                         );
                       })()}
                       {p.readingTime && (
-                        <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
+                        <span className="text-xs text-subtle tabular-nums">
                           {p.readingTime}분
                         </span>
                       )}
-                      <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums" title={p.date}>
+                      <time className="text-xs text-subtle tabular-nums" title={p.date}>
                         {formatRelativeDate(p.date)}
                       </time>
                     </div>
                   </div>
                   {p.description && (
-                    <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">{p.description}</p>
+                    <p className="mt-1.5 text-sm text-muted leading-relaxed">{p.description}</p>
                   )}
                   {p.tags && p.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1.5">

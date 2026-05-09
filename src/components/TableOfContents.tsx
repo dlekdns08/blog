@@ -66,7 +66,7 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
     <nav aria-label="목차" className="select-none">
       {/* Reading progress bar */}
       <div className="flex items-center gap-2 mb-3 px-1">
-        <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-subtle">
           목차
         </p>
         <div className="flex-1 h-1 bg-zinc-100 dark:bg-white/8 rounded-full overflow-hidden">
@@ -75,7 +75,7 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
             style={{ width: `${readProgress}%` }}
           />
         </div>
-        <span className="text-[9px] tabular-nums text-zinc-400 dark:text-zinc-500">
+        <span className="text-[9px] tabular-nums text-subtle">
           {readProgress}%
         </span>
       </div>
@@ -97,7 +97,7 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
                   level === 3 ? "pl-4" : ""
                 } ${
                   isActive
-                    ? "text-violet-600 dark:text-violet-400 font-medium bg-violet-50 dark:bg-violet-500/10"
+                    ? "text-accent font-medium bg-violet-50 dark:bg-violet-500/10"
                     : isPast
                     ? "text-zinc-400/70 dark:text-zinc-500/70 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-white/5"
                     : "text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-white/5"
@@ -126,7 +126,7 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
                 )}
                 <span className="relative line-clamp-2">{text}</span>
                 {(heatmap[id] ?? 0) >= 5 && (
-                  <span className="relative ml-auto shrink-0 text-[9px] tabular-nums text-zinc-400 dark:text-zinc-500">
+                  <span className="relative ml-auto shrink-0 text-[9px] tabular-nums text-subtle">
                     {Math.round(heatmap[id])}s
                   </span>
                 )}

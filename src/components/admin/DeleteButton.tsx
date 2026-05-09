@@ -37,7 +37,7 @@ export function DeleteButton({ slug }: { slug: string }) {
         </button>
         <button
           onClick={() => setConfirming(false)}
-          className="px-2 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 transition-colors"
+          className="px-2 py-1 text-xs font-medium rounded-md border border-divider hover:border-zinc-400 transition-colors"
         >
           취소
         </button>
@@ -48,7 +48,7 @@ export function DeleteButton({ slug }: { slug: string }) {
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 hover:border-red-400 hover:text-red-500 transition-colors"
+      className="px-3 py-1 text-xs font-medium rounded-md border border-divider hover:border-red-400 hover:text-red-500 transition-colors"
     >
       삭제
     </button>

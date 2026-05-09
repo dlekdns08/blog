@@ -141,11 +141,11 @@ export function CommandPalette({ posts, open, onClose }: Props) {
         role="dialog"
         aria-modal="true"
         aria-label="명령어 팔레트"
-        className="relative w-full max-w-xl bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-black/10 dark:border-white/10 overflow-hidden"
+        className="relative w-full max-w-xl bg-panel rounded-2xl shadow-2xl border border-line overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 검색 입력 */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-black/8 dark:border-white/8">
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-line">
           <svg
             className="size-4 text-zinc-400 shrink-0"
             fill="none"
@@ -164,9 +164,9 @@ export function CommandPalette({ posts, open, onClose }: Props) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="포스트 검색..."
-            className="flex-1 bg-transparent text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none"
+            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-zinc-400 outline-none"
           />
-          <kbd className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 bg-zinc-100 dark:bg-white/8 rounded px-1.5 py-0.5 leading-5">
+          <kbd className="text-[10px] font-medium text-subtle bg-zinc-100 dark:bg-white/8 rounded px-1.5 py-0.5 leading-5">
             esc
           </kbd>
         </div>
@@ -200,18 +200,18 @@ export function CommandPalette({ posts, open, onClose }: Props) {
                         className={`text-sm font-medium truncate ${
                           isSelected
                             ? "text-violet-700 dark:text-violet-300"
-                            : "text-zinc-800 dark:text-zinc-200"
+                            : "text-body"
                         }`}
                       >
                         {highlight(post.title, query)}
                       </p>
                       {post.description && (
-                        <p className="text-xs text-zinc-400 dark:text-zinc-500 truncate mt-0.5">
+                        <p className="text-xs text-subtle truncate mt-0.5">
                           {post.description}
                         </p>
                       )}
                     </div>
-                    <time className="text-xs text-zinc-400 dark:text-zinc-500 shrink-0 tabular-nums">
+                    <time className="text-xs text-subtle shrink-0 tabular-nums">
                       {post.date}
                     </time>
                   </button>
@@ -222,7 +222,7 @@ export function CommandPalette({ posts, open, onClose }: Props) {
         </ul>
 
         {/* 하단 힌트 바 */}
-        <div className="px-4 py-2 border-t border-black/8 dark:border-white/8 flex items-center gap-4 text-[10px] text-zinc-400 dark:text-zinc-500">
+        <div className="px-4 py-2 border-t border-line flex items-center gap-4 text-[10px] text-subtle">
           <span>
             <kbd className="font-semibold">↑↓</kbd> 이동
           </span>

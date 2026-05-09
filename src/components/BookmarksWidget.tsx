@@ -38,7 +38,7 @@ export function BookmarksWidget({ posts }: { posts: PostMeta[] }) {
     <div className="mb-4">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 w-full rounded-xl px-3 py-2 text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100/80 dark:hover:bg-white/8 transition-colors"
+        className="flex items-center gap-2 w-full rounded-xl px-3 py-2 text-xs font-medium text-muted hover:bg-zinc-100/80 dark:hover:bg-white/8 transition-colors"
       >
         <svg
           className="size-3.5 text-amber-500 shrink-0"
@@ -65,7 +65,7 @@ export function BookmarksWidget({ posts }: { posts: PostMeta[] }) {
             <li key={p.slug}>
               <Link
                 href={`/posts/${p.slug}`}
-                className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100/80 dark:hover:bg-white/8 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+                className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs text-muted hover:bg-zinc-100/80 dark:hover:bg-white/8 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
               >
                 <span className="size-1 rounded-full bg-amber-400 shrink-0" />
                 <span className="truncate">{p.title}</span>

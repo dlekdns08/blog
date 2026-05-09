@@ -28,7 +28,7 @@ export function MobileHeader() {
   return (
     <>
       {/* ── 상단 바 ──────────────────────────────── */}
-      <header className="md:hidden sticky top-0 z-40 border-b border-black/10 dark:border-white/10 bg-white/85 dark:bg-zinc-950/85 backdrop-blur-md">
+      <header className="md:hidden sticky top-0 z-40 border-b border-line bg-white/85 dark:bg-zinc-950/85 backdrop-blur-md">
         <div className="flex h-14 items-center justify-between px-4">
           {/* 로고 */}
           <Link href="/" className="flex items-center gap-2 min-w-0 shrink-0">
@@ -81,14 +81,14 @@ export function MobileHeader() {
         }`}
       >
         {/* 드로어 헤더 */}
-        <div className="flex items-center justify-between px-5 h-14 border-b border-black/8 dark:border-white/8 shrink-0">
+        <div className="flex items-center justify-between px-5 h-14 border-b border-line shrink-0">
           <Link href="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
             <div className="size-8 rounded-xl bg-gradient-to-br from-violet-100 to-violet-200 dark:from-violet-500/25 dark:to-violet-600/15 flex items-center justify-center text-base shadow-sm shrink-0">
               🐨
             </div>
             <div>
               <div className="text-xs font-bold text-zinc-900 dark:text-white leading-tight">이다운</div>
-              <div className="text-[10px] text-zinc-400 dark:text-zinc-500 leading-tight">코알라 오딧세이</div>
+              <div className="text-[10px] text-subtle leading-tight">코알라 오딧세이</div>
             </div>
           </Link>
           <button
@@ -116,7 +116,7 @@ export function MobileHeader() {
                     : "text-zinc-500 hover:bg-zinc-100/80 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/8 dark:hover:text-white"
                 }`}
               >
-                <span className={active ? "text-violet-600 dark:text-violet-400" : "text-zinc-400 dark:text-zinc-500"}>
+                <span className={active ? "text-accent" : "text-subtle"}>
                   {icon}
                 </span>
                 {label}
@@ -126,7 +126,7 @@ export function MobileHeader() {
         </nav>
 
         {/* 드로어 하단 고정 영역 */}
-        <div className="shrink-0 border-t border-black/8 dark:border-white/8 px-4 pt-4 pb-6 space-y-4">
+        <div className="shrink-0 border-t border-line px-4 pt-4 pb-6 space-y-4">
           {/* 구독 폼 */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-50 to-violet-100/50 dark:from-violet-500/10 dark:to-violet-600/5 p-4 border border-violet-100 dark:border-violet-500/15">
             <SubscribeForm />

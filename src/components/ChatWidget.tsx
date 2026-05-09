@@ -156,7 +156,7 @@ export function ChatWidget() {
     <>
       {/* 채팅 패널 */}
       {open && (
-        <div role="dialog" aria-modal="true" aria-label="AI 채팅" className="fixed bottom-20 right-4 z-50 w-80 sm:w-96 flex flex-col rounded-2xl shadow-2xl border border-black/8 dark:border-white/10 bg-white dark:bg-zinc-900 overflow-hidden" style={{ maxHeight: "min(560px, calc(100dvh - 100px))" }}>
+        <div role="dialog" aria-modal="true" aria-label="AI 채팅" className="fixed bottom-20 right-4 z-50 w-80 sm:w-96 flex flex-col rounded-2xl shadow-2xl border border-line bg-panel overflow-hidden" style={{ maxHeight: "min(560px, calc(100dvh - 100px))" }}>
 
           {/* 헤더 */}
           <div className="flex items-center gap-2.5 px-4 py-3 border-b border-black/6 dark:border-white/8 bg-gradient-to-r from-violet-50 to-violet-100/50 dark:from-violet-500/10 dark:to-violet-600/5 shrink-0">
@@ -166,11 +166,11 @@ export function ChatWidget() {
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-zinc-900 dark:text-white leading-tight">AI 어시스턴트</p>
               {contextTitle ? (
-                <p className="text-[11px] text-violet-600 dark:text-violet-400 truncate leading-tight mt-0.5">
+                <p className="text-[11px] text-accent truncate leading-tight mt-0.5">
                   📄 {contextTitle}
                 </p>
               ) : (
-                <p className="text-[11px] text-zinc-400 dark:text-zinc-500 leading-tight mt-0.5">코알라 오딧세이</p>
+                <p className="text-[11px] text-subtle leading-tight mt-0.5">코알라 오딧세이</p>
               )}
             </div>
             <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-black/5 dark:hover:bg-white/8 transition-colors">
@@ -183,24 +183,24 @@ export function ChatWidget() {
             {messages.length === 0 && (
               <div className="text-center py-8">
                 <div className="text-3xl mb-2">🐨</div>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                <p className="text-sm text-muted">
                   {contextTitle ? `"${contextTitle}"에 대해` : "블로그에 대해"}
                 </p>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">무엇이든 물어보세요!</p>
+                <p className="text-sm text-muted">무엇이든 물어보세요!</p>
               </div>
             )}
 
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 {msg.role === "assistant" && (
-                  <div className="size-6 rounded-lg bg-violet-100 dark:bg-violet-500/20 flex items-center justify-center text-violet-600 dark:text-violet-400 shrink-0 mr-2 mt-0.5">
+                  <div className="size-6 rounded-lg bg-violet-100 dark:bg-violet-500/20 flex items-center justify-center text-accent shrink-0 mr-2 mt-0.5">
                     <SparkleIcon />
                   </div>
                 )}
                 <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words ${
                   msg.role === "user"
                     ? "bg-violet-500 dark:bg-violet-600 text-white rounded-br-sm"
-                    : "bg-zinc-100 dark:bg-white/8 text-zinc-800 dark:text-zinc-200 rounded-bl-sm"
+                    : "bg-zinc-100 dark:bg-white/8 text-body rounded-bl-sm"
                 }`}>
                   {msg.content}
                   {msg.role === "assistant" && msg.content === "" && (
@@ -218,7 +218,7 @@ export function ChatWidget() {
 
           {/* 입력 영역 */}
           <div className="shrink-0 px-3 pb-3 pt-2 border-t border-black/6 dark:border-white/8">
-            <div className="flex items-end gap-2 rounded-xl border border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-white/5 px-3 py-2 focus-within:border-violet-400 dark:focus-within:border-violet-500/60 transition-colors">
+            <div className="flex items-end gap-2 rounded-xl border border-line bg-zinc-50 dark:bg-white/5 px-3 py-2 focus-within:border-violet-400 dark:focus-within:border-violet-500/60 transition-colors">
               <textarea
                 ref={inputRef}
                 value={input}
@@ -227,7 +227,7 @@ export function ChatWidget() {
                 placeholder="메시지를 입력하세요..."
                 rows={1}
                 disabled={loading}
-                className="flex-1 resize-none bg-transparent text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 outline-none leading-relaxed max-h-28 overflow-y-auto disabled:opacity-50"
+                className="flex-1 resize-none bg-transparent text-sm text-body placeholder-zinc-400 dark:placeholder-zinc-600 outline-none leading-relaxed max-h-28 overflow-y-auto disabled:opacity-50"
                 style={{ minHeight: "1.5rem" }}
                 onInput={(e) => {
                   const el = e.currentTarget;

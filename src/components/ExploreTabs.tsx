@@ -142,13 +142,13 @@ export function ExploreTabs({
       {/* 헤더 */}
       <div>
         <h1 className="text-xl font-bold tracking-tight mb-1">탐색</h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="text-sm text-muted">
           블로그 데이터를 다양한 시각화로 살펴봅니다.
         </p>
       </div>
 
       {/* 탭 버튼 */}
-      <div className="flex gap-1 rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-1 w-fit">
+      <div className="flex gap-1 rounded-xl border border-line bg-surface p-1 w-fit">
         {TABS.map((t) => {
           const Icon = t.icon;
           return (
@@ -161,7 +161,7 @@ export function ExploreTabs({
                   : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
               }`}
             >
-              <span className={tab === t.id ? "text-violet-600 dark:text-violet-400" : "text-zinc-400 dark:text-zinc-500"}>
+              <span className={tab === t.id ? "text-accent" : "text-subtle"}>
                 <Icon />
               </span>
               {t.label}
@@ -176,10 +176,10 @@ export function ExploreTabs({
       {tab === "wordcloud" && (
         <div className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
               워드 클라우드
             </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-muted">
               블로그 글의 제목·설명·태그에서 추출한 핵심 키워드입니다.
             </p>
           </div>
@@ -191,10 +191,10 @@ export function ExploreTabs({
       {tab === "arxiv" && (
         <div className="space-y-8">
           <div className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
               arXiv 논문 그래프
             </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-muted">
               cs.CL · cs.LG · cs.AI 최신 논문을 매일 수집하고 시맨틱 유사도·공저자 관계로 지식 그래프를 구축합니다.
             </p>
           </div>
@@ -203,7 +203,7 @@ export function ExploreTabs({
           <div className="grid grid-cols-3 gap-3">
             {arxivLoading
               ? Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-4">
+                  <div key={i} className="rounded-xl border border-line bg-surface p-4">
                     <Skeleton className="h-3 w-16 mb-2" />
                     <Skeleton className="h-6 w-20" />
                   </div>
@@ -213,8 +213,8 @@ export function ExploreTabs({
                   { label: "관계 엣지", value: stats?.relationCount ?? 0, unit: "개" },
                   { label: "저자", value: stats?.authorCount ?? 0, unit: "명" },
                 ].map((s) => (
-                  <div key={s.label} className="rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-4">
-                    <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1">{s.label}</div>
+                  <div key={s.label} className="rounded-xl border border-line bg-surface p-4">
+                    <div className="text-xs text-subtle mb-1">{s.label}</div>
                     <div className="text-xl font-bold tabular-nums">
                       {s.value.toLocaleString()}
                       <span className="text-xs font-normal text-zinc-400 ml-1">{s.unit}</span>
@@ -226,7 +226,7 @@ export function ExploreTabs({
           {/* Category breakdown */}
           {!arxivLoading && stats && stats.categories.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">카테고리 분포</h2>
+              <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">카테고리 분포</h2>
               <div className="space-y-2">
                 {stats.categories.map(({ primary_category, cnt }) => {
                   const pct = Math.round((cnt / (stats.paperCount || 1)) * 100);
@@ -238,7 +238,7 @@ export function ExploreTabs({
                       <div className="flex-1 h-2 bg-zinc-100 dark:bg-white/8 rounded-full overflow-hidden">
                         <div className="h-full bg-violet-500 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
                       </div>
-                      <span className="w-8 text-right text-xs tabular-nums text-zinc-400 dark:text-zinc-500">{cnt}</span>
+                      <span className="w-8 text-right text-xs tabular-nums text-subtle">{cnt}</span>
                     </div>
                   );
                 })}
@@ -247,8 +247,8 @@ export function ExploreTabs({
           )}
 
           {/* Score weight explanation */}
-          <section className="rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-5 space-y-3">
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">중요도 점수 구성</h2>
+          <section className="rounded-xl border border-line bg-surface p-5 space-y-3">
+            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">중요도 점수 구성</h2>
             <div className="flex gap-2 h-2 rounded-full overflow-hidden">
               {SCORE_WEIGHTS.map((w) => (
                 <div key={w.label} className={`${w.color} rounded-full`} style={{ width: `${w.pct}%` }} />
@@ -258,7 +258,7 @@ export function ExploreTabs({
               {SCORE_WEIGHTS.map((w) => (
                 <div key={w.label} className="flex items-center gap-1.5">
                   <span className={`inline-block size-2 rounded-full ${w.color}`} />
-                  <span className="text-xs text-zinc-500 dark:text-zinc-400">{w.label} {w.pct}%</span>
+                  <span className="text-xs text-muted">{w.label} {w.pct}%</span>
                 </div>
               ))}
             </div>
@@ -267,7 +267,7 @@ export function ExploreTabs({
           <div className="h-px bg-black/8 dark:bg-white/8" />
 
           {/* Graph / List sub-tabs */}
-          <div className="flex gap-1 rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-1 w-fit">
+          <div className="flex gap-1 rounded-xl border border-line bg-surface p-1 w-fit">
             {(["graph", "list"] as const).map((t) => (
               <button
                 key={t}
@@ -285,7 +285,7 @@ export function ExploreTabs({
 
           {arxivTab === "graph" && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+              <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
                 논문 관계 그래프 — 상위 {graphData.papers.length.toLocaleString()}편
               </h2>
               {arxivLoading ? (
@@ -293,7 +293,7 @@ export function ExploreTabs({
               ) : (
                 <ArxivForceGraph papers={graphData.papers} relations={graphData.relations} />
               )}
-              <p className="text-xs text-zinc-400 dark:text-zinc-500 text-center">
+              <p className="text-xs text-subtle text-center">
                 노드 크기 = 중요도 점수 · 보라 선 = 시맨틱 유사도 · 초록 선 = 공저자
               </p>
             </section>
@@ -301,13 +301,13 @@ export function ExploreTabs({
 
           {arxivTab === "list" && (
             <section className="space-y-3">
-              <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">중요도 상위 논문</h2>
+              <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">중요도 상위 논문</h2>
               {arxivLoading ? (
                 <div className="space-y-2">
                   {Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}
                 </div>
               ) : papers.length === 0 ? (
-                <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-12">
+                <p className="text-sm text-subtle text-center py-12">
                   아직 수집된 논문이 없어요.{" "}
                   <code className="text-xs bg-zinc-100 dark:bg-white/8 px-1.5 py-0.5 rounded">arxiv-graph crawl</code>을 먼저 실행해 주세요.
                 </p>
@@ -319,18 +319,18 @@ export function ExploreTabs({
                         href={p.pdf_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-start gap-3 rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 transition-all"
+                        className="group flex items-start gap-3 rounded-xl border border-line bg-surface px-4 py-3 hover:border-violet-200 dark:hover:border-violet-500/30 transition-all"
                       >
                         <span className="text-xs tabular-nums font-bold text-zinc-300 dark:text-zinc-600 w-5 shrink-0 mt-0.5">{i + 1}</span>
                         <div className="flex-1 min-w-0 space-y-1.5">
-                          <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors line-clamp-2 leading-snug">
+                          <p className="text-sm font-medium text-body group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors line-clamp-2 leading-snug">
                             {p.title}
                           </p>
                           <div className="flex items-center gap-2">
                             <ScoreBar score={p.importance_score} max={maxScore} />
-                            <span className="shrink-0 text-xs tabular-nums text-zinc-400 dark:text-zinc-500 font-mono">{p.importance_score.toFixed(3)}</span>
+                            <span className="shrink-0 text-xs tabular-nums text-subtle font-mono">{p.importance_score.toFixed(3)}</span>
                           </div>
-                          <div className="flex items-center gap-2 text-[10px] text-zinc-400 dark:text-zinc-500">
+                          <div className="flex items-center gap-2 text-[10px] text-subtle">
                             <span>{p.primary_category}</span>
                             <span>·</span>
                             <span>{new Date(p.published_at).toLocaleDateString("ko-KR", { year: "numeric", month: "short", day: "numeric" })}</span>
@@ -350,10 +350,10 @@ export function ExploreTabs({
       {tab === "knowledge" && (
         <div className="space-y-8">
           <div className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
               포스트 지식 그래프
             </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-muted">
               블로그 글들의 관계를 시각화합니다. 같은 카테고리·태그를 공유하는 글끼리 연결됩니다.
             </p>
           </div>
@@ -365,8 +365,8 @@ export function ExploreTabs({
               { label: "카테고리", value: categoryCount, unit: "개" },
               { label: "연결 기준", value: "카테고리·태그", unit: "" },
             ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-4">
-                <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1">{s.label}</div>
+              <div key={s.label} className="rounded-xl border border-line bg-surface p-4">
+                <div className="text-xs text-subtle mb-1">{s.label}</div>
                 <div className="text-lg font-bold tabular-nums">
                   {s.value}
                   {s.unit && <span className="text-xs font-normal text-zinc-400 ml-1">{s.unit}</span>}
@@ -377,7 +377,7 @@ export function ExploreTabs({
 
           {/* 카테고리 분포 */}
           <section className="space-y-2">
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">카테고리</h2>
+            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">카테고리</h2>
             <div className="space-y-1.5">
               {categories.map((cat) => (
                 <div key={cat.key} className="flex items-center gap-3">
@@ -397,11 +397,11 @@ export function ExploreTabs({
           <div className="h-px bg-black/8 dark:bg-white/8" />
 
           <section className="space-y-3">
-            <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+            <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
               그래프 — 노드를 클릭하면 해당 글로 이동합니다
             </h2>
             <PostKnowledgeGraph />
-            <p className="text-xs text-zinc-400 dark:text-zinc-500 text-center">
+            <p className="text-xs text-subtle text-center">
               노드 크기 = 태그 수 · 색상 = 카테고리 · 엣지 굵기 = 유사도
             </p>
           </section>

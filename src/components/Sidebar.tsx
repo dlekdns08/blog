@@ -17,7 +17,7 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
   const cmdPalette = useCommandPalette();
 
   return (
-    <aside className="w-64 shrink-0 border-r border-black/8 dark:border-white/8 self-stretch">
+    <aside className="w-64 shrink-0 border-r border-line self-stretch">
       <div className="sticky top-0 h-dvh flex flex-col overflow-hidden px-4 py-7">
 
         {/* ── 헤더 ─────────────────────────────────────── */}
@@ -29,7 +29,7 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
             <div className="text-sm font-bold text-zinc-900 dark:text-white leading-tight">
               이다운
             </div>
-            <div className="text-xs text-zinc-400 dark:text-zinc-500 leading-tight mt-0.5 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+            <div className="text-xs text-subtle leading-tight mt-0.5 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
               코알라 오딧세이
             </div>
           </div>
@@ -38,7 +38,7 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
         {/* ── 검색 버튼 (⌘K) ──────────────────────────── */}
         <button
           onClick={() => cmdPalette?.open()}
-          className="flex items-center gap-2.5 w-full rounded-xl px-3 py-2 mb-4 text-sm text-zinc-400 border border-dashed border-black/10 dark:border-white/10 hover:border-violet-300 dark:hover:border-violet-500/40 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 transition-all duration-150 shrink-0"
+          className="flex items-center gap-2.5 w-full rounded-xl px-3 py-2 mb-4 text-sm text-zinc-400 border border-dashed border-line hover:border-violet-300 dark:hover:border-violet-500/40 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50/50 dark:hover:bg-violet-500/5 transition-all duration-150 shrink-0"
         >
           <SearchIcon />
           <span className="flex-1 text-left text-xs">검색</span>
@@ -61,7 +61,7 @@ export function Sidebar({ categories: _categories, posts }: { categories: unknow
                     : "text-zinc-500 hover:bg-zinc-100/80 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/8 dark:hover:text-white"
                 }`}
               >
-                <span className={active ? "text-violet-600 dark:text-violet-400" : "text-zinc-400 dark:text-zinc-500"}>
+                <span className={active ? "text-accent" : "text-subtle"}>
                   {icon}
                 </span>
                 {label}

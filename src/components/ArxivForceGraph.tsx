@@ -595,7 +595,7 @@ export function ArxivForceGraph({
   if (papers.length === 0) {
     return (
       <div
-        className="flex items-center justify-center rounded-2xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-zinc-400 dark:text-zinc-500"
+        className="flex items-center justify-center rounded-2xl border border-line bg-surface text-sm text-subtle"
         style={{ height: graphH }}
       >
         아직 수집된 논문이 없어요.{" "}
@@ -629,7 +629,7 @@ export function ArxivForceGraph({
   return (
     <div
       ref={wrapRef}
-      className="relative rounded-2xl border border-black/8 dark:border-white/10 overflow-hidden"
+      className="relative rounded-2xl border border-line overflow-hidden"
       style={{ height: graphH, background: "transparent" }}
     >
       {/* ── 2D Canvas ────────────────────────────────────────── */}

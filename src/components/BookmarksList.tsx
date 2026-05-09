@@ -44,11 +44,11 @@ export function BookmarksList({ posts }: { posts: PostMeta[] }) {
   }
   if (bookmarks.length === 0) {
     return (
-      <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 text-center">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-1">
+      <div className="rounded-xl border border-divider p-8 text-center">
+        <p className="text-sm text-muted mb-1">
           아직 저장한 글이 없어요.
         </p>
-        <p className="text-xs text-zinc-400 dark:text-zinc-500">
+        <p className="text-xs text-subtle">
           글 페이지에서 북마크 버튼을 눌러 저장해 보세요.
         </p>
       </div>
@@ -64,7 +64,7 @@ export function BookmarksList({ posts }: { posts: PostMeta[] }) {
             <div className="group flex items-start gap-3 rounded-xl border border-black/8 bg-white p-4 shadow-sm hover:shadow-md transition-all dark:border-white/10 dark:bg-white/5">
               <Link href={`/posts/${p.slug}`} className="flex-1 min-w-0">
                 {catLabel && (
-                  <p className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 mb-0.5">
+                  <p className="text-[11px] font-medium text-subtle mb-0.5">
                     {catLabel}
                   </p>
                 )}
@@ -72,13 +72,13 @@ export function BookmarksList({ posts }: { posts: PostMeta[] }) {
                   {p.title}
                 </p>
                 {p.description && (
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-1">
+                  <p className="text-xs text-muted mt-0.5 line-clamp-1">
                     {p.description}
                   </p>
                 )}
               </Link>
               <div className="flex flex-col items-end gap-1 shrink-0">
-                <time className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
+                <time className="text-xs text-subtle tabular-nums">
                   {formatRelativeDate(p.date)}
                 </time>
                 <button

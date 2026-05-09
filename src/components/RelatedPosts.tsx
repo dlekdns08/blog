@@ -33,7 +33,7 @@ export function RelatedPosts({ current, all }: { current: PostMeta; all: PostMet
 
   return (
     <section className="mt-12">
-      <h2 className="mb-4 text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+      <h2 className="mb-4 text-sm font-semibold text-muted uppercase tracking-widest">
         관련 글
       </h2>
       <ul className="space-y-2">
@@ -47,16 +47,16 @@ export function RelatedPosts({ current, all }: { current: PostMeta; all: PostMet
               >
                 <div className="flex-1 min-w-0">
                   {catLabel && (
-                    <p className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 mb-0.5">{catLabel}</p>
+                    <p className="text-[11px] font-medium text-subtle mb-0.5">{catLabel}</p>
                   )}
                   <p className="text-sm font-semibold text-zinc-900 group-hover:text-violet-700 dark:text-zinc-100 dark:group-hover:text-violet-300 transition-colors truncate">
                     {p.title}
                   </p>
                   {p.description && (
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-1">{p.description}</p>
+                    <p className="text-xs text-muted mt-0.5 line-clamp-1">{p.description}</p>
                   )}
                 </div>
-                <time className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500 tabular-nums mt-0.5">
+                <time className="shrink-0 text-xs text-subtle tabular-nums mt-0.5">
                   {formatRelativeDate(p.date)}
                 </time>
               </Link>

@@ -18,12 +18,12 @@ function NavCard({
   return (
     <Link
       href={`/posts/${post.slug}`}
-      className={`group flex flex-col h-full rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-4 hover:border-violet-200 dark:hover:border-violet-500/30 hover:shadow-sm transition-all duration-150 ${
+      className={`group flex flex-col h-full rounded-xl border border-line bg-surface p-4 hover:border-violet-200 dark:hover:border-violet-500/30 hover:shadow-sm transition-all duration-150 ${
         isPrev ? "" : "text-right"
       }`}
     >
       <span
-        className={`inline-flex items-center gap-1 text-[10px] font-medium text-zinc-400 dark:text-zinc-500 mb-2 ${
+        className={`inline-flex items-center gap-1 text-[10px] font-medium text-subtle mb-2 ${
           isPrev ? "" : "justify-end"
         }`}
       >
@@ -59,11 +59,11 @@ function NavCard({
           </svg>
         )}
       </span>
-      <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors line-clamp-2 leading-snug">
+      <span className="text-sm font-medium text-body group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors line-clamp-2 leading-snug">
         {post.title}
       </span>
       {post.category && (
-        <span className="mt-2 text-[10px] text-zinc-400 dark:text-zinc-500">
+        <span className="mt-2 text-[10px] text-subtle">
           {CATEGORY_CONFIG[post.category]?.icon}{" "}
           {CATEGORY_CONFIG[post.category]?.label ?? post.category}
         </span>

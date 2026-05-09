@@ -49,7 +49,7 @@ export function ArxivLiveFeed() {
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between px-1">
-        <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-subtle">
           최신 논문
         </p>
         <div className="flex gap-0.5">
@@ -73,7 +73,7 @@ export function ArxivLiveFeed() {
         href={p.pdf_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="group block rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2.5 hover:border-violet-200 dark:hover:border-violet-500/30 transition-all"
+        className="group block rounded-xl border border-line bg-surface px-3 py-2.5 hover:border-violet-200 dark:hover:border-violet-500/30 transition-all"
       >
         <div className="flex items-start gap-2">
           <span
@@ -81,10 +81,10 @@ export function ArxivLiveFeed() {
             style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}` }}
           />
           <div className="min-w-0">
-            <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors line-clamp-2 leading-snug">
+            <p className="text-xs font-medium text-body group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors line-clamp-2 leading-snug">
               {p.title}
             </p>
-            <div className="mt-1 flex items-center gap-1.5 text-[10px] text-zinc-400 dark:text-zinc-500">
+            <div className="mt-1 flex items-center gap-1.5 text-[10px] text-subtle">
               <span style={{ color }}>{p.primary_category}</span>
               <span>·</span>
               <span className="font-mono">{p.importance_score.toFixed(3)}</span>

@@ -518,7 +518,7 @@ export function PostKnowledgeGraph() {
   if (loading) {
     return (
       <div
-        className="rounded-2xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 animate-pulse"
+        className="rounded-2xl border border-line bg-surface animate-pulse"
         style={{ height: graphH }}
       />
     );
@@ -528,7 +528,7 @@ export function PostKnowledgeGraph() {
   return (
     <div
       ref={wrapRef}
-      className="relative rounded-2xl border border-black/8 dark:border-white/10 overflow-hidden"
+      className="relative rounded-2xl border border-line overflow-hidden"
       style={{ height: graphH }}
     >
       {/* ── 2D Canvas ────────────────────────────────────────── */}

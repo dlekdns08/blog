@@ -114,7 +114,7 @@ export function KoalaRanking() {
           <p className="text-sm font-semibold text-violet-700 dark:text-violet-300 mb-1">
             새 기록: {pendingScore}점
           </p>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+          <p className="text-xs text-muted mb-3">
             닉네임을 입력하고 랭킹에 등록해보세요.
           </p>
           <div className="flex gap-2">
@@ -125,7 +125,7 @@ export function KoalaRanking() {
               onKeyDown={(e) => { if (e.key === "Enter") submit(); }}
               placeholder="익명 코알라"
               maxLength={20}
-              className="flex-1 rounded-lg px-3 py-2 text-sm bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 focus:outline-none focus:border-violet-400 dark:focus:border-violet-500/60"
+              className="flex-1 rounded-lg px-3 py-2 text-sm bg-panel border border-line focus:outline-none focus:border-violet-400 dark:focus:border-violet-500/60"
             />
             <button
               onClick={submit}
@@ -144,7 +144,7 @@ export function KoalaRanking() {
         </div>
       )}
 
-      <div className="rounded-2xl border border-black/8 dark:border-white/8 bg-white dark:bg-zinc-900/40 overflow-hidden">
+      <div className="rounded-2xl border border-line bg-panel/40 overflow-hidden">
         {loading ? (
           <p className="text-sm text-zinc-400 text-center py-10">불러오는 중…</p>
         ) : rankings.length === 0 ? (
@@ -167,7 +167,7 @@ export function KoalaRanking() {
                   <span className="flex-1 truncate text-zinc-800 dark:text-zinc-100">
                     {r.nickname || "익명 코알라"}
                   </span>
-                  <span className="font-bold tabular-nums text-violet-600 dark:text-violet-400">
+                  <span className="font-bold tabular-nums text-accent">
                     {r.score.toLocaleString()}
                   </span>
                 </li>

@@ -18,7 +18,7 @@ type AddingState = { level: 1 | 2 | 3; value: string }
 
 const PILL = 'px-3 py-1.5 text-sm rounded-lg border transition-colors cursor-pointer select-none'
 const PILL_ACTIVE = 'border-violet-500 bg-violet-50 dark:bg-violet-950 text-violet-700 dark:text-violet-300 font-medium'
-const PILL_IDLE = 'border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-violet-300 dark:hover:border-violet-700 text-zinc-700 dark:text-zinc-300'
+const PILL_IDLE = 'border-divider bg-panel hover:border-violet-300 dark:hover:border-violet-700 text-body'
 const PILL_NEW = 'border-dashed border-zinc-300 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-900 text-zinc-500 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-600'
 
 export function CategoryPicker({ onChange }: Props) {
@@ -150,7 +150,7 @@ export function CategoryPicker({ onChange }: Props) {
           onChange={(e) => setAdding({ level, value: e.target.value })}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="px-2 py-1.5 text-sm rounded-lg border border-violet-400 outline-none w-32 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100"
+          className="px-2 py-1.5 text-sm rounded-lg border border-violet-400 outline-none w-32 bg-panel text-foreground"
         />
         <button
           type="button"
@@ -182,7 +182,7 @@ export function CategoryPicker({ onChange }: Props) {
     <div className="space-y-4">
       {/* L1 카테고리 */}
       <div>
-        <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">
+        <p className="text-xs font-medium text-muted mb-2">
           카테고리 <span className="text-red-500">*</span>
         </p>
         <div className="flex flex-wrap gap-2">
@@ -203,7 +203,7 @@ export function CategoryPicker({ onChange }: Props) {
       {/* L2 서브카테고리 */}
       {category && (
         <div>
-          <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">
+          <p className="text-xs font-medium text-muted mb-2">
             서브카테고리{' '}
             <span className="font-normal text-zinc-400">(선택 — 건너뛰면 {category}/ 바로 저장)</span>
           </p>
@@ -226,7 +226,7 @@ export function CategoryPicker({ onChange }: Props) {
       {/* L3 세부 분류 */}
       {subcategory && (
         <div>
-          <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">
+          <p className="text-xs font-medium text-muted mb-2">
             세부 분류{' '}
             <span className="font-normal text-zinc-400">(선택)</span>
           </p>

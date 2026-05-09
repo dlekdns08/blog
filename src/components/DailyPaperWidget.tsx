@@ -23,7 +23,7 @@ function Skeleton() {
   return (
     <div className="space-y-3">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-4 space-y-2 animate-pulse">
+        <div key={i} className="rounded-xl border border-line bg-surface p-4 space-y-2 animate-pulse">
           <div className="h-3 bg-zinc-100 dark:bg-white/8 rounded w-3/4" />
           <div className="h-3 bg-zinc-100 dark:bg-white/8 rounded w-full" />
           <div className="h-3 bg-zinc-100 dark:bg-white/8 rounded w-1/2" />
@@ -51,10 +51,10 @@ export function DailyPaperWidget() {
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+        <h2 className="text-xs font-semibold text-subtle uppercase tracking-widest">
           오늘의 논문
         </h2>
-        <Link href="/explore?tab=arxiv" className="text-xs text-violet-600 dark:text-violet-400 hover:underline">
+        <Link href="/explore?tab=arxiv" className="text-xs text-accent hover:underline">
           더 보기 →
         </Link>
       </div>
@@ -68,7 +68,7 @@ export function DailyPaperWidget() {
               href={p.pdf_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-3.5 hover:border-violet-200 dark:hover:border-violet-500/30 hover:shadow-sm transition-all"
+              className="group block rounded-xl border border-line bg-surface px-4 py-3.5 hover:border-violet-200 dark:hover:border-violet-500/30 hover:shadow-sm transition-all"
             >
               <div className="flex items-start gap-2.5">
                 <span
@@ -82,7 +82,7 @@ export function DailyPaperWidget() {
                     {p.title}
                   </p>
                   {p.summary && (
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-2">
+                    <p className="text-xs text-muted leading-relaxed line-clamp-2">
                       {p.summary}
                     </p>
                   )}
@@ -96,7 +96,7 @@ export function DailyPaperWidget() {
                     >
                       {p.primary_category}
                     </span>
-                    <span className="text-zinc-400 dark:text-zinc-500 tabular-nums">
+                    <span className="text-subtle tabular-nums">
                       중요도 {p.importance_score.toFixed(3)}
                     </span>
                   </div>

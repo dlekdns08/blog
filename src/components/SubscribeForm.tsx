@@ -40,7 +40,7 @@ export function SubscribeForm() {
         </p>
       </div>
       {status === "done" ? (
-        <p className="text-xs text-violet-600 dark:text-violet-400 leading-relaxed">{message}</p>
+        <p className="text-xs text-accent leading-relaxed">{message}</p>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <input
@@ -49,7 +49,7 @@ export function SubscribeForm() {
             placeholder="이메일 주소"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg border border-violet-200 dark:border-violet-500/25 bg-white dark:bg-zinc-900/50 px-3 py-1.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:focus:ring-violet-500/40 transition-shadow"
+            className="w-full rounded-lg border border-violet-200 dark:border-violet-500/25 bg-panel/50 px-3 py-1.5 text-xs text-foreground placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:focus:ring-violet-500/40 transition-shadow"
           />
           <button
             type="submit"

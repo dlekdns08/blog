@@ -108,13 +108,13 @@ export function PostForm({
         {mode === 'create' && (
           <>
             {/* 카테고리 선택기 */}
-            <div className="md:col-span-2 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 space-y-4">
+            <div className="md:col-span-2 rounded-xl border border-divider p-4 space-y-4">
               <CategoryPicker onChange={handleCategoryChange} />
 
               {/* 파일명 입력 */}
               {catParts.category && (
                 <div>
-                  <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 block mb-2">
+                  <label className="text-xs font-medium text-muted block mb-2">
                     파일명 <span className="text-red-500">*</span>
                     <span className="font-normal text-zinc-400 ml-1">(영문, 숫자, -, _ 사용)</span>
                   </label>
@@ -122,17 +122,17 @@ export function PostForm({
                     value={filename}
                     onChange={(e) => setFilename(e.target.value.replace(/[^a-zA-Z0-9_-]/g, '-'))}
                     placeholder="my-new-post"
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-none focus:ring-2 focus:ring-violet-500 font-mono"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-divider bg-panel outline-none focus:ring-2 focus:ring-violet-500 font-mono"
                   />
                 </div>
               )}
 
               {/* 최종 slug 미리보기 */}
               {computedSlug && (
-                <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                <div className="flex items-center gap-2 text-xs text-subtle font-mono bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2 rounded-lg border border-zinc-100 dark:border-zinc-800">
                   <span className="text-zinc-300 dark:text-zinc-600">경로:</span>
-                  <span className="text-violet-600 dark:text-violet-400">content/posts/</span>
-                  <span className="text-zinc-700 dark:text-zinc-300">{computedSlug}.md</span>
+                  <span className="text-accent">content/posts/</span>
+                  <span className="text-body">{computedSlug}.md</span>
                 </div>
               )}
             </div>
@@ -148,7 +148,7 @@ export function PostForm({
             onChange={(e) => setTitle(e.target.value)}
             placeholder="글 제목"
             required
-            className="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-divider bg-panel outline-none focus:ring-2 focus:ring-violet-500"
           />
         </div>
 
@@ -161,7 +161,7 @@ export function PostForm({
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            className="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-divider bg-panel outline-none focus:ring-2 focus:ring-violet-500"
           />
         </div>
 
@@ -171,7 +171,7 @@ export function PostForm({
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             placeholder="태그1, 태그2, 태그3"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-divider bg-panel outline-none focus:ring-2 focus:ring-violet-500"
           />
         </div>
 
@@ -181,7 +181,7 @@ export function PostForm({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="글 설명 (선택사항)"
-            className="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-divider bg-panel outline-none focus:ring-2 focus:ring-violet-500"
           />
         </div>
       </div>

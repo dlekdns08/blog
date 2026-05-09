@@ -35,7 +35,7 @@ export function PostAttachments({ attachments }: { attachments: Attachment[] }) 
 
   return (
     <section className="mt-10">
-      <h2 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+      <h2 className="mb-3 text-sm font-semibold text-body">
         첨부 파일
       </h2>
       <ul className="space-y-2">
@@ -54,7 +54,7 @@ export function PostAttachments({ attachments }: { attachments: Attachment[] }) 
                   <span className="truncate font-medium text-zinc-800 group-hover:text-violet-700 dark:text-zinc-200 dark:group-hover:text-violet-300 transition-colors">
                     {a.name}
                   </span>
-                  <span className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500">
+                  <span className="shrink-0 text-xs text-subtle">
                     {filename}
                   </span>
                 </span>

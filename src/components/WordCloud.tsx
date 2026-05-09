@@ -6,7 +6,7 @@ import Link from "next/link";
 type Word = { text: string; value: number };
 
 const COLORS = [
-  "text-violet-600 dark:text-violet-400",
+  "text-accent",
   "text-indigo-600 dark:text-indigo-400",
   "text-sky-500 dark:text-sky-400",
   "text-emerald-600 dark:text-emerald-400",
@@ -14,7 +14,7 @@ const COLORS = [
   "text-rose-500 dark:text-rose-400",
   "text-violet-500 dark:text-violet-300",
   "text-indigo-500 dark:text-indigo-300",
-  "text-zinc-500 dark:text-zinc-400",
+  "text-muted",
 ];
 
 // Subtle rotations for organic look
@@ -43,7 +43,7 @@ export function WordCloud() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-72 text-zinc-400 dark:text-zinc-500">
+      <div className="flex items-center justify-center min-h-72 text-subtle">
         <span className="text-sm animate-pulse">단어 구름을 불러오는 중...</span>
       </div>
     );
@@ -51,7 +51,7 @@ export function WordCloud() {
 
   if (error || !words.length) {
     return (
-      <div className="flex items-center justify-center min-h-72 text-zinc-400 dark:text-zinc-500">
+      <div className="flex items-center justify-center min-h-72 text-subtle">
         <span className="text-sm">단어 데이터를 불러올 수 없어요.</span>
       </div>
     );
@@ -62,7 +62,7 @@ export function WordCloud() {
   const range = maxVal - minVal || 1;
 
   return (
-    <div className="relative rounded-2xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/5 p-8 shadow-sm">
+    <div className="relative rounded-2xl border border-line bg-surface p-8 shadow-sm">
       <div className="flex flex-wrap gap-x-4 gap-y-5 justify-center items-center">
         {words.map((word, i) => {
           const norm = (word.value - minVal) / range;
@@ -90,7 +90,7 @@ export function WordCloud() {
           );
         })}
       </div>
-      <p className="mt-8 text-center text-xs text-zinc-400 dark:text-zinc-500">
+      <p className="mt-8 text-center text-xs text-subtle">
         단어를 클릭하면 관련 글을 검색해요
       </p>
     </div>
