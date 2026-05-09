@@ -686,7 +686,7 @@ export function ArxivForceGraph({
       {/* ── 2D/3D Toggle ─────────────────────────────────────── */}
       <button
         onClick={() => setIs3D((v) => !v)}
-        className="absolute top-3 right-3 z-20 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-semibold bg-black/25 backdrop-blur-sm text-white/70 hover:text-white hover:bg-black/40 transition-colors border border-white/10 select-none"
+        className="absolute top-3 right-3 z-20 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-semibold bg-zinc-900/75 backdrop-blur-sm text-white hover:bg-zinc-800/85 transition-colors border border-white/10 select-none"
       >
         {is3D ? <><Icon2D />2D</> : <><Icon3D />3D</>}
       </button>
