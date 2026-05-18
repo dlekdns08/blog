@@ -4,18 +4,17 @@ date: '2026-05-09'
 ---
 ## 목차
 
-- [ML 엔지니어 업무 영역](#ml-엔지니어-업무-영역)
 - [예상 문제 20선](#예상-문제-20선)
   - **A. 분류/회귀 (Tabular ML)**
-    - [문제 1. 쿠키런 게임로그 기반 이탈 유저 예측](#문제-1-쿠키런-게임로그-기반-이탈-유저-예측)
-    - [문제 4. 쿠키런 IAP 매출 예측 (LTV30)](#문제-4-쿠키런-iap-매출-예측-ltv30)
+    - [문제 1. 게임로그 기반 이탈 유저 예측](#문제-1-게임로그-기반-이탈-유저-예측)
+    - [문제 4. IAP 매출 예측 (LTV30)](#문제-4-iap-매출-예측-ltv30)
     - [문제 5. 매크로 어뷰징 유저 탐지](#문제-5-매크로-어뷰징-유저-탐지)
   - **B. 추천 시스템**
-    - [문제 6. 쿠키런: 킹덤 쿠키 추천 시스템](#문제-6-쿠키런-킹덤-쿠키-추천-시스템)
+    - [문추천 시스템](#문제-6-킹덤--추천-시스템)
   - **C. 시계열 예측**
     - [문제 7. 일별 DAU 예측](#문제-7-일별-dau-예측)
   - **D. 강화학습**
-    - [문제 2. 쿠키 던전 그리드 환경 + PPO/REINFORCE](#문제-2-쿠키-던전-그리드-환경--ppo-reinforce)
+    - [문제 2.  던전 그리드 환경 + PPO/REINFORCE](#문제-2--던전-그리드-환경--ppo-reinforce)
     - [문제 8. 오븐브레이크 자동 점프 DQN](#문제-8-오븐브레이크-자동-점프-dqn)
     - [문제 9. 3-매치 퍼즐 자동 난이도 평가](#문제-9-3-매치-퍼즐-자동-난이도-평가)
   - **E. LLM / NLP 응용**
@@ -24,8 +23,8 @@ date: '2026-05-09'
     - [문제 11. 게임 스토리 자동 요약 봇](#문제-11-게임-스토리-자동-요약-봇)
     - [문제 12. 유저 문의 자동 분류 + 라우팅](#문제-12-유저-문의-자동-분류--라우팅)
   - **F. 컴퓨터 비전 / 생성형 AI**
-    - [문제 13. 쿠키 캐릭터 자동 검수](#문제-13-쿠키-캐릭터-자동-검수)
-    - [문제 14. 쿠키 풍 더미 이미지 생성기](#문제-14-쿠키-풍-더미-이미지-생성기)
+    - [문제 13.  캐릭터 자동 검수](#문제-13--캐릭터-자동-검수)
+    - [문제 14.  풍 더미 이미지 생성기](#문제-14--풍-더미-이미지-생성기)
   - **G. A/B 테스트 / 실험 분석**
     - [문제 15. 신규 결제 UI A/B 테스트 분석](#문제-15-신규-결제-ui-ab-테스트-분석)
   - **H. MLOps / 시스템 설계**
@@ -34,27 +33,9 @@ date: '2026-05-09'
   - **I. 데이터 엔지니어링 + ML**
     - [문제 18. 게임 이벤트 로그 funnel 분석](#문제-18-게임-이벤트-로그-funnel-분석)
   - **J. 클러스터링 / 세그멘테이션**
-    - [문제 19. 쿠키런 유저 페르소나 클러스터링](#문제-19-쿠키런-유저-페르소나-클러스터링)
+    - [문제 19.  유저 페르소나 클러스터링](#문제-19--유저-페르소나-클러스터링)
   - **K. 평가 / 검증**
     - [문제 20. 신구 번역 모델 비교 평가 시스템](#문제-20-신구-번역-모델-비교-평가-시스템)
-- [면접 준비 체크리스트](#면접-준비-체크리스트)
-
-
-## ML 엔지니어 업무 영역
-
-데브시스터즈 ML 엔지니어 채용 공고에 명시된 실제 업무 영역:
-
-| 영역 | 구체적 프로젝트 |
-|------|-------------|
-| LLM 번역 | 다국어 서비스를 위한 게임 텍스트 자동 번역 |
-| 강화학습 | 신규 스테이지 자동 플레이테스트 봇 (PPO 기반) |
-| 생성형 AI | 쿠키런 스타일 컨셉 이미지 생성 봇 |
-| ML 예측 | 마케팅 성과 예측 모델 (LTV, ROAS) |
-| MLOps | 모델 프로덕션 배포 및 지속적 성능 개선 |
-
-이 영역에서 출제될 가능성이 높은 문제 유형을 다음 섹션에서 다룬다.
-
----
 
 # 예상 문제 20선
 
@@ -62,7 +43,7 @@ date: '2026-05-09'
 
 ---
 
-### 문제 1. 쿠키런 게임로그 기반 이탈 유저 예측
+### 문제 1.  게임로그 기반 이탈 유저 예측
 
 **카테고리**: 이진 분류, Tabular ML
 **예상 시간**: 90분
@@ -70,7 +51,7 @@ date: '2026-05-09'
 #### 문제 설명
 
 ```
-용감한 쿠키 데이터팀은 최근 신규 유저들이 첫 7일 이내에 게임을 떠나는 비율이
+용감한  데이터팀은 최근 신규 유저들이 첫 7일 이내에 게임을 떠나는 비율이
 높다는 점을 알아냈다. 데이터팀은 게임 첫날 행동 로그를 보고 '7일 이내 이탈
 여부'를 예측하는 모델을 만들어, 위험군에게 푸시 알림으로 보상을 줄지 결정
 하는 시스템을 만들고자 한다.
@@ -229,7 +210,7 @@ print("submission.csv saved.")
 
 ---
 
-### 문제 4. 쿠키런 IAP 매출 예측 (LTV30)
+### 문제 4.  IAP 매출 예측 (LTV30)
 
 **카테고리**: 회귀, Tabular ML, Zero-Inflated
 **예상 시간**: 90분
@@ -528,7 +509,7 @@ def predict_with_action(X_new, model, iso, threshold):
 
 ---
 
-### 문제 6. 쿠키런: 킹덤 쿠키 추천 시스템
+### 문제 6. : 킹덤  추천 시스템
 
 **카테고리**: 추천 시스템, Item-Item Embedding, Beam Search
 **예상 시간**: 90분
@@ -536,7 +517,7 @@ def predict_with_action(X_new, model, iso, threshold):
 #### 문제 설명
 
 ```
-쿠키런: 킹덤에는 200종 이상의 쿠키가 있다. 유저가 새 덱을 구성할 때 추천해
+: 킹덤에는 200종 이상의 가 있다. 유저가 새 덱을 구성할 때 추천해
 주는 시스템을 만들고자 한다.
 
 데이터
@@ -545,7 +526,7 @@ def predict_with_action(X_new, model, iso, threshold):
 - users.csv: user_id, level, league_tier, owned_cookies(list)
 
 요구사항
-1. 유저가 보유한 쿠키 내에서, 현재 메타에서 가장 승률이 높을 것으로
+1. 유저가 보유한  내에서, 현재 메타에서 가장 승률이 높을 것으로
    예상되는 5장 덱을 추천.
 2. 추천 이유를 자연어로 한 줄 설명.
 3. 콜드스타트 유저(전투 기록 < 10) 도 처리.
@@ -553,9 +534,9 @@ def predict_with_action(X_new, model, iso, threshold):
 
 #### 접근 방법
 
-- **Item2Vec**: 같은 덱에 함께 사용된 쿠키 임베딩을 word2vec 스타일로 학습
+- **Item2Vec**: 같은 덱에 함께 사용된  임베딩을 word2vec 스타일로 학습
 - **Deck Win Rate Predictor**: 덱(5장)이 주어졌을 때 승률 예측하는 모델
-- **추천 = Beam Search**: 보유한 쿠키 중 5장 조합을 탐색 (C(200,5) ≈ 25억 → 전수 불가)
+- **추천 = Beam Search**: 보유한  중 5장 조합을 탐색 (C(200,5) ≈ 25억 → 전수 불가)
 - **콜드스타트**: 레벨/리그 기반 segment 의 평균 메타 덱 fallback
 
 #### 풀이 코드
@@ -579,7 +560,7 @@ battles["ts"] = pd.to_datetime(battles["ts"])
 recent = battles[battles["ts"] >= battles["ts"].max() - pd.Timedelta(days=30)]
 
 # ============================================================
-# 2. Item2Vec: 덱 = 문장, 쿠키 = 단어
+# 2. Item2Vec: 덱 = 문장,  = 단어
 # ============================================================
 decks = [list(map(str, deck)) for deck in recent["deck"].tolist()]
 w2v = Word2Vec(
@@ -601,7 +582,7 @@ def cookie_emb(cid: int) -> np.ndarray:
 # ============================================================
 # 3. 덱 승률 예측 모델
 # ============================================================
-# Feature: 5명 쿠키의 임베딩 평균 + 통계 + 메타 정보
+# Feature: 5명 의 임베딩 평균 + 통계 + 메타 정보
 def deck_features(deck, opponent_deck=None):
     embs = np.stack([cookie_emb(c) for c in deck])
     feats = np.concatenate([
@@ -640,7 +621,7 @@ winrate_model.fit(
 # ============================================================
 def recommend_deck(owned_cookies, top_n=5, beam_width=20, sample_size=50):
     """
-    1) 보유한 쿠키 중 임베딩 norm 상위 N장 후보 추리기 (인기 쿠키)
+    1) 보유한  중 임베딩 norm 상위 N장 후보 추리기 (인기 )
     2) 1장씩 추가하면서 winrate 가 가장 높은 조합 beam_width 개 유지
     """
     # 후보 축소: 너무 많으면 시간 폭발
@@ -726,7 +707,7 @@ def recommend_with_coldstart(user_id):
 
 - **"오프라인 NDCG 가 좋아도 실제 클릭률은 별로면?"** → 오프라인 지표는 참고용, A/B 테스트가 최종 판단.
 - **"다양성을 어떻게 보장?"** → MMR(Maximal Marginal Relevance) 도입, 추천 결과의 임베딩 분산이 일정 이상 되도록 제약.
-- **"신규 쿠키 출시 시?"** → content-based feature (rarity, role, attack_type) 로 cold-start.
+- **"신규  출시 시?"** → content-based feature (rarity, role, attack_type) 로 cold-start.
 
 ---
 
@@ -912,7 +893,7 @@ plt.savefig("dau_forecast.png", dpi=100, bbox_inches="tight")
 
 ---
 
-### 문제 2. 쿠키 던전 그리드 환경 + PPO/REINFORCE
+### 문제 2.  던전 그리드 환경 + PPO/REINFORCE
 
 **카테고리**: 강화학습, Policy Gradient
 **예상 시간**: 60분
@@ -920,10 +901,10 @@ plt.savefig("dau_forecast.png", dpi=100, bbox_inches="tight")
 #### 문제 설명
 
 ```
-쿠키 던전이라는 5x5 격자 환경이 있다. 쿠키는 (0,0)에서 시작해 (4,4)의 골인
+ 던전이라는 5x5 격자 환경이 있다. 는 (0,0)에서 시작해 (4,4)의 골인
 지점까지 가야 한다. 격자 안에는 장애물 두 개와 보너스 젤리 한 개가 있다.
 
-상태: 쿠키의 (x, y) 좌표
+상태: 의 (x, y) 좌표
 행동: 상하좌우 4방향
 보상: 골인 +10, 장애물 -5, 젤리 +2, 매 스텝 -0.1
 
@@ -1101,7 +1082,7 @@ class ActorCritic(nn.Module):
 
 - **"REINFORCE 의 variance 문제 해결책?"** → returns 정규화 (간단), baseline V(s) 도입 (Actor-Critic), PPO 의 clipping (최종).
 - **"PPO 가 REINFORCE 보다 좋은 이유?"** → policy 업데이트 크기를 clipping ratio 로 제한 → 안정성↑, sample efficiency↑.
-- **"더 큰 환경(쿠키런: 모험의 탑)에 확장?"** → state representation 을 CNN, sparse reward 면 curiosity reward (RND), hierarchical RL.
+- **"더 큰 환경(: 모험의 탑)에 확장?"** → state representation 을 CNN, sparse reward 면 curiosity reward (RND), hierarchical RL.
 
 ---
 
@@ -1517,9 +1498,9 @@ mapper = IsotonicRegression(out_of_bounds="clip").fit(bot_rates, clear_rates)
 #### 문제 설명
 
 ```
-데브시스터즈는 신규 쿠키 캐릭터의 대사를 한국어에서 영어/일본어/중국어 간체로
-번역하는 도구를 만들고 있다. 단순 기계번역이 아니라 캐릭터의 톤(시니컬한 쿠키,
-명랑한 쿠키, 노년의 쿠키 등)을 유지해야 한다.
+신규  캐릭터의 대사를 한국어에서 영어/일본어/중국어 간체로
+번역하는 도구를 만들고 있다. 단순 기계번역이 아니라 캐릭터의 톤(시니컬한 ,
+명랑한 , 노년의  등)을 유지해야 한다.
 
 다음을 구현하라.
 1. OpenAI/Anthropic 등 임의의 LLM API 또는 로컬 모델을 사용한 번역 함수.
@@ -1712,13 +1693,13 @@ def register_new_character_cli(registry: ToneRegistry):
 if __name__ == "__main__":
     registry = ToneRegistry()
     registry.register(CharacterTone(
-        name="시니컬 쿠키",
+        name="시니컬 ",
         style_desc="냉소적, 짧고 단정적, 종종 비꼬는 어조. 감정 표현 최소화.",
         examples=[("어차피 안 될 거야.", "It won't work anyway."),
                   ("뭐, 별로 놀랍지도 않네.", "Well, not surprising.")]
     ))
     registry.register(CharacterTone(
-        name="명랑 쿠키",
+        name="명랑 ",
         style_desc="밝고 에너지 넘침, 감탄사 자주, 긍정적.",
         examples=[("우와! 정말 신나!", "Wow! So exciting!"),
                   ("같이 가자, 친구야!", "Let's go together, buddy!")]
@@ -1728,11 +1709,11 @@ if __name__ == "__main__":
 
     # 같은 대사를 두 캐릭터로 번역
     text = "이번 모험은 꽤 위험할 거야."
-    print("시니컬 →", translator.translate(text, "시니컬 쿠키", "en"))
-    print("명랑   →", translator.translate(text, "명랑 쿠키", "en"))
+    print("시니컬 →", translator.translate(text, "시니컬 ", "en"))
+    print("명랑   →", translator.translate(text, "명랑 ", "en"))
 
     # 캐시 hit 확인
-    translator.translate(text, "시니컬 쿠키", "en")  # 캐시에서 가져옴
+    translator.translate(text, "시니컬 ", "en")  # 캐시에서 가져옴
     print("\n캐시 통계:", translator.stats)
 ```
 
@@ -1962,7 +1943,7 @@ for text in samples:
 #### 문제 설명
 
 ```
-쿠키런: 킹덤의 신규 스토리 챕터가 추가됐다. 챕터당 텍스트는 약 30,000자.
+: 킹덤의 신규 스토리 챕터가 추가됐다. 챕터당 텍스트는 약 30,000자.
 다음 기능을 갖춘 요약 봇을 만들어라.
 
 1. 챕터 전체 요약 (300자 이내)
@@ -2235,7 +2216,7 @@ TEMPLATE_CATALOG = {
     "BUG_001": {"category": "bug_report", "title": "버그 신고 접수",
                 "body": "버그 신고 감사합니다. 재현 영상을..."},
     "GUI_001": {"category": "game_guide", "title": "게임 가이드 링크",
-                "body": "쿠키런 가이드는 다음 링크를 참고..."},
+                "body": " 가이드는 다음 링크를 참고..."},
     "REP_001": {"category": "report_user", "title": "신고 접수 안내",
                 "body": "신고 내용 검토 후 24시간 이내 조치..."},
     "OTH_001": {"category": "other", "title": "추가 문의 안내",
@@ -2397,7 +2378,7 @@ router = TicketRouter(analyzer)
 samples = [
     "T001: 어제 결제했는데 다이아가 안 들어왔어요. 즉시 환불해주세요!",
     "T002: 친구가 욕설을 했어요. 신고합니다.",
-    "T003: 오븐브레이크 새 쿠키 어떻게 얻나요?",
+    "T003: 오븐브레이크 새  어떻게 얻나요?",
     "T004: 갑자기 앱이 안 켜져요. 아이폰 15입니다.",
 ]
 for s in samples:
@@ -2421,7 +2402,7 @@ for s in samples:
 
 ---
 
-### 문제 13. 쿠키 캐릭터 자동 검수
+### 문제 13.  캐릭터 자동 검수
 
 **카테고리**: 컴퓨터 비전, 고전 CV + 임베딩, 이상 탐지
 **예상 시간**: 90분
@@ -2429,19 +2410,19 @@ for s in samples:
 #### 문제 설명
 
 ```
-디자이너가 새 쿠키 캐릭터의 액션 스프라이트 시트(800x800 PNG)를 만들어
+디자이너가 새  캐릭터의 액션 스프라이트 시트(800x800 PNG)를 만들어
 업로드한다. 다음을 자동 검수하라.
 
-1. 색상이 쿠키런 톤 가이드 범위 내인지 (정해진 팔레트 80% 이상 사용).
+1. 색상이  톤 가이드 범위 내인지 (정해진 팔레트 80% 이상 사용).
 2. 캐릭터 외곽이 깨끗한지 (반투명 픽셀, jaggy edge 검출).
 3. 알파 채널 누락 여부.
-4. 기존 쿠키들과 너무 유사하지 않은지 (표절/중복 방지).
+4. 기존 들과 너무 유사하지 않은지 (표절/중복 방지).
 ```
 
 #### 접근 방법
 
 - **1, 2, 3 은 고전 CV** 로 충분 (딥러닝 불필요)
-- **4 만 임베딩 모델** (CLIP / DINOv2) → 기존 쿠키 임베딩과 cosine similarity
+- **4 만 임베딩 모델** (CLIP / DINOv2) → 기존  임베딩과 cosine similarity
 - 디자이너용 시각적 피드백 (오버레이) 제공
 
 #### 풀이 코드
@@ -2468,11 +2449,11 @@ class ReviewResult:
     warnings: list[str] = field(default_factory=list)
 
 # ============================================================
-# 2. 쿠키런 톤 가이드 (예시 팔레트, Lab 색공간)
+# 2.  톤 가이드 (예시 팔레트, Lab 색공간)
 # ============================================================
 PALETTE_RGB = np.array([
-    [255, 220, 180],  # 쿠키 베이스
-    [240, 180, 140],  # 진한 쿠키
+    [255, 220, 180],  #  베이스
+    [240, 180, 140],  # 진한 
     [255, 250, 230],  # 밝은 부분
     [120, 80, 50],    # 어두운 부분 / 외곽선
     [255, 100, 100],  # 포인트 빨강
@@ -2549,7 +2530,7 @@ def check_alpha_present(img_rgba: np.ndarray) -> bool:
 # 6. 임베딩 기반 유사도 검사
 # ============================================================
 class CookieSimilarityChecker:
-    """기존 쿠키들과 너무 유사한지 검사."""
+    """기존 들과 너무 유사한지 검사."""
     def __init__(self):
         # 실제는 transformers 의 CLIP 또는 DINOv2 사용
         # from transformers import CLIPModel, CLIPProcessor
@@ -2598,7 +2579,7 @@ def review_cookie_sprite(image_path: str,
     if not palette_ok:
         result.issues.append(
             f"팔레트 일치율 {match_ratio:.1%} < 80%. "
-            f"쿠키런 톤 가이드 색상 사용 비율을 높여주세요."
+            f" 톤 가이드 색상 사용 비율을 높여주세요."
         )
         result.passed = False
 
@@ -2617,12 +2598,12 @@ def review_cookie_sprite(image_path: str,
     result.similar_to = similar_name
     if sim > 0.92:
         result.issues.append(
-            f"기존 쿠키 '{similar_name}' 와 유사도 {sim:.2%}. 표절 의심."
+            f"기존  '{similar_name}' 와 유사도 {sim:.2%}. 표절 의심."
         )
         result.passed = False
     elif sim > 0.85:
         result.warnings.append(
-            f"기존 쿠키 '{similar_name}' 와 유사도 {sim:.2%}. 검토 권장."
+            f"기존  '{similar_name}' 와 유사도 {sim:.2%}. 검토 권장."
         )
 
     return result
@@ -2653,7 +2634,7 @@ def make_feedback_overlay(img_rgba: np.ndarray, output_path: str):
 
 ---
 
-### 문제 14. 쿠키 풍 더미 이미지 생성기
+### 문제 14.  풍 더미 이미지 생성기
 
 **카테고리**: 생성형 AI, Stable Diffusion + LoRA, 안전성
 **예상 시간**: 90분
@@ -2661,21 +2642,21 @@ def make_feedback_overlay(img_rgba: np.ndarray, output_path: str):
 #### 문제 설명
 
 ```
-기획자가 신규 쿠키 아이디어를 브레인스토밍할 때 사용할 더미 이미지 생성 봇을
+기획자가 신규  아이디어를 브레인스토밍할 때 사용할 더미 이미지 생성 봇을
 만들어라.
 
-입력: 자연어 프롬프트 ("얼음 마법사 컨셉의 우아한 쿠키")
-출력: 쿠키런 스타일의 컨셉 이미지 4장
+입력: 자연어 프롬프트 ("얼음 마법사 컨셉의 우아한 ")
+출력:  스타일의 컨셉 이미지 4장
 
 요구사항
-1. 쿠키런 IP 의 비주얼 톤 유지.
+1.  IP 의 비주얼 톤 유지.
 2. 부적절한 콘텐츠 필터링.
 3. 이미지 생성 비용을 추적해 월 예산 한도 내로 제어.
 ```
 
 #### 접근 방법
 
-- 베이스 모델 (SDXL/Flux) + 쿠키런 스타일 LoRA
+- 베이스 모델 (SDXL/Flux) +  스타일 LoRA
 - 시스템 prompt 에 스타일 강제 + negative prompt
 - 사전/사후 안전 검수 + 예산 quota
 
@@ -2863,14 +2844,14 @@ generator = CookieImageGenerator(
     safety=OutputSafetyChecker(),
 )
 
-result = generator.generate("user_42", "얼음 마법사 컨셉의 우아한 쿠키", n_images=4)
+result = generator.generate("user_42", "얼음 마법사 컨셉의 우아한 ", n_images=4)
 print(f"Blocked: {result.blocked}, Images: {len(result.images)}, "
       f"Cost: ${result.cost_usd:.3f}")
 ```
 
 #### 트레이드오프 및 후속 질문
 
-- **"왜 일반 SD 가 아닌 LoRA 가 필요?"** → 일반 SD 는 쿠키런 스타일을 모름. LoRA 로 적은 데이터로 스타일만 학습 → 베이스 모델 그대로 보존하면서 스타일 강제.
+- **"왜 일반 SD 가 아닌 LoRA 가 필요?"** → 일반 SD 는  스타일을 모름. LoRA 로 적은 데이터로 스타일만 학습 → 베이스 모델 그대로 보존하면서 스타일 강제.
 - **"기획자가 '톤이 안 맞는다' 하면?"** → 톤 평가 reward model 학습 → DPO 또는 새 LoRA 학습. RLHF 의 lite 버전.
 - **"안전 필터의 FN(놓침) 위험?"** → 다중 필터 (NSFW classifier + LLM-based content review + 사람 샘플링 검수).
 
@@ -3806,7 +3787,7 @@ con.close()
 
 ---
 
-### 문제 19. 쿠키런 유저 페르소나 클러스터링
+### 문제 19.  유저 페르소나 클러스터링
 
 **카테고리**: 비지도 학습, 차원축소, 시각화
 **예상 시간**: 90분
@@ -4390,84 +4371,3 @@ if __name__ == "__main__":
 - **"테스트셋과 운영 분포가 다르면?"** → 운영에서 샘플링한 별도 테스트셋 구축, 카테고리(대사/UI/스토리)별 분리 평가.
 
 ---
-
-## 면접 준비 체크리스트
-
-### 출제 가능성 / 우선순위 매트릭스
-
-| 카테고리 | 등장 가능성 | 핵심 준비 포인트 |
-|---------|----------|----------------|
-| Tabular ML (회귀/분류) | ★★★★★ | EDA→FE→모델링→평가 루틴을 60~90분에 끝내는 손 |
-| LLM 응용 | ★★★★★ | 모듈 분리한 시스템 설계 (Translator 예시) |
-| 강화학습 | ★★★★☆ | PPO/DQN 직접 짜본 경험, 데브시스터즈 시그니처 |
-| MLOps/시스템 설계 | ★★★★☆ | 경력직 면접의 핵심, 모니터링 + 배포 |
-| 추천/세그멘테이션 | ★★★☆☆ | 마케팅·BM 협업 업무에 직결 |
-| 컴퓨터 비전/생성 | ★★★☆☆ | 사내 도구 컨텍스트 |
-| A/B 테스트/평가 | ★★★☆☆ | 경력자에게 의외로 자주 |
-| 데이터 엔지니어링 | ★★☆☆☆ | ML 엔지니어에게도 종종 |
-
-### 면접 직전 1주일 워밍업
-
-**Day 1-2: Tabular ML 손에 익히기**
-- [ ] Kaggle 노트북 1개 처음부터 끝까지 1시간 안에 풀어보기
-- [ ] LightGBM/XGBoost 의 주요 하이퍼파라미터 5개 외우기
-- [ ] target encoding, class weight, 5-fold CV 코드 외우기
-
-**Day 3-4: LLM 시스템 설계**
-- [ ] 추상 클래스 + 모듈 분리한 LLM 호출 코드 1개 작성
-- [ ] 캐싱 / fallback / 모델 라우팅 / 비용 추적 흐름 손에 익히기
-- [ ] OpenAI 또는 Anthropic API 의 structured output 사용법 확인
-
-**Day 5: 강화학습 + MLOps**
-- [ ] Gym 환경 + REINFORCE/PPO 코드 처음부터 작성
-- [ ] FastAPI 추론 서버 1개 띄워보기 (Redis feature store 포함)
-
-**Day 6: A/B 테스트 + 통계**
-- [ ] Z-test, Bootstrap, Mann-Whitney U 직접 코드 한 번씩
-- [ ] Simpson's paradox / 다중 비교 보정의 의미 설명할 수 있게
-
-**Day 7: 모의 면접**
-- [ ] 위 문제 중 하나를 화면 녹화 + 입 밖으로 설명하며 90분 풀이
-- [ ] 본인의 풀이 영상 다시 보면서 "의사결정을 말로 했는가" 점검
-
-### 면접 당일 행동 강령
-
-1. **첫 5분은 듣고 정의하기**. 문제를 받자마자 코딩 시작하지 말 것. 문제 정의를 메모장에 한 번 적고, 면접관에게 "이 문제를 이렇게 이해했습니다" 확인 받기.
-
-2. **3번 짚어야 할 의사결정**
-   - 평가 지표 선택의 정당성 (왜 AUC 가 아닌 PR-AUC 인지)
-   - 모델 선택의 정당성 (왜 딥러닝이 아닌 LightGBM 인지)
-   - 운영 시 제약 (latency / 비용 / 모니터링) 한 번 언급
-
-3. **완벽보다 완주**. 30분 남았는데 1번 완성 못 했으면, 2번 손 대지 말고 1번 마무리. 점수는 "한 문제 완성도" > "여러 문제 미완".
-
-4. **막힐 때 말로 풀기**. 코드가 안 떠오르면 "이 부분은 X 라는 알고리즘이 적합해서 의사코드로 작성하고 시간 남으면 채우겠습니다" 하고 진행.
-
-5. **코드 리뷰 대화 준비**. 끝나고 면접관이 물어볼 것:
-   - "이 코드의 한계는?"
-   - "운영에 올린다면?"
-   - "테스트는 어떻게?"
-   - "성능이 안 나오면 어디부터 보겠어요?"
-
-이 4가지에 대한 답을 *작성하면서* 머릿속에 미리 메모해두면, 리뷰 시간에 1.5배의 점수를 가져갈 수 있다.
-
----
-
-## 참고 자료
-
-- [데브시스터즈 기술 블로그](https://tech.devsisters.com/) — 특히 "데브시스터즈 서버 직군은 왜 코딩 면접을 볼까?", "강화학습으로 더 재미있는 게임 만들기" 글
-- [데브시스터즈 채용 페이지](https://careers.devsisters.com)
-- [DEVIEW 2016: 딥러닝과 강화 학습으로 나보다 잘하는 쿠키런 AI 구현하기](https://tv.naver.com/v/2051482)
-- Sutton & Barto, *Reinforcement Learning: An Introduction* (2nd ed.)
-- *가상면접 사례로 배우는 머신러닝 시스템 설계 기초* — ML 시스템 디자인 면접 대비
-- *인사이드 머신러닝 인터뷰* — 빅테크 ML 면접 문항 모음
-
----
-
-> **마지막 한 마디**
->
-> 데브시스터즈가 면접에서 보고 싶어하는 건 "이 사람이 우리 팀에서 *지속적으로 성장하면서* 문제를 풀어나갈 수 있을까" 라는 질문에 대한 답이다. 코드가 화려한 사람보다, *왜 그렇게 했는지 설명하면서 한 발씩 나아가는 사람*이 합격한다.
->
-> 위 20문제를 다 외워서 갈 필요는 없다. 카테고리별로 한 문제씩, 평가지표/모델선택/운영제약 세 가지를 자기 입으로 설명할 수 있게 손에 익히면 어떤 변형이 나와도 흔들리지 않는다.
->
-> 좋은 결과 있기를.
