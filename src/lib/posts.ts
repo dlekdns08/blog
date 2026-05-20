@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { cache } from "react";
 import matter from "gray-matter";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
@@ -92,11 +93,9 @@ function resolveFilePath(slug: string): string {
   return base.endsWith(".md") || base.endsWith(".mdx") ? base : `${base}.md`;
 }
 
-let postsCache: PostMeta[] | null = null;
-
-export async function getAllPosts(): Promise<PostMeta[]> {
-  if (postsCache) return postsCache;
-
+// per-request 메모이즈만 — 프로세스 전역 캐시는 두지 않는다.
+// 파일시스템에서 글이 추가/수정되면 다음 요청부터 즉시 반영되어야 하기 때문.
+export const getAllPosts = cache(async (): Promise<PostMeta[]> => {
   const slugInfos = await collectSlugs();
 
   const metas = await Promise.all(
@@ -116,14 +115,13 @@ export async function getAllPosts(): Promise<PostMeta[]> {
       })
     : metas;
 
-  postsCache = filtered.sort((a, b) => {
+  return filtered.sort((a, b) => {
     const ad = Date.parse(a.date);
     const bd = Date.parse(b.date);
     if (Number.isNaN(ad) || Number.isNaN(bd)) return a.slug.localeCompare(b.slug);
     return bd - ad;
   });
-  return postsCache;
-}
+});
 
 async function getPostMeta(
   slug: string,
