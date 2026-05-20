@@ -17,6 +17,9 @@ import { TypingText } from "@/components/TypingText";
 import { DailyPaperWidget } from "@/components/DailyPaperWidget";
 import { FeaturedPosts } from "@/components/FeaturedPosts";
 
+// 새 글이 파일시스템에 추가되면 최대 60초 안에 홈에 반영
+export const revalidate = 60;
+
 type Stack = { icon: IconType; label: string; color: string };
 
 const PRIMARY_STACKS: Stack[] = [
