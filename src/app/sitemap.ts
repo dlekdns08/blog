@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/posts";
 
+export const revalidate = 300;
+
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://koala.ai.kr";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
