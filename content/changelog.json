@@ -1,5 +1,1105 @@
 [
   {
+    "date": "2026-05-20",
+    "entries": [
+      {
+        "hash": "53204d3",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "getAllPosts 함수에 캐시 적용하여 성능 개선"
+      },
+      {
+        "hash": "d9d33dd",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "호스트의 content 디렉토리를 마운트하여 새 글 즉시 반영"
+      },
+      {
+        "hash": "ca82cf4",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "revalidate 상수 추가"
+      },
+      {
+        "hash": "78daaa9",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "revalidate 설정 추가"
+      },
+      {
+        "hash": "155f51a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "홈에 새 글 반영을 위한 revalidate 설정 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-18",
+    "entries": [
+      {
+        "hash": "98082c7",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "머신러닝 문제 풀이 글 수정"
+      },
+      {
+        "hash": "882b7d5",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "머신러닝 문제 풀이 글 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-09",
+    "entries": [
+      {
+        "hash": "8f84b44",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Pyodide 코드 플레이그라운드 스타일 추가"
+      },
+      {
+        "hash": "67e0bb4",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Pyodide 코드 플레이그라운드 기능 추가"
+      },
+      {
+        "hash": "db4b29a",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Implement feature X to enhance user experience and optimize performance"
+      },
+      {
+        "hash": "daa7b8e",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "첨부파일 업로드 기능 추가 및 UI 개선"
+      },
+      {
+        "hash": "80c3c45",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "초기 첨부파일 목록을 PostForm에 전달하도록 수정"
+      },
+      {
+        "hash": "805830e",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "PUT 요청에 첨부파일 처리 기능 추가"
+      },
+      {
+        "hash": "65cdd80",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "발송 다이제스트 스크립트 추가"
+      },
+      {
+        "hash": "2cc2d02",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "POST 요청에 첨부파일 처리 기능 추가"
+      },
+      {
+        "hash": "3e1045d",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "주간 다이제스트 발송 스크립트 추가"
+      },
+      {
+        "hash": "95b04be",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "태그 추천 API 구현"
+      },
+      {
+        "hash": "3914073",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "기술 블로그 글에 적절한 태그를 추천하는 API 추가"
+      },
+      {
+        "hash": "3808c41",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "바이너리 파일 생성 또는 업데이트 기능 추가"
+      },
+      {
+        "hash": "99903c7",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "번역 캐시 로드 및 언어 지원 기능 추가"
+      },
+      {
+        "hash": "42c9308",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "markdownToHtml 함수 추가 및 markdown → HTML 변환 파이프라인 구현"
+      },
+      {
+        "hash": "409f361",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "포스트 상세 페이지에 언어 지원 추가 및 번역본 적용"
+      },
+      {
+        "hash": "ece12f6",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "LangToggle 컴포넌트 추가 및 searchParams에 lang 속성 추가"
+      },
+      {
+        "hash": "c1998d5",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "언어 토글 컴포넌트 추가"
+      },
+      {
+        "hash": "2e4f7bf",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "번역 스크립트 추가"
+      },
+      {
+        "hash": "fc8bcba",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "번역 캐시 파일 추가"
+      },
+      {
+        "hash": "5cbbe0b",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "포스트 상세 페이지에 마지막 업데이트 날짜 및 TTS 버튼 추가"
+      },
+      {
+        "hash": "5ce47f2",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "모든 게시물을 가져와 FeaturedPosts 컴포넌트에 전달"
+      },
+      {
+        "hash": "ff49670",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "이미지 라이트박스 기능 추가 - 클릭 시 풀스크린 오버레이 표시"
+      },
+      {
+        "hash": "c2d348a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "백링크, 마지막 업데이트, TTS 버튼, 편집 제안, 읽기 위치 복원 및 읽기 기록 추적 기능 추가"
+      },
+      {
+        "hash": "75d2d0a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "백링크 맵 생성 및 내부 링크 추출 기능 구현"
+      },
+      {
+        "hash": "7f8777b",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "TTSButton 컴포넌트 추가 및 Web Speech API를 이용한 글 낭독 기능 구현"
+      },
+      {
+        "hash": "7994369",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Sidebar에 ReadingMap 및 GitHubActivityWidget 컴포넌트 추가"
+      },
+      {
+        "hash": "46986fe",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "ReadingPositionRestore 컴포넌트 추가 및 스크롤 위치 복원 기능 구현"
+      },
+      {
+        "hash": "7088869",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "ReadingMap 컴포넌트 추가 및 사용자가 읽은 글 비율 표시 기능 구현"
+      },
+      {
+        "hash": "a4c4533",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "ReadHistoryTracker 컴포넌트 추가 및 방문한 글의 slug를 localStorage에 저장하는 기능 구현"
+      },
+      {
+        "hash": "fa61c57",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "LastUpdated 컴포넌트 추가 및 글 수정일 표시 기능 구현"
+      },
+      {
+        "hash": "4ce7660",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "GitHubActivityWidget 컴포넌트 추가 및 최근 공개 활동 표시 기능 구현"
+      },
+      {
+        "hash": "93590f6",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "FeaturedPosts 컴포넌트 추가 및 홈 상단에 추천 글 표시 기능 구현"
+      },
+      {
+        "hash": "bb55915",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "이미지 라이트박스 오버레이 및 인쇄 스타일 추가"
+      },
+      {
+        "hash": "df48f49",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "NotFound 페이지 개선 및 최근 글 목록 표시 기능 추가"
+      },
+      {
+        "hash": "2fd1f7a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "EditSuggestion 컴포넌트 추가 및 GitHub 편집 링크 기능 구현"
+      },
+      {
+        "hash": "9a6fe30",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "태그 페이지 추가 및 인기 태그 표시 기능 구현"
+      },
+      {
+        "hash": "6941232",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Backlinks 컴포넌트 추가 및 인용한 글 목록 표시 기능 구현"
+      },
+      {
+        "hash": "7c8d5bd",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "검색 기능 구현 및 결과 표시 UI 추가"
+      },
+      {
+        "hash": "9d68a46",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "검색 API 추가 및 게시물 본문 로드 기능 구현"
+      },
+      {
+        "hash": "3d7e68a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "getAllPosts에서 예약 발행 기능 추가 및 PostMeta에 updated, featured 필드 매핑"
+      },
+      {
+        "hash": "7f0383f",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "PostMeta 타입에 updated 및 featured 필드 추가"
+      },
+      {
+        "hash": "e78ab20",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "RelatedPosts 컴포넌트에서 SectionHeader로 헤더 구조 개선"
+      },
+      {
+        "hash": "d05e634",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "StatsPage에서 MetricCard, SectionHeader, EmptyState 컴포넌트로 UI 개선"
+      },
+      {
+        "hash": "bda397e",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "AdminLoginPage에서 PrimaryButton 컴포넌트로 버튼 구조 개선"
+      },
+      {
+        "hash": "171be88",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "DailyPaperWidget에서 SectionHeader 컴포넌트로 헤더 구조 개선"
+      },
+      {
+        "hash": "c030d16",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "BookmarksList에서 EmptyState 컴포넌트로 빈 상태 처리 개선"
+      },
+      {
+        "hash": "8d6a3ca",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "BookmarksList에서 EmptyState 컴포넌트 사용"
+      },
+      {
+        "hash": "3822860",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "SubscribeForm에서 PrimaryButton 컴포넌트 사용"
+      },
+      {
+        "hash": "e51948d",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "CommentForm에서 PrimaryButton 컴포넌트 사용"
+      },
+      {
+        "hash": "25126b0",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "SectionHeader 컴포넌트 추가"
+      },
+      {
+        "hash": "f0aa1a9",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "PrimaryButton 컴포넌트 추가"
+      },
+      {
+        "hash": "6f4396b",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "MetricCard 컴포넌트 추가"
+      },
+      {
+        "hash": "8891e8d",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "FormInput 및 FormTextarea 컴포넌트 구현"
+      },
+      {
+        "hash": "583020c",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "빈 상태 표시 컴포넌트(EmptyState) 구현"
+      },
+      {
+        "hash": "b037585",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "카드 컴포넌트 구현 및 기본 스타일 추가"
+      },
+      {
+        "hash": "b38e60b",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "아이콘 컴포넌트(Spinner, Icon2D, Icon3D) 임포트 및 중복 정의 제거"
+      },
+      {
+        "hash": "60ee2db",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "아이콘 컴포넌트(Spinner, Icon2D, Icon3D) 임포트 및 불필요한 정의 제거"
+      },
+      {
+        "hash": "6a82702",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "추가 아이콘 컴포넌트(Spinner, Icon2D, Icon3D) 구현"
+      },
+      {
+        "hash": "89c7b67",
+        "type": "refactor",
+        "typeLabel": "리팩토링",
+        "scope": null,
+        "description": "update styles across components for consistency and improved readability"
+      },
+      {
+        "hash": "29d6c64",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "태그 페이지의 텍스트 색상을 일관성 있는 스타일로 수정"
+      },
+      {
+        "hash": "3d4ce12",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "통계 페이지의 텍스트 색상을 일관성 있는 스타일로 수정"
+      },
+      {
+        "hash": "88f7c21",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "포스트 상세 페이지의 텍스트 색상을 일관성 있는 스타일로 수정"
+      },
+      {
+        "hash": "062f75b",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "디자인 토큰 매핑 방식을 배열에서 문자열로 변경하여 가독성 향상"
+      },
+      {
+        "hash": "56bd938",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "게임 페이지의 텍스트 색상을 일관성 있는 스타일로 수정"
+      },
+      {
+        "hash": "806096d",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "북마크 페이지의 텍스트 색상 클래스를 일관성 있는 스타일로 수정"
+      },
+      {
+        "hash": "9fda853",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "관리자 로그인 페이지 스타일 개선 및 클래스 이름 수정"
+      },
+      {
+        "hash": "6d9d59c",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "관리자 패널 스타일 개선 및 일관성 있는 클래스 이름 적용"
+      },
+      {
+        "hash": "a81d862",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "스타일 개선을 위한 텍스트 클래스 업데이트"
+      },
+      {
+        "hash": "f0ad095",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "check:tokens 스크립트 추가하여 디자인 토큰 검증 기능 구현"
+      },
+      {
+        "hash": "d422a8b",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "check-design-tokens.sh 실행 권한 수정"
+      },
+      {
+        "hash": "b1efc5a",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "디자인 토큰 우회 방지 스크립트 추가"
+      },
+      {
+        "hash": "ba1da33",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "디자인 토큰 추가 및 테마 색상 변수 개선"
+      },
+      {
+        "hash": "9963bda",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "MdEditorThemeSync 컴포넌트 추가하여 테마 동기화 기능 구현"
+      },
+      {
+        "hash": "8d2eba5",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "PostKnowledgeGraph 컴포넌트의 3D 힌트 배경 색상 개선"
+      },
+      {
+        "hash": "ea60362",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "AdminLayout 컴포넌트에 MdEditorThemeSync 추가"
+      },
+      {
+        "hash": "e8461eb",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "DailyPaperWidget 컴포넌트의 카테고리 배경 색상 혼합 방식 개선"
+      },
+      {
+        "hash": "613abd0",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "ArxivForceGraph 컴포넌트의 툴팁 배경 색상 개선"
+      },
+      {
+        "hash": "6c930ed",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "ArxivForceGraph 컴포넌트의 배경 색상 개선"
+      },
+      {
+        "hash": "323c0b5",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "ArxivForceGraph 버튼의 배경 색상 및 호버 효과 개선"
+      },
+      {
+        "hash": "db47a4b",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "PostKnowledgeGraph 컴포넌트의 버튼 및 배경 색상 개선"
+      },
+      {
+        "hash": "0039c6c",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "테마에 따른 Mermaid 다이어그램 렌더링 개선 및 코드 정리"
+      },
+      {
+        "hash": "f6c95f6",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Highlight.js 스타일 변경 및 다크모드 포커스 색상 조정"
+      },
+      {
+        "hash": "a0dbfbe",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Highlight.js 스타일 추가 및 다크모드 색상 오버라이드"
+      },
+      {
+        "hash": "0cdb446",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "TLDR 캐시 로딩 및 가져오기 기능 구현"
+      },
+      {
+        "hash": "867cc3d",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "포스트 메타에 시리즈 정보 추가 및 파싱 기능 구현"
+      },
+      {
+        "hash": "5f99352",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "SeriesNav 컴포넌트 추가 및 시리즈 내비게이션 기능 구현"
+      },
+      {
+        "hash": "8d1b60d",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "PostTldr 컴포넌트 추가 및 AI 요약 기능 구현"
+      },
+      {
+        "hash": "4ad925d",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "Mermaid 다이어그램 렌더링 기능 추가"
+      },
+      {
+        "hash": "9b95616",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "포스트 인덱스 로드 기능 추가 및 상태 관리 개선"
+      },
+      {
+        "hash": "e99ef8c",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "북마크 목록 컴포넌트 추가 및 로컬 스토리지 연동"
+      },
+      {
+        "hash": "57fb48e",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "포스트 상세 페이지에 시리즈 네비게이션 및 AI 요약 추가"
+      },
+      {
+        "hash": "7af5cbb",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "북마크 페이지 컴포넌트 및 메타데이터 추가"
+      },
+      {
+        "hash": "ad94916",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "GET 요청을 통해 블로그 글 목록의 핵심 메타 데이터 반환 기능 추가"
+      },
+      {
+        "hash": "0e3ae48",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "POST 요청에 블로그 글 목록 및 설명 추가"
+      },
+      {
+        "hash": "85a518b",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "블로그 글 요약 생성 스크립트 추가"
+      },
+      {
+        "hash": "abd4792",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": ".tldr-cache.json 파일 추가"
+      },
+      {
+        "hash": "1b73225",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "package.json에 tldr 스크립트 추가 및 mermaid 의존성 추가"
+      },
+      {
+        "hash": "fa2aca4",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "Implement feature X to enhance user experience and fix bug Y in module Z"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-25",
+    "entries": [
+      {
+        "hash": "872b2ab",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "Autonoma — 에이전트 군집을 \"관전\"하는 라이브 캐스트 글 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-13",
+    "entries": [
+      {
+        "hash": "6579d21",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "KoalaRanking 컴포넌트 추가 및 게임 랭킹 기능 구현"
+      },
+      {
+        "hash": "7311f85",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "게임 오버 시 점수를 전송하는 이벤트 추가"
+      },
+      {
+        "hash": "74f3930",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "KoalaRanking 컴포넌트를 게임 페이지에 추가"
+      },
+      {
+        "hash": "ec7bf4e",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "KoalaRanking 컴포넌트 추가"
+      },
+      {
+        "hash": "a1d1b56",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "게임 랭킹 API의 GET 및 POST 엔드포인트 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-12",
+    "entries": [
+      {
+        "hash": "50e1a01",
+        "type": "refactor",
+        "typeLabel": "리팩토링",
+        "scope": null,
+        "description": "enhance PostKnowledgeGraph component with improved types and structure"
+      },
+      {
+        "hash": "7c5cde2",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "3D 그래프 기능 추가 및 다크 모드 지원, 성능 최적화"
+      },
+      {
+        "hash": "d2824f0",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "3D 그래프 기능 추가 및 성능 최적화, 다크 모드 지원"
+      },
+      {
+        "hash": "eac6047",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "add react-force-graph dependency to package.json"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-10",
+    "entries": [
+      {
+        "hash": "a96e1fe",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "관련 글 컴포넌트 추가 및 읽기 시간 계산 기능 구현, 태그 페이지 생성"
+      },
+      {
+        "hash": "7c4dc55",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "환경 변수 추가 및 JWT 인증 미들웨어 구현, RSS 피드 생성 기능 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-09",
+    "entries": [
+      {
+        "hash": "dd1fcd1",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "테스트 코멘트 제거"
+      },
+      {
+        "hash": "5c73bd6",
+        "type": "test",
+        "typeLabel": "테스트",
+        "scope": null,
+        "description": "AI review 트리거 테스트"
+      },
+      {
+        "hash": "6685577",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "README 개선 (기술 스택, 관련 프로젝트 링크)"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-08",
+    "entries": [
+      {
+        "hash": "f8101aa",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "update sitemap with new routes, enhance stats page layout, and remove word cloud component"
+      },
+      {
+        "hash": "fbb57e8",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "네비게이션에서 워드클라우드, 논문 그래프, 지식 그래프 항목 제거 및 탐색 항목 수정"
+      },
+      {
+        "hash": "aece64d",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "네비게이션에서 워드클라우드, 논문 그래프, 지식 그래프 항목 제거 및 탐색 항목 수정"
+      },
+      {
+        "hash": "51fef61",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "탐색 탭 컴포넌트 추가 및 arXiv 논문 그래프 기능 구현"
+      },
+      {
+        "hash": "e06dbc6",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "탐색 페이지 추가 및 카테고리 통계 기능 구현"
+      },
+      {
+        "hash": "87d95b5",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "리디렉션 기능 추가 및 경로 설정"
+      },
+      {
+        "hash": "9933c87",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "대규모 그래프를 위한 공간 해시 그리드 구현 및 성능 최적화"
+      },
+      {
+        "hash": "b22eceb",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "그래프 데이터 요청의 제한 값을 1000으로 증가 및 관계 요청의 제한 값을 5000으로 증가"
+      },
+      {
+        "hash": "ad5cc78",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "changelog 아이콘 추가 및 사이드바에 네비게이션 항목 포함"
+      },
+      {
+        "hash": "dcccb8f",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "changelog 아이콘 추가 및 네비게이션에 포함"
+      },
+      {
+        "hash": "eabd117",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "changelog 페이지 추가 및 데이터 로드 기능 구현"
+      },
+      {
+        "hash": "b52a21c",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "그래프 요청의 제한 값을 1000으로 증가"
+      },
+      {
+        "hash": "b663c77",
+        "type": "fix",
+        "typeLabel": "버그 수정",
+        "scope": null,
+        "description": "요청 제한 값 수정 및 기본값 증가"
+      },
+      {
+        "hash": "14ccc85",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "changelog 생성 스크립트 추가"
+      },
+      {
+        "hash": "88e9996",
+        "type": "chore",
+        "typeLabel": "기타",
+        "scope": null,
+        "description": "fix"
+      },
+      {
+        "hash": "8ed4950",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "changelog 스크립트 추가"
+      }
+    ]
+  },
+  {
+    "date": "2026-04-05",
+    "entries": [
+      {
+        "hash": "efb8273",
+        "type": "refactor",
+        "typeLabel": "리팩토링",
+        "scope": null,
+        "description": "배포 워크플로우에서 새 글 알림 단계 제거"
+      },
+      {
+        "hash": "11776ae",
+        "type": "feat",
+        "typeLabel": "새 기능",
+        "scope": null,
+        "description": "새 글 알림을 위한 GitHub Actions 워크플로우 추가"
+      },
+      {
+        "hash": "5d33ac2",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "docker-compose.yml에서 Arxiv 데이터 경로 수정"
+      },
+      {
+        "hash": "6ee9ad7",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "배포 스크립트에서 Arxiv 데이터 경로 수정"
+      },
+      {
+        "hash": "94f7412",
+        "type": "docs",
+        "typeLabel": "문서",
+        "scope": null,
+        "description": "Conformal Prediction: 머신러닝 예측에 신뢰를 더하는 방법 글 추가"
+      },
+      {
+        "hash": "842fb22",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "사이드바 스크롤 영역에 스크롤바 숨김 및 최대 높이 설정"
+      },
+      {
+        "hash": "22c4123",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "인라인 목차 컴포넌트 추가"
+      },
+      {
+        "hash": "9dee9ab",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "Collapsible 목차 컴포넌트 추가"
+      },
+      {
+        "hash": "7ce974f",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "Collapsible 목차 컴포넌트 추가 및 UI 개선"
+      },
+      {
+        "hash": "2cb417f",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "페이지 번호 생성 로직 개선 및 페이지네이션 UI 수정"
+      },
+      {
+        "hash": "2df2bd9",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "'그 외' 섹션을 접을 수 있는 형태로 변경하여 UI 개선"
+      },
+      {
+        "hash": "b6bfeb4",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "텍스트 그림자 효과를 추가하여 제목과 설명의 가독성 향상"
+      },
+      {
+        "hash": "f5dcd46",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "포스트 카드의 패딩을 조정하여 여백 개선"
+      },
+      {
+        "hash": "f4ca3aa",
+        "type": "style",
+        "typeLabel": "스타일",
+        "scope": null,
+        "description": "이미지에 대체 텍스트를 추가하여 중앙 정렬 및 스타일 적용"
+      }
+    ]
+  },
+  {
     "date": "2026-04-04",
     "entries": [
       {
