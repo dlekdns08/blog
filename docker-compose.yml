@@ -17,4 +17,7 @@ services:
       - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
     volumes:
       - /root/.arxiv-graph/data:/root/.arxiv-graph/data:ro
+      # 호스트의 content/ 를 그대로 마운트 — 이미지 재빌드 없이 새 글 즉시 반영.
+      # 관리자 API(src/app/api/admin/posts)가 fs.writeFile 로 쓰기 때문에 rw 필요.
+      - ./content:/app/content
     restart: always
