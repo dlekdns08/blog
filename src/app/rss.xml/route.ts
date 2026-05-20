@@ -1,5 +1,7 @@
 import { getAllPosts } from '@/lib/posts'
 
+export const revalidate = 300
+
 export async function GET() {
   const posts = await getAllPosts()
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://koala.ai.kr'
