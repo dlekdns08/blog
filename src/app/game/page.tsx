@@ -6,6 +6,8 @@ import { KoalaRanking } from "@/components/KoalaRanking";
 export const metadata: Metadata = {
   title: "코알라 점프",
   description: "귀여운 코알라와 함께하는 점프 게임!",
+  // 메뉴에서 숨긴 페이지 — 검색엔진 색인도 제외
+  robots: { index: false, follow: false },
 };
 
 export default function GamePage() {
